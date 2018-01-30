@@ -1,0 +1,50 @@
+       My Progress Report for September-October 2006
+
+Software Development
+
+Draw_Temp and Batch_Temp
+
+  I have continued the development of the IDL procedures draw_temp and
+batch_temp.  The batch_temp procedure was developed to run in a non-
+interactive environment.  Input may be from a file, a list of files,
+or the thermocouple values may be taken directly from the socket on
+hacksaw.  The output consists of log files and displays of the raw
+and fitted data written to eps files.
+
+  I created a save file of the procedures that may run on machines that
+do not have IDL licenses using the IDL Virtual Environment.  However, 
+this does not work in batch mode  because the IDL VM creates an interactive
+display that must be acknowledged before the program will execute.
+
+  The remaining feature to implement is the modification to the batch_temp
+procedure so that it may be called directly from a c program or shell script.  
+
+Transient_Search
+
+  I have been experimenting with an IDL procedure to locate transient events
+in the all sky camera data using the Hough Transform.  The program produces
+a log of detected events (results.txt) and a composite of all frames in
+which events were detected (transients.png).  The two files above were 
+created by processing approximately 100 all sky camera frames.  There is
+a great deal of potential for the all sky camera data.  The transient
+procedure needs a great deal more development.  
+
+Meetings:
+
+  The 16th annual Astronomical Data Analysis Software and Systems Conference
+was held at the Westin La Paloma October 15-18.  There were 290 attendees
+and 185 papers presented.  I particularly paid attention to the many papers
+on pipeline calibration (especially many papers from NOAO) and archives.
+
+Committee Work:
+
+  As a member of the Local Organizing Committee for ADASS I was responsible
+for all catering.  I had to insure that there was ample and tasty food for the
+the opening reception, evening banquet, daily breakfasts, morning and afternoon
+breaks, and lunches without going over budget.  As a member of the Program
+Organizing Committee I also chaired one oral session and attended the annual
+POC business meeting.
+
+  I serve on the International Astronomical Union Flexible Image Transport
+System Working Group (IAU FITS WG).  I with most other members of the
+working group attended the FITS Birds of a Feather Session at ADASS.

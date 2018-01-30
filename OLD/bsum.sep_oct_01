@@ -1,0 +1,50 @@
+		     DT3155 Framegrabber Support
+
+I took the old version of the DT3155 linux drive rand updated it to
+work with the newest linux kernel versions.  This allowed me to
+upgrade machines with DT3155 cards to the latest operating system
+versions and to do further development on the driver and tools that
+use it such as the SAO Guider system.  The new version also seems to
+fix the random stability problems that had plagued the older driver. 
+
+				Gleaky
+
+I developed a new application, gleaky, which takes advantage of the
+DT3155 driver I developed/updated and provides an easy-to-use GUI for
+displaying video feeds on the mountain computers.  It implements the
+"leaky" algorithm to integrate the incoming video images in real-time
+to improve sensitivity to faint sources.  It will be replacing the old
+analog Wagner box that was previously used to integrate video signals
+from the acquisition/guide cameras.  It also replaces the very
+rudimentary existing video display GUI that the telescope operators
+found hard to use and not very reliable.  Gleaky runs on any linux
+desktop with no problem and is started by simply clicking on an entry
+in the main system menu.
+
+			      SAO Guider
+
+Along with Tom Trebisky, I traveled to Boston to visit with the CfA
+software people and discuss the status and future of the SAO Guider
+system.  Many changes and simplifications were agreed upon including a
+much easier interface for configuring the guider to handle different
+instruments.  Brian McLeod and John Roll are doing the work on
+reworking the guider code.  When they're done I will take their final
+product and get it working on our mountain machines with the site
+instrumentation.  
+
+			  mmt.as.arizona.edu
+
+I obtained and configured a new computer that will eventually replace
+nemo as the main server machine for the MMT.  The first step in the
+process, automatically backing up the MMT's various windows machines
+every night, was successfully implemented.
+
+			 Mountain Networking
+
+Along with Tom Trebisky, I helped get the mountain network moved over
+to the new, higher performance radios.  That was successfully done,
+though new fiber transceivers need to be installed on the feed into
+the MMT building itself to take full advantage of the increased
+bandwidth.  The changeover will also allow us to eventually put
+downtown and mountain machines all on the same network which will
+simplify network management, especially for windows machines.  

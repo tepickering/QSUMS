@@ -1,0 +1,61 @@
+		  Wavefront Sensor Analysis Software
+
+Over the course of the f/5 engineering runs in May and June the WFS
+analysis software was engineered to the point where it works at least
+as well as for the f/5 WFS as it does for the f/9 system.  The key to
+solving many of the problems we had with the f/5 system during the
+April run was replacing the finely pitched lenslet array that the
+Puntino WFS unit came with.  Dan Fabricant obtained and installed a
+coarser lenslet array as well as some extra optics that were needed to
+correctly image the pupil onto the lenslet array (another source of
+previous problems).  The coarser array greatly simplifies the process
+of associating spot centroids with their reference positions,
+especially when the seeing is degraded, while still providing a more
+than adequate number of apertures across the pupil.
+
+Specific modifications, additions, and improvements to the software
+include:
+
+Interactive Aperture Overlay - This is based on Steve West's original
+interactive overlay and was resurrected to help deal with the closely
+spaced spots of the original lenslet array.  See Figure 1 for a
+screenshot.  It is not as necessary with the new array, but still
+provides a useful fallback mode when conditions are poor and the
+default centroiding parameters do not work well.  Both the f/5 and f/9
+systems will bring up the interactive overlay if the criteria for
+initial spot association are not met.
+
+Inserting Telescope and Other Data in WFS Image Headers - The first
+cut at this was done previously for the f/9 WFS, but that required
+some non-trivial modifications of some core code in the Mill's Apogee
+software.  This has been replaced by a much more general perl script
+that takes a FITS file as input, queries the mount, hexapod, and
+thermal systems, and places that information into the FITS header.
+Having all the information in the image headers will greatly ease
+mining of WFS data to profile telescope performance. 
+
+Handling of Arbitrary Rotator Position - Steve West put hooks in the
+analysis code to handle non-zero rotator angles, but these were unused
+and not fully tested.  It is now fully implemented via parsing rotator
+angles out of the image headers and has been tested by inserting known
+amounts of aberrations at various angles.  Thus the WFS can be used
+successfully at any rotator angle and will even work with the rotator
+on, though that is not recommended. 
+
+
+
+
+
+
+Figure 1 (overlay.jpg): This window provides a fallback to the
+automatic routines in the WFS software and allows the user to align
+the reference spot positions (red boxes) with the measured spots in
+the image.  Clicking and dragging anywhere in the image will move the
+entire reference pattern around at once.  The 'Mag+' and 'Mag-'
+buttons will scale the reference pattern to account for any focus
+offset.  The centroiding parameters HWHM (Half-width at half maximum)
+and Threshold can be changed and then applied to the image by clicking
+'Re-centroid'.  Clicking 'Accept' will take the reference pattern
+position and the improved centroiding and use them to continue
+analysis of the image.  Clicking 'Discard' will cause the image to be
+ignored from any further processing.

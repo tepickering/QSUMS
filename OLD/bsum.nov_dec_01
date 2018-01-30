@@ -1,0 +1,44 @@
+			      SAO Guider
+
+After much reworking, Brian McLeod and John Roll sent me the latest
+revision of the SAO Guider.  I got it built and working on the
+computers here and on the mountain in preparation for testing and
+engineering during the first week of January 2002. 
+
+		      Mountain Computer Upgrades
+
+To better handle the rigors of real-time video display, auto-guiding,
+and to get around the fact that the framegrabber cards we use don't
+work well with multiple CPUs, the main operator computer, hacksaw, was
+upgraded to a 1.4 GHz athlon.  In the process it also gained a 40 GB
+disk to alleviate disk space constraints.  A new machine, alewife, was
+added to the control room.  It is a 1 GHz athlon with 40 GB of
+mirrored RAID diskspace and its own framegrabber card.  It is the
+eventual replacement for ringo as the primary observer's machine.
+hacksaw, hoseclamp, and alewife were all upgraded to the latest
+version of Red Hat Linux during this time.
+
+			GPS Clock and NTP Time
+
+I successfully got the Garmin 25 GPS clock to work with the linux NTP
+(Network Time Protocol) server.  Unfortunately, it was much less
+accurate than using other network time servers such as those run by
+campus.  Part of the problem was a 0.4 sec offset due to serial port
+and other latencies.  However, even after calibrating that out, the
+noise was 20-50 ms, about an order of magnitude noiser than the campus
+or other network time servers.  It might be possible to improve that
+using the PPS (pulse per second) output, though getting the linux NTP
+server to utilize it would require the construction of a pulse
+stretching circuit and applying non-standard patches to the linux
+kernel.  The Garmin 25 also has the undesirable feature of requiring
+multiple satellites to get a time lock and will not output time or PPS
+signals without a lock.  Thus, during long building slews it could
+lose lock due to the antenna facing a different area of sky.  These
+issues prompted me to investigate getting a dedicated NTP server box
+with integrated GPS and oven-controlled local oscillator. 
+
+			NASA AISRP Peer Review
+
+I was invited to review proposals for NASA Applied Information Systems
+Research Program (AISRP) and traveled to Washington, DC to participate
+in the review Dec 10-13.  

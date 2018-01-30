@@ -1,0 +1,212 @@
+		    Unified Network Authentication
+
+The LDAP-based network authentication server that was deployed over
+shutdown has continued to work well serving our linux workstations.  
+MMT Windows user accounts on the Active Directory server (VAULT) are
+now synchronizing with the Linux user accounts using LDAP.  This means
+that if a user changes their password on a Windows machine, the
+password will be automatically changed on the Linux machines for that
+same user account. There are still a couple of Windows users in town
+that still need to be migrated over to the Active Directory along with
+most of the mountain staff's Windows desktops. Dallan will be
+migrating these Windows users onto the AD in the next couple of weeks.
+The samba configurations on the linux machines have been updated to
+authenticate via LDAP (specifically, via AD) to help simplify file
+sharing between windows, mac os x, and linux.  Samba previously
+required its own password database which was painful to reliably keep
+in sync with normal unix and windows passwords.   
+
+We have also begun to migrate our web page authentication to use the
+LDAP server via SSL.  Dokuwiki was the first service to migrate to the
+new scheme.  Its installation was transferred from mmto.org to
+hacksaw.mmto.arizona.edu and its code base was updated to the current
+version, 2007-06-26b.
+
+LDAP authentication and the requirement for secure web connections
+(SSL/HTTPS) were set up for the http://hacksaw.mmto.arizona.edu/ssl/
+web directory.  The new dokuwiki installation is one directory under
+this directory.  Efforts will continue to move the current
+http://tcs.mmto.arizona.edu/ site into this more open, yet secure
+LDAP/SSL directory.
+
+A self-signed certification was created for use with OpenSSL on
+hacksaw.  This certification is valid for one year.
+
+The new dokuwiki installation was configured so that only one LDAP
+authentication is required for user login.  A second login using
+dokuwiki authentication was eliminated.
+
+
+			 DT3155 Linux Driver
+
+I started looking into modifications to the linux driver for the DT3155
+framegrabber card.  Modifications are needed to the interrupt handling
+and memory management so that this driver can be used efficiently on more
+modern machines with multiple cpus and large amounts of ram.
+
+
+-- Wind Sensor Display  & R.M. Young Miniserver:
+
+The R.M. Young wind sensor, which was previously connected to a
+console in the control room, was recently converted to connect to the
+network using a Lantronix. To make use of the newly available data, a
+new miniserver was created to make this data available online. A new
+webpage was created to help visualize the wind direction, speed and
+sensor location for this wind sensor as well as the other two existing
+wind sensors (Viasala3 & 4). Unfortunately shortly after the page went
+online, lightning struck both the R.M. Young and the Viasala4 taking
+them offline. [screenshot attached in case we need to fill extra
+space]
+
+The 17th annual Astronomical Data Analysis Software and Systems (ADASS)
+Conference was held September 23-26 at the Kensington Town Hall in London,
+U.K.  There were 315 attendees with 246 presentations including orals,
+posters, demonstrations, birds-of-a-feather sessions, and tutorials.
+Tim Pickering and Betty Stobie attended the conference presenting posters
+on "Web-based Interfaces to Telescope Control Systems at the MMT" and
+"Data Mining the MMT All-Sky Camera", respectively.  Betty also co-authored
+a poster on "Proposed Changes to the FITS Standard" with the rest of the
+IAU FITS Working Group Technical Panel.  As a member of the Conference
+Program Organizing Committee Betty chaired the 7th Oral Session: Algorithms
+and Image Processing II and attended the annual POC business meeting.
+
+Betty serves on the IAU FITS Working Group and is a member of 5 person
+Technical Panel to update the FITS Standard.  The Panel's recommended
+revised Standard was made public in early September.  Betty has reviewed
+the public comments for possible modifications to the document.  She
+also attended the FITS Birds of a Feather Session at ADASS where the 
+proposed changes were discussed.
+
+
+Transient Search with the All-Sky Camera
+
+From October 20th thru October 24th this year we experienced a spectular
+Orionid Meteor Shower.  For the nights of October 20th and October 21st
+the moon set early and there were few clouds making perfect conditions
+for detecting meteors in the All-Sky Camera data with the transient search
+program.  On October 20th from 00:12:04 until 05:14:38 MST 51 meteors were
+detected (oct_19_meteor.fits, a composite of masked difference images 
+contains the 29 brightest meteors) and on October 21st from 01:21:50 
+to 05:26:33 MST 85 meteors were detected (oct_20_meteor.fits, also a 
+composite of masked difference images contains the 38 brightest meteors 
+and two aircraft).
+
+1) Desktop Menu Items on yggdrasil, hoseclamp, and other MMT mountain
+Linux machines.
+    Work continued on adding desktop menu items to the "MMT" desktop menu
+on the mountain Linux machines.  These desktop items will give the
+telescope operators and daytime engineering staff easier access to
+the various programs required for operating the telescope and support
+systems.
+
+   Submenus under the "MMT" pull-down menu include:
+  1. Autoguiders
+  2. Cell GUI's
+  3. Hexapod and M2 GUI's
+  4. Instrument GUI's
+  5. MMTAO GUI's
+  6. Mount GUI's
+  7. Thermal System GUI's
+  8. WFS GUI.
+
+   Each of these submenus contain several menu items that launch the
+related software.
+
+   Separate menu items are also available for a 32-bit version of the
+Firefox web browser for the operator's use, the WIS (a.k.a. the
+"Operator's Log"), and a WIS screen capture tool.  The 32-bit version
+web browser is required to display web pages that include Flash and/or
+Java plug-ins.
+
+   Individual Firefox profiles were set up for each web page that is
+included as a menu item.  This approach allows each of these critical
+web pages to be run as a separate process, reducing the
+inter-dependency between web pages.  The profiles also "remember" user
+preferences, such as size of the web browser window when the web page
+is more recently displayed.  These profiles are shared between users
+within the "mmtop" user group and between the mountain Linux machines.
+
+    A new WIS screen capture tool has also been implemented and is
+incorporated into the desktop menu items.
+
+    Finally, additional menu items were created to launch a suite of
+GUI's with one mouse click.   This includes the "vmount all" command
+line command for mount GUI's and a new script for all the thermal
+GUI's.
+
+2) Dokuwiki update and LDAP/SSL conversion.
+
+3) Benchmarking of common Ajax/HTML programming tasks on different
+browsers and operating systems, and a comparison with Flex2.
+   A comparison of different programming approaches to routine Ajax/HTML
+update operations was made on different web browsers for Linux, Mac,
+and Windows machines.  This comparison aims to improve the often
+excessive CPU usage for web pages that contain highly dynamic data,
+i.e., data that is changing at 1Hz or faster.  A MMT programming goal
+is to have these web pages update at 1Hz.
+
+   Different Ajax/HTML approaches were also compared to Flex2/Flash9
+implementations of the same web pages.
+
+   Preliminary results of this comparison were presented by Tim Pickering
+at the ADASS conference in London in September.  More details results
+may be presented at the SPIE conference on Astronomical Telescopes and
+Instrumentation in Marseilles next summer.
+
+4) Miniserver Update and Lightning Issues
+    MySQL logging was consolidated into one Perl script,
+/mmt/dataserver/mysql_updater, that is called from a cron job on
+hacksaw.
+
+   Further work was also done on accessing data from the /tcs shared
+memory on hacksaw.  A PHP-based, "comet" back-end script,
+comet_backend.php, was written that delivers new data from the /tcs
+shared memory to web pages or other clients in XML, JSON, CGI, or the
+MMT "all" format.  Server-push is used to send new data to the client
+as soon as it becomes available.  The thermal transect is being
+updated to use this back-end and to use Flex2 to improve its CPU
+efficiency.
+
+   Dallan P. created a new "young1" miniserver and logging framework for
+the R.M. Young weather station.  However, this weather station was
+completely destroyed from a direct lightning hit on Sept 17, 2007.
+
+   The "vaisala4" Model WXT510 weather station had also been placed to
+the west of the MMT observatory and a miniserver created for recording
+its data.  This unit was also damaged by this same lightning strike. 
+The unit has been repaired by the manufacturer.  The vaisala4 unit
+will be re-installed on the west side of the MMT when additional
+lightning protection is in place.
+
+   Because of lightning concerns, the Yankee thermohygrometer, model
+MET-2010, was removed from outside of the building and installed in
+the chamber.  Web pages have been updated to reflect this new location
+
+   Finally, the "roof" Temptrax digital thermometer probe, which records
+a metal temperatures on the roof and is also used to compute a
+relative humidity, has been removed until construction on the roof is
+complete.
+
+5) LOTIS Aluminization Software and Database Development.
+    Under support of the LOTIS project, new software was written for
+aluminization of 6.5-m mirrors that will be used by both the LOTIS
+project and the MMT.  This software uses National Instruments LabVIEW
+software to interface with an Agilent 34970A Data Acquisition Unit
+(DAU) and a Measurement Computing PCI-DAS 6023 analog and digital I/O
+board.  The Agilent DAU samples atmospheric pressure and aluminum
+deposition rates within the aluminization bell jar.  The PCI-DAS
+board measures outputs from the ten welders used to supply power for
+the aluminization process.
+
+   A graphical user interface (GUI) was created used LabVIEW to display
+real-time aluminization data as well as a video feed of an image from
+inside the belljar.
+
+   MySQL logging of all aluminization data was implemented.  A web page
+interface to this MySQL database was also created.  The web page
+updates at 1Hz and displays the most recent data appended to the MySQL
+database.  Images from the video feed are also logged at a 1-second
+interval.
+
+   The aluminization Windows computer was integrated into the Steward
+system so that data and images can be seen via the internet.

@@ -1,0 +1,95 @@
+		   New Spectrograph Control System
+
+A new GUI-based spectrograph control system that runs under linux has
+been deployed on the mountain for Blue and Red Channel.  It replaces
+the old DOS PC that had been used for spectrograph control for well
+over a decade and old PASCAL-based software that had been in use for
+at least 15 years.  The new system communicates over the network to a
+Lantronix DC-10 ethernet-to-RS232 converter that is attached to the
+computer that runs the motors within the spectrographs (the MSD box).
+The new software is installed under /mmt/sccs on hacksaw, hoseclamp,
+and alewife and can be run from any of those machines, though the
+Lantronix only allows a single network connection at a time.  The GUIs
+can be invoked by running '/mmt/sccs/bccs' for Blue Channel and
+'/mmt/sccs/rccs' for Red Channel.  Desktop menu entries have also been
+added so that the new GUIs show up under Extras->Other along with
+other MMT software.  
+
+Figures 1 & 2 show screenshots of the main Blue and Red Channel GUIs.
+Since the spectrographs are slow to respond, configuration changes
+(with the exception of opening/closing the Blue Channel shutter) are
+queued within the GUI until the Configure Spectrograph button is
+clicked.  The icons to the right of each setting provide feedback on
+that setting's status.  In the File pull-down menu there are entries
+for saving and loading spectrograph configurations.  This makes it
+much simpler to swap between different observing modes and reduces the
+risk of forgetting to set something important like an order-blocking
+filter.  A link to the on-line user manual (http://www.mmto.org/SCCS/)
+is also provided via the Help pull-down menu.
+
+For users within the mmtop group, an entry to bring up the Engineering
+Interface is also provided from the File pull-down.  This brings up
+two more windows that are shown in Figures 3 & 4.  The Configure
+Motors window provides the capability of querying and setting the
+index positions for each of the indexed motors (e.g. grating and
+filter wheels) and the ability to command each indexed motor to a
+specific position.  Direct access to grating and TIRP angle positions
+plus some MSD box commands are also provided.  The Set Gratings and
+Filters window is used to configure what is installed in each filter
+and grating wheel position and on the magnetic plate.  The filter and
+magnetic plate configuration only entails typing in a label that will
+get displayed in the main user GUI.  Configuring the gratings is
+somewhat more complicated.  Buttons are provided to configure the
+spectrographs in the way required for grating or cover changes.  For
+each grating position, there is a menu containing all available
+gratings and controls for configuring the zeropoint of the selected
+grating.  The Save Configuration button will save all of the settings
+to disk on hacksaw, hoseclamp, and alewife and update the main GUI
+accordingly.  
+
+Figure 1 (bccs.jpg): Screenshot of the Blue Channel Control System
+GUI.
+
+Figure 2 (rccs.jpg): Screenshot of the Red Channel Control System GUI.
+
+Figure 3 (motors.jpg): Screenshot of the Configure Motors window.
+
+Figure 4 (config.jpg): Screenshot of the Set Gratings and Filters
+window.
+
+
+		       Improved WFS Centroiding
+
+In an effort to improve the automation of the WFS as well as its
+ability to measure the seeing, work was done to replace the relatively
+rudimentary centroiding routines based on IRAF's starfind with a more
+robust and adaptive scheme based on DAOphot.  The big advantage of
+DAOphot is that it will compute an analytical point-spread function
+(PSF) for each image rather than assuming a single, simple profile
+like a gaussian.  It can also compute the PSF as a function of
+location in each image.  When the seeing is good (<0.8") the WFS spots
+are well-approximated by a gaussian and simple schemes like starfind
+or daofind (the first pass of a DAOphot analysis) perform very well.
+Once the seeing gets worse than about 1" to 1.3", however, the spot
+profiles begin to deviate significantly from a gaussian and frequently
+vary considerably across the image (e.g. due to dome seeing or other
+effects).  
+
+In principle, daofind is very similar to the starfind routine we had
+been using.  In practice, it has been found to be much more robust in
+finding the appropriate spots and far less sensitive to seeing and
+image brightness.  A single set of parameters works quite well over a
+large range of seeing (<0.5" to about 2", though recently more
+tweaking was required to handle >3" seeing) and brightness which
+obviates the need for the operators to frequently fiddle with
+starfind's centroiding parameters.  The output from daofind is input
+into the rest of DAOphot where a best-fit position-dependent PSF is
+calculated and then the spots recentroided using that model.  The PSF
+model is also averaged across the image to calculate a measure of the
+seeing.  The seeing measures from DAOphot are MUCH more accurate than
+those from starfind and correlate quite well with direct measures of
+seeing from various instruments (e.g. PISCES, Flamingos, MegaCAM).  
+
+One downside of DAOphot is that it is considerably slower than our old
+method.  Tests are ongoing to help optimize and streamline it
+further.  

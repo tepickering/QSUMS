@@ -1,0 +1,187 @@
+		  New Apogee CCD Software Interface
+
+The linux driver and interface for Apogee CCD cameras (such as those
+used by the interferometric and f/9 Shack-Hartmann wavefront sensors)
+that we have been using is no longer supported by the author, does not
+support newer revisions of the linux kernel, and does not support
+newer PCI interface boards.  A new, completely free driver and
+software development kit (available from
+http://www.randomfactory.com/apogee-lfa.html) has been developed by
+Dave Mills at NOAO/KPNO which supports all current versions of linux,
+supports all Apogee interfaces including parallel port and PCI, and
+provides source code for everything to enable the development of
+custom interfaces as well as providing an interface of its own.  These
+distinct advantages compelled us upgrade and port our software to use
+it.
+
+As part of the upgrade, a new computer was purchased to replace the
+old wavefront sensor (WFS) computer (the old computer will still be
+used with the interferometric WFS).  The new machine is a small
+form-factor Pentium 4-based Shuttle SS51G and is equipped with a new
+PCI Apogee controller.  It is configured to run with no keyboard or
+monitor and its GUI is designed to be accessed over the network using
+the VNC protocol (the default session is accessible at
+wavefront.mmto.arizona.edu:1).  The small form-factor proved to be
+valuable when the long cable to the east naismyth platform did not
+work properly with the PCI controller.  As a workaround we were able
+to simply install the computer on the east side of the f/9 topbox and
+use a short cable instead.  The WFS computer will eventually find a
+permanent home on the east drive arc and use a 30' cable to the CCD
+that is known to work with the PCI controller.
+
+Some modifications to the Mills driver and libraries were required to
+get it working properly and to help integrate it with our WFS
+software.  The driver source code just needed a few simple
+modifications for it to compile and run under Red Hat 8.0.  The FITS
+image handling routines needed more significant modifications to
+handle some extra header information that the WFS software will
+require such as rotator angle.  The original Mills version expected an
+explicit set of information to put in the image headers and would die
+ungracefully if the complete set was not given.  This turned out to be
+the root cause of the problems Steve West originally had in building
+custom scripts using the Mills code.  Once these modifications were
+made, it became very easy to pull in telescope information via the MSG
+protocol and insert it automatically into each FITS image.
+
+A simple TCL-based GUI was then written to interface to the new Apogee
+driver (see Figure 1 for a screenshot).  It provides basic image
+acquisition capabilities with the option of inserting telescope
+information into the image headers.  It will also automatically number
+the images it produces to help avoid accidental overwrites.  Upon
+acquiring a frame, it will then display the most recent image in a DS9
+window.  
+
+Figure 1 [apogee_shot.jpg]: Screenshot of the new Apogee CCD image
+acquisition GUI.  Acquired images are automatically displayed in a DS9
+window (not shown).  
+
+
+		   F/9 Shack-Hartmann WFS Software
+
+Upon Steve West's departure from the MMT, Tim Pickering became the new
+caretaker of the software for the f/9 wavefront sensor.  The main
+feature that has been added since then has been the ability to display
+the image being analyzed along with the fitted centroids in a DS9
+window.  Some other relatively minor revisions to the interface were
+made such as removing the actuator force graphical display which was
+too small and hard to read to be very useful (the forces are still
+provided in text format).  The WFS software is now run on wavefront
+via VNC along with the new Apogee CCD interface.  A screenshot of a
+typical session is shown in Figure 2.
+
+Figure 2 [wfs.png]: Screenshot of a typical f/9 WFS analysis VNC
+session.  Running the GUIs in a VNC session greatly simplfies setup
+and allows them to continue running from night to night.  This allows
+the reference focus from one night to carry over to the next.  It also
+allows the exact same session to be accessed from multiple computers
+simultaneously which greatly aids engineering and debugging.  
+
+Some internal changes were made in how the WFS software handles
+certain modes and corrections.  Corrections for coma are now handled
+solely by movements of the secondary about its center of curvature as
+opposed to the previous method of secondary vertex tilts plus
+telescope repointings.  Corrections for spherical aberrations as well
+as any other mode with an amplitude of less than 100 nm are now turned
+off by default in the analysis GUI.  They can be reenabled if desired,
+but spherical aberrations are frequently due to thermal problems and
+are often best left to sort themselves out since it can require a lot
+of bending force to correct them.  Likewise, relatively small amounts
+of high order modes can also require relatively large amounts of force
+to correct and are often best ignored unless significant or if the
+conditions are really good.
+
+It has been found that if the integrated amount of requested force
+corrections becomes too great, the rcell interface to the cell crate
+will silently ignore any further corrections.  The standard procedure
+for now should be to clear all forces and then reload the default
+startForces before doing any primary mirror correction with a WFS
+system.  Generally 2 or 3 iterations should be more than sufficient to
+get a good figure if the conditions and data are good enough.  If that
+is not the case, one should probably go back to startForces and start
+over.  Obviously, more work and experience are needed to fully
+quantify these procedures.  
+
+A test was performed where the same star was observed repeatedly over
+the course of 15 minutes and each image analyzed separately.  The
+results for each mode were then detrended and the RMS calculated from
+the residuals.  The results are:
+
+  MODE	            RMS
+
+tilt_yax         5360.700 nm
+tilt_xax         1850.088 nm
+defocus           339.790 nm
+astig_45          275.409 nm
+astig_0           289.346 nm
+Xcoma             124.695 nm
+Ycoma             158.807 nm
+spherical          71.828 nm
+tref_bsX          185.282 nm
+tref_bsY          175.214 nm
+ast5th_45          97.981 nm
+ast5th_0           88.480 nm
+Frth_1             98.926 nm
+Frth_2            103.768 nm
+tref5th_X          72.094 nm
+Tref5th_Y          66.221 nm
+Xcoma5th           55.686 nm
+Ycoma5th           67.971 nm
+spher6th           35.672 nm
+
+Thus the 100 nm cutoff is reasonable and somewhat conservative,
+especially if multiple images are averaged together and analyzed.
+
+
+		 F/9 Elevation-dependent Collimation
+
+The elevation-dependent components of collimation and focus can be
+corrected for using a simple TCL script called elcoll.tcl.  This
+script applies relative tilt and focus corrections to the secondary
+that are derived from 2nd order polynomial fits to focus and coma
+versus elevation.  It previously corrected for coma using vertex tilts
+of the secondary plus telescope repointings.  As with the WFS
+software, it has been modified to make the corrections solely with
+hexapod movements by moving the secondary about its center of
+curvature.  This has the benefit of not affecting the mount's pointing
+model at all and should do a better job of maintaining the alignment
+of the optical system.  The ability to make motions about the center
+of curvature (and the zero-coma point as well) were also added to the
+operator's hexapod GUI by Duane Gibson which has made initial setup
+and collimation much easier and more straightforward than before.
+
+
+		   F/5 Shack-Hartmann WFS Software
+
+A version of the f/9 WFS analysis was forked off and modified to work
+with the f/5 optical setup.  Most of the initial changes mostly
+involved the optical parameters that differ due to the different
+telescope and WFS focal lengths.  Data was taken with the f/5 WFS
+system during the commissioning run in April, but only partial success
+was had in the analysis of that data.  The two main problems plaguing
+the analysis were the unknown rotation of the WFS system with respect
+to the rest of the optical system and the inability of the f/9 spot
+association routines to robustly deal with the much finer grid of
+spots produced by the f/5 system (see Figure 3 for a representative
+image).  There is also a minor problem with a 1.27 degree misalignment
+between the CCD camera and lenslet array, but it is easily dealt with
+by rotating each image before the centroiding and analysis is done.  
+
+Figure 3 [f5_example.jpg]: Representative data obtained with the
+f/5 WFS during the April commissioning run.  
+
+Several attempts were made to massage the f/9 spot association
+algorithms to work with the f/5 setup, but nothing really worked out
+to be general or robust enough.  The fine spacing and relatively large
+distortions near the edges (which were exacerbated by an optical
+problem that caused the lenslet array to not be at the pupil) made it
+very difficult to reliably associate spots with their reference
+apertures in an automatic way.  More sophisticated algorithms such as
+Bayesian pattern matching are being researched as a way around this.
+In the meantime, Steve West's interactive aperture overlay script is
+being resurrected as a way to do the initial association manually.
+This will also get ported back to f/9 as a fall-back in case its
+automatic method fails for some reason (e.g., if the seeing is bad or
+the image is under or overexposed).  A coarser 13x13 lenslet array may
+also be tested during the May f/5 run to see if it would be
+sufficient.
+

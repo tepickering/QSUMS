@@ -1,0 +1,48 @@
+Instrument Rotator Software:
+
+A significant amount of effort has been expended on
+improving the instrument rotator software during this
+time period.  We have made rotator limits persistent
+so that the operators do not have to reenter them
+after every software boot.  A number of features
+have been added to avoid the need for the operators
+to make calculations in their head involving position
+angles.  A feature has been added to support a
+spectrograph mode (also refered to as "Track at Zero")
+where it is desired to maintain the instrument slit
+nearly normal to the horizon, yet to have the
+rotator actively tracking so as to be able to use
+the autoguider.
+
+(See figure for a snapshot of the new rotator GUI)
+
+During the end of this time period, we experienced a
+catastrophic failure of the incremental encoders on
+the four motors driving the rotator.  This necessitated
+reorganizing the servo code to allow the rotator to be
+run using only the tape encoder.  This has turned out
+to work very well, and the tape encoder has been
+entirely reliable and robust.
+
+GPS Clock and NTP Time:
+
+As the first stage of an effort to improve telescope pointing,
+we began an effort to use the NTP protocol to obtain a time
+reference for the mount control software.  Since the mount
+software runs under VxWorks, it was necessary to expend
+substantial effort to adapt and test the publicly available
+source for the ntpdate program.  Ntpdate as we have now
+adapted it, runs well under VxWorks, and polls a list of
+timerservers to obtain a 64 bits time value.  From this
+list, a single server is selected based on a number of
+criteria, including the network delay to that server,
+and the advertised stratum of the server.  A stratum 1
+server with a directly connected radio clock will be chosen
+in preference to other servers. If the radio clock is
+not available for any reason, this scheme offers a smooth
+and transparent failover to another server.  This scheme
+is now in use, and the mount currently synchronizes time
+both on software boot, and again when slew to a new object 
+is requested.  A time offset of 1 or 2 milliseconds is
+typically obtained.  We also have modified the mount software
+to allow the operators to introduce the current DUT correction.

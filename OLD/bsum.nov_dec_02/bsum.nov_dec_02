@@ -1,0 +1,49 @@
+	   More Tracking and Encoder Performance Profiling
+
+More tests were performed to help track down the cause of the low
+frequency oscillations in the elevation and azimuth absolute encoders.
+The first was to take a close look at the indexer output to make sure
+there are no subtle digital artifacts such as stuck low-order bits.
+The 16-bit indexer should smoothly ramp from 0 to 65535 and do so 512
+times per 360 degrees of rotation (the indexer output is meshed with a
+16-bit resolver to give a full 25-bit per 360 degree encoder output).
+Indexer ramps were run through the IRAF task 'bitstat' to check the
+statistics of the output bits.  In every case all of the bits behaved
+normally with equal numbers of 1's and 0's.  The smoothness of the
+oscillations made it somewhat improbable that the problem was digital,
+but this was a worthwhile sanity check.  
+
+The 1024 cycle/rev oscillation is clearly visible in the detrended
+elevation indexer ramp output shown in Figure 1.  The lower amplitude
+azimuth oscillation likely is swamped by mechanical signal due to only
+the inner loop being closed for this test.  Dusty Clark has been using
+the clues provided by the phasing of the oscillation with the indexer
+ramp frequency to track down the problem in the electronics.  In the
+meantime, Tom Trebisky added some code to the mount crate to try to
+compensate for the oscillation.  Figure 2 shows the oscillation as a
+function of elevation angle.  At first glance after a few tests it
+appeared to have a constant phase with some position-dependent
+variation in amplitude.  However, several attempts at fiddling with
+amplitude and phase parameters in the compensation code resulted in
+little or no improvement in the on-sky tracking performance.  
+
+To help further monitor tracking, the minicam guider code was modified
+to use higher resolution timestamps, the permissions on the guider log
+files were modified so that the guider account can write to them, and
+a cron script was written to compress and rotate the log files
+nightly.  Eventually the minicam guider logs on packrat will be copied
+over to hacksaw and archived with the rest of the guider logs, but
+there are ssh compatibility issues that need to be resolved first.
+
+
+Figure 1:  Plot of detrended indexer readout over a single 0 to 65535
+count cycle.  The indexer cycles 512 times per 360 degrees of
+revolution so the 1024 cycles/rev oscillation cycles twice per indexer
+cycle.  This is clearly seen on the elevation readout.  The outer loop
+was open for this test which results in the significant mechanical
+noise that is likely washing out the 1024 cycles/rev signal in the
+azimuth output.
+
+Figure 2:  Plot of elevation tape readout with outer loop closed.
+Note the prominent peak at 1024 cycles/rev with a smaller, but still
+significant peak, at 512 cycles/rev.  

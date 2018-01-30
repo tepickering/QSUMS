@@ -1,0 +1,257 @@
+		   Mount Servos and Mount Computer
+
+Work continues on the mount servos.  Servo algorithms designed as
+block diagrams via Simulink are converted to C code by Simulink:Real
+Time Workshop and them compiled using our linux hosted cross
+compilers.  This code is then linked with the mount code and run under
+VxWorks.  We use the same code image on both the downtown simulator
+and the actual mount computer on the mountain.
+
+Tests on the mountain exposed one bug (we were updating encoder
+information at 100 Hz instead at the 1000 Hz rate that we run the
+servos at), which was quickly fixed.  We were then able to move the
+mount using the new servos, but not in a completely satisfactory
+manner.  The motor command output shows substantial high frequency
+noise, which we have traced to a malfunctioning differentiator block
+being used to calculate commanded velocities from commanded positions.
+This can be fixed by the addition of a suitable low pass filter after
+the differentiator.
+
+Servo response when performing real moves with the telescope do not
+match the response from simulated moves using a model of the telescope
+transfer function.  This indicates that the telescope model (transfer
+function), for which the current servo model was designed, does not
+match the response of the current telescope configuration.  This
+indicates that the telescope itself and/or the control system hardware
+has changed.  It also suggests that the servo model may be more
+sensitive to the exact telescope configuration than we anticipated.
+We do not believe that our basic model is flawed, it simply needs to
+be "tuned" (i.e. parameters adjusted) in order to obtain stable
+performance.  We will need to investigate how sensitive the model is
+to actual telescope configuration and whether one set of parameters
+will have enough latitude to allow operation of the telescope in all
+configurations.
+
+
+		     Remote Protocol Improvements
+
+The mount, hexapod, and cell computers all support distributed
+computing via what we call the "remote protocol".  This is a simple
+ascii based protocol that can be manipulated using a telnet session
+for diagnosis, and which supports our logging system, the various
+miniservers, and most of the graphical user interfaces used by the
+operators.  Recent efforts to design a new set of graphical user
+interfaces for the cell computer exposed throughput limitations of
+this protocol.  In particular we discovered a limit of approximately
+10 of our "all" commands per second communicating to any of the
+vxworks crates.
+
+We have found that the delay is happening in the TCP protocol itself,
+and in many cases the crate is simply waiting for a TCP ACK packet
+to be sent by the client end of the connection.  We can make and
+break approximately 1000 connections per second, even with our
+older m68k processor based vxworks systems; two orders of magnitude
+more than we can manage when actually moving data.  The addition of
+output buffering has given a substantial improvement: we can now
+make over 30 connections involving the "all" command in a second.
+Now that we understand the nature of the throughput throttling it
+is likely that we will be able to make additional improvements.
+However, 30 connections per second is entirely adequate for our current
+needs and anticipated future use.
+
+
+1) Inclusion of offsets in hexapod operation:
+    A new approach to hexapod operation occurred during the past two
+months.  All hexapod positions are now the result of up to ten
+distinct types of offsets.  These offsets include:
+     i) operator offsets.
+    ii) base offsets,
+   iii) instrument offsets,
+   iv) wavefront sensor offsets,
+    v) guider offsets,
+   vi) OSS temperature offsets,
+   vii) M1 temperature offsets,
+   viii) flexure offsets,
+   ix) M1 spherical offsets, and
+   x) user offsets.
+
+This new approach allows better monitoring and logging of contributions to
+the final hexapod position from different sources, such as thermal and
+elevation effects, guiders and wavefront sensors.  Instrument-specific
+information is now included in calculation of these offsets.
+
+    a) Tim calculated new parameters for secondary and instrument offsets.
+ These parameters had previously been used in the "hexpredict" script.
+    b) Tom implemented new code in the hexapod crate, including position
+calculation from the offsets and automatic updating of thermal and
+elevation offsets.  The remote protocol for the hexapod crate was
+expanded.
+    c) I created a web-based, hexoffsets GUI for normal operation and
+engineering use.   This GUI will replace the existing "hexgui".  A
+"hexpods" web page had already been created to replace the "Pods" GUI.
+    d) Dallan has created a web-based "hexlimits" GUI.
+    e) Modifications were made to the setting server to accommodate the
+new instrument parameters.
+    f) Modification was made to MySQL tables and miniserver scripts to log
+the new parameters.
+    g) New web pages were created and existing web pages modified to
+display the new offsets in tabular and graphical form.
+
+2) Hexapod/Secondary support debugging:
+    a) Extensive analysis of f/5 hexapod background data is being done by
+Brian C., Ricardo O., and others to understand possible shifts in the
+hexapod support system.  High resolution (1Hz) hexapod data was
+collected and analyzed to quantify hexapod behavior.
+    b) Evaluation was also done of the f/9 hexapod and secondary following
+the recent re-aluminization.   New software limits were mapped for
+this hexapod.  Prior this mapping, it was thought that the f/9 hexapod
+was unable to contact any part of the telescope hub.  Software limits
+are now necessary to prevent this contact.
+
+3) Ongoing creation of new and modification of existing engineering web
+pages:
+     a) cell error log display, the "rerr" GUI, was converted to a
+ajax-enabled web page.
+     b) web pages were created to present thermal movies of primary mirror
+temperature data, creating images on-the-fly from E-series
+thermocouple data obtained from MySQL background logs.
+    c) Additional work has been done on XY scatterplot web pages for
+presenting MMT background log data to engineers and other end users.
+    d) Various web pages were created and modified for possible use on new
+control room monitors.  These web pages include weather,
+environmental, and systems status information.  Final layout for
+displays in these new monitors is underway.
+    e) Modifications were made to PHP scripts used to generate RRDTool
+images from RRDTool databases with the inclusion of additional
+parameters.
+    f) Additional functionality was added to the "Miniserver" and
+"xajaxMMT" PHP classes.  These modifications include new methods for
+communication with the cell crate using an ASCII protocol.  Work in
+underway by Skip in generating new cell GUI's to replace the existing
+windex GUIs.
+    g) PHP classes are also being developed to generalize the PHP/MySQL
+interface to background logs and for plotting of this background log
+data.
+    h) An inferred roof dewpoint is now being calculated and displayed for
+operator use.
+
+4) Project management software, specifically "dotproject", has been
+installed for evaluation by the MMT staff.
+
+5) Software group attended the ADASS conference.  (Betty was on organizing
+committee; Grant and Tim led field trips.)
+
+
+
+*Windows Domain Controller*
+------------------------------------
+The Windows Domain Controller server is online. All remaining MMT  
+Windows users will be migrated onto the new domain over the next few  
+weeks. The domain controller provides a centralized mode of  
+administration and allows any MMT user to log into any Windows  
+computer on the MMT domain with their existing username and password.
+
+All of the MMTs Autodesk Inventor files have been moved onto the new  
+Windows server and these files are accessed using Autodesk’s Vault  
+software. The Vault provides a robust method for checking in-and-out  
+files and maintaining appropriate permissions.
+
+We are currently evaluating ‘roaming profiles’ which will permit  
+Windows users to store their computer settings and ‘My Documents’  
+on the server instead of their desktop computer. This will give users  
+their same ‘desktop’ regardless of which computer at the MMT they  
+are logged into.
+
+A centralized backup system for Windows desktops is currently being  
+evaluated. This will provide Windows users with automatic backup of  
+important documents onto the server on a regular basis.
+
+
+*Catalog Enhancements*
+---------------------------------
+Since the roll out of the new observer catalog submission tool, many  
+changes and additions have been requested and implemented. A couple  
+of the major enhancements are:
+
+    * The ability for the observer to edit catalogs online after they
+      have already been submitted.
+    * Plotting catalog targets and graphing airmass.
+    * Administration page for managing submitted catalogs.
+
+
+
+At the beginning of this period, I continued testing hexapod control.
+
+During engineering at the telescope, I tested and commissioned
+gspec gui changes to allow multiple clients to red/blue channel spectrograph,
+the ccdacq detector interface to azcam science camera (red/blue channel),
+the ccdacq instrument interface to red/blue channel spectrograph, and
+the ccdacq telescope interface to telstat.
+
+I also implemented computer control of comparison lamps,
+(many thanks to Cory and Brian for their electronics work), and
+made a ccdacq interface to the lamps.
+This was tested and successfully used during a recent blue channel run.
+
+During this period, I also investigated using LDAP for unix account passwords,
+web page passwords, and samba account password.  The lack of LDAP support
+in gdm was a show stopper for now.
+
+I also made some minor changes to ccdacq to prepare for the new red channel.
+The changes involved moving some initialization code out of the client and into
+the server.  These changes were tested and used during a recent
+blue channel run.
+
+October 15-18, I attended ADASS conference in Tucson.
+
+I have started working on replacing windx cell guis with php/ajax web pages.
+
+
+Software Development
+
+Draw_Temp and Batch_Temp
+
+  I have continued the development of the IDL procedures draw_temp and
+batch_temp.  The batch_temp procedure was developed to run in a non-
+interactive environment.  Input may be from a file, a list of files,
+or the thermocouple values may be taken directly from the socket on
+hacksaw.  The output consists of log files and displays of the raw
+and fitted data written to eps files.
+
+  I created a save file of the procedures that may run on machines that
+do not have IDL licenses using the IDL Virtual Environment.  However, 
+this does not work in batch mode  because the IDL VM creates an interactive
+display that must be acknowledged before the program will execute.
+
+  The remaining feature to implement is the modification to the batch_temp
+procedure so that it may be called directly from a c program or shell script.  
+
+Transient_Search
+
+  I have been experimenting with an IDL procedure to locate transient events
+in the all sky camera data using the Hough Transform.  The program produces
+a log of detected events (results.txt) and a composite of all frames in
+which events were detected (transients.png).  The two files above were 
+created by processing approximately 100 all sky camera frames.  There is
+a great deal of potential for the all sky camera data.  The transient
+procedure needs a great deal more development.  
+
+Meetings:
+
+  The 16th annual Astronomical Data Analysis Software and Systems Conference
+was held at the Westin La Paloma October 15-18.  There were 290 attendees
+and 185 papers presented.  I particularly paid attention to the many papers
+on pipeline calibration (especially many papers from NOAO) and archives.
+
+Committee Work:
+
+  As a member of the Local Organizing Committee for ADASS I was responsible
+for all catering.  I had to insure that there was ample and tasty food for the
+the opening reception, evening banquet, daily breakfasts, morning and afternoon
+breaks, and lunches without going over budget.  As a member of the Program
+Organizing Committee I also chaired one oral session and attended the annual
+POC business meeting.
+
+  I serve on the International Astronomical Union Flexible Image Transport
+System Working Group (IAU FITS WG).  I with most other members of the
+working group attended the FITS Birds of a Feather Session at ADASS.

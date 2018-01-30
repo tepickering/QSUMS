@@ -1,0 +1,97 @@
+			   WFS Catalog GUI
+
+A new window has been added to the F/9 and F/5 wavefront sensor
+interfaces to help simplify and speed up the task of finding nearby
+stars suitable for wavefront sensing (see Figure 1 for a screenshot).
+Previously, the operator had to juggle between observer catalogs and
+several different WFS catalogs using the scope GUI on hacksaw.  This
+was a rather cumbersome process and would often be somewhat slow due
+to the large size of the WFS catalogs and due to frequently having to
+swap between two computers to run both the telescope and the WFS.  The
+WFS Catalog window accesses a binary version of the entire Tycho2
+catalog (from which the original WFS catalogs are derived) and can
+search this >2 million star catalog extremely quickly.  A 1 degree
+radius search down to 10th magnitude around any position occurs almost
+instantaneously.  Clicking on the column headings will cause the
+listing to be sorted by the selected column.  Clicking a selected
+column heading again will reverse the direction of the sort. When the
+button to find stars at the current telescope position is clicked, the
+current catalog coordinates and mount offsets are queried and stored.
+The 'Go to Selected Star' button will command the telescope to slew to
+the selected star's coordinate, clear any mount offsets, and will turn
+off rotator tracking.  After wavefront sensing is complete, the
+'Return to Previous Position' button will put the telescope back at
+the original catalog coordinates, restore the mount offsets, and turn
+rotator tracking back on.  Thus all of the telescope movement and
+configuration required to do wavefront sensing can now be done easily
+in once place.  
+
+
+		   Remote Control of WFS Interfaces
+
+Work has begun on a remote network interface to the WFS interfaces
+that will allow greater automation of the wavefront sensing process
+while retaining access to the fine-grained control that's currently
+available.  Hooks are now in place to display and analyse data
+remotely, query and send zernike coefficients and M1/M2 corrections,
+and query and set the WFS reference focus.  Work is ongoing to make
+more capabilities available via the network and to build interfaces to
+take advantage of them.  
+
+
+			 PC-NFS Port to Linux
+
+Several PI instruments still run DOS on their data acquisition
+computers and use PC-NFS to access drives on networked machines.
+Providing PC-NFS support was one of the primary roles of our last
+remaining Sun workstation, ringo.  Thanks to the help of Jeff Fookson
+at Steward Observatory, the PC-NFS server has now been ported to
+linux.  This port has been installed within the /mmt hierarchy under
+/mmt/pcnfsd.  It can be run on any one of the linux machines on the
+summit, but by default is only run automatically on alewife.  PIs
+should thus now use alewife as their PC-NFS server instead of ringo.
+The mmtobs account is to be used as before for this purpose.  
+
+
+       Port of Blue/Red Channel Image Header Server to Packrat
+
+Another one of ringo's roles was to act as a gateway between IRAF's
+ICE protocol and the SAO MSG protocol for querying the telescope and
+inserting queried data into CCD image headers.  This was done via a
+small server provided by Maureen Conroy at CfA.  In addition to being
+difficult to port to linux, this server had not been updated in a long
+time and had a few bugs including malformation of a couple of
+different header entries.  Starting with the most recent version of
+similar code that SAO used for Hecto and MegaCam, a new server was put
+together to fix these problems and run on packrat.  It is now running
+on a port completely separate from similar servers that SAO runs and
+was used successfully during the most recent Red Channel run.  Hooks
+have been added to make the server start automatically when the
+computer boots, but these have not yet been fully tested.  Scripts and
+instructions have been left with the operators in case this server
+does not start or stops working.
+
+
+		Homer - A Linux Replacement for Ringo
+
+A new linux machine called homer has been added to the control room
+and placed where ringo used to be.  It is configured the same as
+alewife and is to be used as a 2nd observer's workstation.  It could
+also be put into use as a spare for either hoseclamp or hacksaw should
+the need arise.  
+
+
+		      Dedicated Telstat Monitor
+
+Grant Williams purchased a 20" LCD monitor along with a
+network-bootable diskless computer which are now used to provide a
+dedicated telescope status display in the control room.  The diskless
+computer runs a version of linux from the Linux Terminal Server
+Project (http://www.ltsp.org).  It boots via the network from hacksaw,
+mounts its filesystem from hacksaw:/mmt/ltsp/i386, and then starts a
+display server with a browser window pointing to J.D. Gibson's telstat
+webpages.  The various pages can be cycled through by clicking with
+the wireless mouse.  
+
+
+Figure 1 (catalog.png):  Screenshot of the new WFS Catalog GUI. 

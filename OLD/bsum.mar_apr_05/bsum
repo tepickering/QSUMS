@@ -1,0 +1,156 @@
+			    All-Sky Camera
+
+On March 24 the all-sky camera was installed permanently and brought
+on-line.  Other than a few control interface quirks that have to be
+worked around and a malfunctioning enclosure heater that had to be
+disconnected, the camera system has worked extremely well.  The
+automatic iris control does a good job of allowing the camera to
+produce useful images even when the bright sun or moon is shining
+right into the camera.  Other all-sky cameras such as CONCAMs do not
+operate at all under a bright moon, let alone during the day.  Under
+dark conditions the camera is at least as sensitive as a perfectly
+dark-adapted human eye and has a magnitude limit of 6.0-6.5 mag.  The
+camera is quite red-sensitive, too, so red stars down to 7th mag are
+easily detected.
+
+Figure 1 shows a representative image from a clear, moonless night.
+The Milky Way is easily visible rising in the east, Jupiter is the
+bright object in the southwest, and the Big Dipper is setting in the
+northwest.  The camera is sensitive enough to detect zodiacal light
+all along the ecliptic, though it may not show up well in hardcopy
+printouts.  The gegenschein is just to the right of the head of
+Scorpius in this image.
+
+After the camera was mounted, a set of images were run through DAOfind
+to detect and centroid stars.  The resulting lists were then
+cross-correlated with a catalog of bright stars to build a coordinate
+transformation that maps altitude and azimuth to image coordinates.
+This transformation is used to label the cardinal directions in each
+image and to plot where the MMT is pointing at the time the image is
+taken.  The camera is pointing within a degree of true zenith, but is
+rotated 10.2 deg west of true north.  The enclosure cuts the image off
+at 15 degress elevation so we're not losing too much compared to, say,
+a dome enclosure.  The image distortions within the visible field are
+quite mild.  A third-order polynomial is used to convert zenith angle
+to radius in the image, though the deviation from linear is only a few
+percent even for an elevation of 20 degrees.  The coordinate
+transformation, and thus the mounting of the camera, appears to be
+quite stable over time.
+
+The telstat display in the control room was upgraded to better support
+displaying sky camera images.  The animated .gif files that are
+continually created are 15-17 MB in size and the old telstat computer
+did not have enough memory to handle displaying them in a browser.
+The new telstat computer is a Pentium-4 machine running linux
+(http://telstat.mmto.arizona.edu) that will also control the seeing
+monitor when that comes on-line.  A dual-head video card and a second
+LCD monitor were obtained and installed so that operators and
+observers each have their own telstat display.  The telstat web pages
+have been modified to use the SOAP protocol to update the displayed
+data which is much more efficient and reliable than doing periodic
+reloads of the whole page.  Sky camera images and movies are now
+displayed on the telstat page in the lower right and left-hand
+corners, respectively.  The images are updated every 10 seconds while
+the movies are updated every 60 seconds since they are fairly large.
+The latest image, movie, and archived day and night movies are also
+available at http://skycam.mmto.arizona.edu/.
+
+Figure 1 (image_0001895.png):  Dark sky image taken with the all-sky
+camera.  A red cross near the Big Dipper marks where the MMT was
+pointing at that time. 
+
+
+	   Open-loop Temperature and Elevation Corrections
+
+The new automated wavefront sensing tool that was put into use
+starting in early March logs hexapod coordinates, elevation, and OSS
+temperatures after every round of corrections has been applied.  The
+resulting database of known good hexapod positions makes it possible
+to look for correlations with elevation and temperature without taking
+up engineering time doing special observations.  The three hexapod
+coordinates affected most by gravity and temperature changes are Z
+(focus), Y, and Tilt_X.  There should be no systematic effects on the
+other three coordinates and none are found in the data at any
+significant level.  No significant correlation is found between Y or
+Tilt_X and average OSS temperature, either.  The focus data is
+modeled by a surface of the form:
+
+Focus (um) = a*sin(El) + b*T + c
+
+where El is the elevation in degrees and T is the average OSS
+temperature in degrees C.  The most WFS data was obtained while in the
+Hecto configuration and the fit to that data nets the following
+results:
+
+a =  1121 +/- 48.6 um
+b = -37.8 +/-  1.6 um/C
+c = 13977 +/- 43   um
+
+The data and best-fit surface are shown in Figures 2, 3, and 4.  The
+sine coefficient and zeropoint are fairly consistent with previous
+determinations, but the temperature coefficient is almost half of the
+predicted value.  This may be part of the explanation why our attempts
+to correct for temperature effects have not worked well in the past.
+This discrepancy is not yet well-understood.  One thought was that the
+focus offsets that we use to help correct for spherical aberration may
+be skewing results.  However, combing through the logs and correcting
+hexapod positions for applied spherical corrections results in much
+larger scatter around the fit with no apparent correlation with
+temperature.  Work is on-going to better understand the effects of
+bending defocus into the primary, both from our application of
+corrective forces and from forcing due to temperature
+non-uniformities.
+
+The different optical configurations of MegaCam and SWIRC require
+different M1-M2 distances than Hecto which translate to zeropoint
+offsets in the above fit.  Fixing the temperature and elevation
+coefficients to their best-fit Hecto values and fitting zeropoints to
+the MegaCam and SWIRC data separately gives:
+
+c(MegaCam) = 13547 um
+c(SWIRC)   =  9386 um
+
+These numbers were then used to build a simple hex_predict script that
+can be used to configure the hexapod to the predicted focus for the
+current elevation and OSS temperature.  This is especially useful for
+setting up for evening sky flats.  Focusing for sky flats previously
+required educated guesswork by the telescope operator.
+
+The effects of gravity on hexapod Y and Tilt_X are independent of
+instrument configuration and are modeled by a function of the form:
+
+Position = a*cos(El) + b
+
+For Tilt_X the best-fit parameters to the entire set of March/April
+WFS logs are:
+
+a = 219 +/- 6 arcsec
+b = 278 +/- 3 arcsec
+
+For Y they are:
+
+a = 2288 +/- 81 um
+b = 1457 +/- 44 um
+
+For f/5, the ratio of Y translation to Tilt_X for zero-coma moves is
+9.45 which is very close to the ratio of these cosine coefficients.
+Thus, gravitational sagging of the front-end with f/5 installed maps
+almost completely into image motion with very little residual coma.
+This is actually not a coincidence.  The front-end was originally
+designed to self-compensate in this way with f/5 installed as
+described in the final conceptual design "Red Books" from SGH dated
+back to 1990.  Results of the Y and Tilt_X fits are shown in Figures 5
+and 6.
+
+Figure 2 (eltemp.eps):  3D plot of the best-fit surface to focus as a
+function of elevation and average OSS temperature.  
+
+Figure 3 (elevation.eps):  Same as Figure 2, but oriented to show
+elevation dependence alone. 
+
+Figure 4 (temperature.eps):  Save as Figure 2, but oriented to
+accentuate OSS temperature dependence.  
+
+Figure 5 (tiltx.eps):  Plot of hexapod Tilt_X versus elevation.
+
+Figure 6 (transy.eps):  Plot of hexapod Y translation versus elevation.

@@ -1,0 +1,88 @@
+		      F/5 Open Loop Corrections
+
+We have been seeing significant changes in the behavior of the f/5
+front-end over the course of Fall 2005 and through Spring 2006.  The
+most significant difference is in the Y axis.  Analyzing WFS logs
+over the course of the March and April f/5 runs finds a very large
+shift of 2 mm or more compared to what was observed in November 2005.
+There is some indication of a change in the shape of the Y-Elevation
+relation, but it's inconclusive due to the large scatter in the WFS
+data.  The scatter is about twice as large as the scatter observed
+when doing similar analysis of WFS data from 2005.  
+
+While the fiber positioner was off-line on the night of April 25-26 we
+took some engineering data with the WFS to more accurately calibrate
+elevation-dependent effects.  The data were obtained by observing
+stars with the WFS at a constant azimuth and over a range of elevation
+from 25 to 85 degrees.  At each star, corrections were applied to the
+secondary to fix focus, coma, and pointing.  Corrections were not
+applied to the primary mirror while the engineering data was obtained.
+The results are shown in Figure 1.  Taking data in a consistent
+fashion under relatively stable conditions greatly reduces the amount
+of scatter in the data.  Ideally, there should be no elevation
+dependence in X or Theta-Y since they are perpendicular to the gravity
+vector.  However, there clearly is significant motion in one of those
+axes as the telescope tips down which is then compensated for in the
+other axis to fix pointing and remove wavefront tilt.
+
+The data shown in Figure 1 was taken while pointing west and keeping
+azimuth near constant at 270.  There was a moderately strong, fairly
+constant 30 mph wind from the south-southwest.  Swinging around and
+taking a set of similar data while pointing east under similar wind
+conditions shows some significant offsets in each of the axes.  Figure
+2 shows the data taken in both runs plotted together.  The offsets
+appear to be consistent with the different wind loading on the front
+end.  This helps explain the large scatter seen in logged WFS data. 
+
+Figure 3 shows best-fit relations between Y and elevation for the f/5
+secondary.  The different relations were determined using dedicated
+engineering data in November 2005 and on April 25, 2006 and using
+different sets WFS data from before and after the April 2006 AO run.
+The most remarkable feature is the huge, almost 2.5 mm offset between
+the relation from fall 2005 and the ones determined in spring of 2006.
+It turns out that around January 2, 2006 the SE and SW lateral
+hardpoints became detached from the f/5 secondary.  As a result, the N
+lateral hardpoint would pull the mirror up as far as it could.  This
+works out to be very close to the 2.5 mm Y offset we observe.  The
+N hardpoint pulls the mirror up in Y so the hexapod compensates by
+moving it back down.  It's also rather remarkable that the secondary
+has behaved as well and as consistently as it has after losing two
+hardpoints.  Outside of the large offset the elevation behavior in Y
+is very similar between the November 2005 and April 2006 engineering
+data.  However, the large scatter seen in the WFS data and the
+shifting seen during engineering on April 25-26 are probably
+symptomatic of the lack of positional constraint within the f/5 cell.
+
+
+Figure 1 (20060426.ps): Results of engineering data taken with the f/5
+WFS on the night of April 25-26, 2006 showing the elevation dependence
+of the five axes of M2 motion.  The plot of Z vs. Elevation is tilted
+slightly to deproject the temperature dependence.
+
+Figure 2 (20060426_both.ps):  Engineering data from the night of April
+25-26, 2006 taken while pointing west (green points) and then pointing
+east (red points). 
+
+Figure 3 (elcoll_compare.ps): Y vs. Elevation relations determined at
+different times between November 2005 and late April 2006.  Note the
+very large offset of about 2.5 mm between November 2005 and all of the
+results from 2006.
+
+
+
+			  Zemax Short Course
+
+During the week of April 3-7 T. E. Pickering attended one of the short
+courses offered by the Zemax Corporation in Bellevue, WA.  The course
+was the introductory level one that covered the basics of optical
+design and Zemax use.  Some more advanced topics such as pupil
+modeling, ray aiming, and tolerancing were also covered.  Since
+attending the class, the acquired Zemax proficiency has been put to
+use to model the surface displacements output from finite element
+thermal modeling and convert them to wavefront errors.  Ongoing work
+that utilizes Zemax includes writing ZPL macros to generate predicted
+off-axis aberrations as a function of distance off-axis and rotator
+angle for each of our optical configurations (e.g. f/5 spectroscopy,
+f/5 imaging, bare f/9, etc.).  This is a required part of supporting
+off-axis, continuous wavefront sensing.
+

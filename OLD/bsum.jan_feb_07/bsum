@@ -1,0 +1,238 @@
+      Operator and Engineering Interface Development and Updates
+
+Several dozen MMT Engineering web pages were updated to use the
+Javascript Ajax.Request class from the Prototype.js library.  Other
+changes to web pages include increased use of the 'mmtlogs' MySQL
+database and RRDTool PNG images.
+
+The Ajax.Request class accounts for differences in the XMLHttpRequest
+class in different web browsers.  The change was made to use a widely
+used Ajax library.  A Javascript file, updater2.js, was created that
+contains common code for using the Ajax.Request class for MMT web
+pages.  The Javascript 'MMTDiv' class, defined in 'MMTDiv.js', was
+also expanded to include many common MMT user interface features.  A
+PHP class, also called 'MMTDiv' and found in the 'mmtdiv.inc' file,
+was created for server-side interaction with the Javascript MMTDiv
+class.
+
+A new web page was developed as a front-end to aluminization modeling:
+http://hacksaw.mmto.org/engineering/aluminize/aluminize_combined.php.
+This web page combined four previous web pages that handled different
+"can" and "ring" filament geometries and different output array sizes.
+The web page uses existing compiled C programs to model the thickness
+of aluminum that is deposited on mirrors during aluminization.  It
+presents the modeling results in a text summary, a FITS image, and a
+PNG image which is displayed on the web page.
+
+The capabilities of the widely-used Flash 9 plug-in from Adobe and the
+recently released Flex 2 programming environment were investigated.
+It offers greater efficiency as well as greater flexibility and power
+in interface design/implementation than HTML+javascript-based Ajax
+methods, but retains much of the ability to tightly couple with
+server-side PHP scripting that we make extensive use of.  The
+web-based cell error log viewer, 'rerr', was re-written using this
+technology.  The new version is at least 4 times more efficient than
+the Ajax version, reducing the CPU usage from 20% to less than 5% on
+yggdrasil during a primary mirror bump test.  Both the Ajax and the
+Flex 2 versions use less than 1% CPU when the log file is not being
+appended.
+
+To get around other limitations of the older version 1.5 of Firefox
+that is installed by default under Fedora 5 and 6, we installed our
+own copy of Firefox 2 under the /mmt hierarchy.  This newer version is
+significantly more efficient and has the ability to restore the
+previous session in the event of a browser crash.  This is a key
+feature that will allow operators to quickly bring their interfaces
+back up they way they were if their browser dies.  Special commands
+were set up to allow the operators to run Firefox 2 as the "mmtop"
+user.  This allows a common profile and set of web pages to be used by
+the various operators while allowing them to continue using the
+system-provided browser for personal use.  The Java and Flash 9
+plugins were also installed for use with Firefox 2.
+
+Various Engineering web pages were removed and replaced by new pages.
+A new web page was created that combines the All-sky camera with three
+webcams located in the chamber.
+
+
+			   Hexapod Software
+
+The hexapod network server code has been successfully ported from
+vxworks to linux.  This allows us to retire another VME crate and
+instead run the network server code on hacksaw along with the rest of
+our TCS services.  The linux server was deployed in mid-February and
+has been used throughout the current f/5 run with no problems of note.
+Testing remains to be done in the f/9 and f/15 configurations, but
+since the actual code changes were fairly minimal and well-tested with
+f/5 we don't expect there to be any complications.
+
+The f/5 hexapod was tested with the high resolution umac data
+gathering utility and was found to have following errors similar to
+f/9.  Tuning the servo parameters reduced the following error to an
+acceptable level.  It should now be possible to make focus and
+collimation adjustments without changing the object position
+significantly.  This should allow use to safely make focus changes
+while taking imaging data (e.g. with megacam).  The new servo
+parameters have been in use during the current f/5 run with Hecto
+installed and have shown a clear improvement in performance.  The
+Hecto operators report that with the previous tuning guide stars would
+routinely bounce out of their guide boxes during focus changes, but
+now stay very steady with little, if any, noticeable movement.
+Later, we will tune and test the f/9-f/15 hexapod.  
+
+
+		  SCCS/ICE Modifications and Updates
+
+Skip worked with Mike Lesser to debug problems in the AzCam controller
+software for the Red and Blue Channel spectrographs.  These involved
+power on initialization and problems with pause and resume.  These
+problems seem to have been resolved, but we need one more round of
+testing to be sure.
+
+Skip also started on phase 2 of the software upgrade to the red and
+blue channel spectrograph control software.  Most of the functionality
+that is currently contained within the client-side GUI will be
+moved into the server.  The client will then be reimplemented as a
+much simpler browser-based interface. 
+
+
+			     Mount Servos
+
+Work continues of the telescope elevation axis servo.  A nominal 20 Hz
+oscillation appeared, a feature that has annoyed the adaptive optics
+group (since this telescope resonance involves the secondary hub), but
+which had not actually seemed significant in regards to the mount axis
+servos.  It would seem that the telescope has changed since the Fall
+of 2006, and there exist reasons to explain this: in particular
+efforts to tighten and stiffen the telescope front end.  A 20 Hz notch
+filter was added to the elevation servo controller (and previous 85
+and 161 Hz filters were dropped, since the accumulated phase lag
+through a long cascade of filters was itself making the loop
+unstable).  This new topology so far seems successful, and allows more
+critical tuning of other servo parameters, which is now in progress.
+
+A telemetry facility was added to the mount computer to capture slew
+and tracking data during normal operations.  Tracking data is captured
+every time we acquire a new object for observation.  After we slew to
+an object, we wait until the servo error is less than some threshold,
+then capture 120 seconds of data at 100 Hz.  This data remains in a
+queue in the mount computer until it has been read out and logged to
+disk by a program dedicated to this purpose which runs on our mountain
+linux server hacksaw.  This facility has been quite successful and
+convenient and will be expanded to collect other forms of detailed
+telemetry for the mount computer, as well as the primary mirror
+support (aka cell computer).
+
+
+		   Improved Error Analysis Facility
+
+As the overall control system at the MMT grows in complexity, it
+becomes ever more difficult and subtle to troubleshoot problems.  In
+particular, our operators are confronted with a plethora of
+information, and are hard put to monitor all possible subsystems for
+errors.  We have decided to begin work on a single centralized error
+reporting interface that will ultimately raise a single red flag to
+get the operators attention and then direct them to the subsystem in
+question and the specific problem that caused the alert.  One example
+is the occasional event where one of the mount drives is killed by a
+safety chain dropout.  This in the past has often been detected
+indirectly by audible clues, or by loss of a guide star, but we would
+prefer and now have a direct indicator of this event.  We expect this
+system to grow and be refined over the coming months.
+
+An MMT subsystem status web page is under development:
+http://hacksaw.mmto.arizona.edu/engineering/sysstat/.  This web page
+uses a small number of status indicators to show the overall status
+for subsystems, such as "Cell", "Mount", and "Thermal".  The web page
+attempts to automate monitoring of MMT subsystems, relieving the
+telescope operators from this task.  At present, approximately 100
+status questions are queried to determine the overall status of the
+subsystems.  New variables are being developed for the cell and mount
+crates to summarize system status.  These variables will be queried by
+the "sysstat" web page as they become available.  Input from other
+staff members is needed to help refine the appropriate subsystem
+status under various conditions.
+
+
+			Service Request System
+
+Dallan Porter has launched the new MMT Service Request System. All of
+the previous SR entries have been imported into the new database and
+it is online and available for use. The old SR System is being phased out
+so update your bookmarks. The URL for the new system is:
+http://www.mmto.org/staff/mmt/service/
+
+
+		    New Staff Web Page at mmto.org
+
+Dallan is also working on a new 'Staff Only' web page for the MMT
+website.  The new page will be a location where staff members can log
+in and get an overall view of whats happening at the MMT. The page
+will display dynamic information from several MMT databases and
+present the information in a useful and efficient manner. The page
+will contain a section which will summarize what is happening at the
+MMT for the current day. For example: who the observer is for today,
+who the operator is for today, what instrument is installed, what SR's
+are currently open and their priority + status, and other useful
+links. In addition to displaying daily activity information at the
+MMT, the new page will provide a interface to view/add/organize images
+in the MMT image archives.
+
+
+			  Observer Catalogs
+
+Dallan is adding a new tool to the MMT Observer catalog submission web
+page to provide observers with a visual display of their submitted
+catalog entries. The catalog targets are superimposed onto MMT All-Sky
+Camera images to aid the observer in object selection.  The tool is
+interactive and allows the observer to click on any target to display
+a plot of the calculated airmass and elevation over time.  A beta
+version is already available to observers and a link is provided when
+they submit their catalogs online.
+
+
+		     All-Sky Camera Data Analysis
+
+Betty has been working on analyzing archived all-sky camera data to
+look for transient phenomena (e.g. planes and meteors) and obtain
+quantitative measures of cloudiness and sky brightness.  In the course
+of this analysis she found a number of frames where bright sources did
+not subtract as cleanly as they should when difference images were
+created.  In some of these frames there were trails of planes or
+satellites that showed clear gaps in the trails.  This was a clear
+indication that the data acquisition script was skipping frames from
+time to time.  This is because the camera updates every 8.533 seconds
+while the script was waiting 10 seconds between framegrabs.  These
+skipped frames complicated analysis of resulting difference images so
+Tim re-engineered the acquisition script to use a high resolution
+timer.  This appears to have fixed the problem with skipped frames.
+The acquisition script was also modified to do on-the-fly compression
+of the FITS data file.  
+
+Work in ongoing to make the transient source detection more robust and
+automated.  Once the number of false positives and negatives reaches
+an acceptable level, this analysis will be applied to each image
+on-the-fly as they are acquired.  Work is also ongoing to try to
+photometrically calibrate the images to allow monitoring of sky
+brightness and opacity.  The lack of a filter complicates this task,
+but initial results are promising at least in terms of long-term
+stability.  This should allow us to at least build an internal
+calibration database for monitoring night-to-night variations.
+Converting these instrumental magnitudes to standard photometric
+systems will likely be a much dicier proposition.
+
+
+			    Committee Work
+
+As a member of the IAU FITS Working Group Technical Panel, Betty
+reviewed suggestions for modifications and clarifications to the
+Definition of the Flexible Image Transport System document.  She
+reviewed the current document that has been revised to reflect the
+discussion of the technical panel.  The Panel hopes to publish a new
+revised document within the next few months.  
+
+As a member of the Program Organizing Committee for the Astronomical
+Data Analysis Software and Systems (ADASS) Conference, Betty has been
+working with fellow committee members to define special topics and
+identify potential guest speakers for the ADASS 2007 meeting in
+London, England.  

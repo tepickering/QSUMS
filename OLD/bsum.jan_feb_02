@@ -1,0 +1,166 @@
+Instrument Rotator Software:
+
+A significant amount of effort has been expended on improving the
+instrument rotator software during this time period.  We have made
+rotator limits persistent so that the operators do not have to reenter
+them after every software boot.  A number of features have been added
+to avoid the need for the operators to make calculations in their head
+involving position angles.  A feature has been added to support a
+spectrograph mode (also refered to as "Track at Zero") where it is
+desired to maintain the instrument slit nearly normal to the horizon,
+yet to have the rotator actively tracking so that the autoguider can
+be used.
+
+(See figure for a snapshot of the new rotator GUI)
+
+During the end of this time period, we experienced a catastrophic
+failure of the incremental encoders on the four motors driving the
+rotator.  This necessitated reorganizing the servo code to allow the
+rotator to be run using only the tape encoder.  This has turned out to
+work very well, and the tape encoder has been entirely reliable and
+robust.
+
+
+GPS Clock and NTP Time:
+
+A key step in the process of improving telescope pointing is the
+definition of an accurate time base.  The first step in this process
+was configuring the computers on the summit to use NTP.  Without NTP,
+the system clocks of our computers could drift as much as minutes per
+week.  With NTP running and utilizing the campus time servers along
+with a sample of public servers spread around the internet excellent
+stability was obtained with hoseclamp and alewife with RMS offsets of
+< 10 ms over timescales of weeks.  Hacksaw, however, does not appear
+to have a stable system clock and can drift off by 100 ms or more on
+timescales faster than NTP can handle.  NTP corrects the offsets
+eventually, but not smoothly, so hacksaw's clock is not terribly
+trustworthy.
+
+The next step then was the acquisition of a dedicated NTP server with
+a built-in GPS-based clock and temperature compensated crystal
+oscillator.  The unit purchased was the Praecis Gntp from EndRun
+Technologies.  Its key features include:
+
+- The use of linux as its operating system which allows it to be
+  accessed and configured much like any other linux machine using
+  standard tools like ssh, scp, and the bourne shell.
+
+- 1 Hz (PPS) and 1 kHz pulse outputs.  Both are TTL and synced on the
+  leading edge of the pulse.  The PPS pulses are 1 ms in duration while
+  the 1 kHz output has a 50% duty cycle. 
+
+- Ability to maintain accurate time lock without constant GPS
+  satellite lock.  The local oscillator allows the unit to freewheel for
+  several hours without any GPS lock with very little degradation in
+  time accuracy.  
+
+Once the unit knows its spatial position accurately, it only requires
+one visible satellite to maintain a time lock.  This makes it
+practical to keep the GPS antenna indoors near a window where it's
+protected from lightning and the elements.  An attempt was made to use
+the existing GPS antenna attached to the building near the loading
+dock, but it is not fully compatible with the Praecis and thus not
+reliable.  When the Praecis is running and fully locked, the internal
+time accuracy is 10 microseconds or better.  
+
+The most crucial step was getting the NTP time into the mount. Since
+the mount software runs under VxWorks, it was necessary to expend
+substantial effort to adapt and test the publicly available source for
+the ntpdate program because the rdate protocol that VxWorks uses by
+default rounds time to the nearest second.  Ntpdate as we have now
+adapted it, runs well under VxWorks, and polls a list of timerservers
+to obtain a 64 bits time value.  From this list, a single server is
+selected based on a number of criteria, including the network delay to
+that server, and the advertised stratum of the server.  The Praecis
+GPS clock is on the local network and is a stratum 1 server (the
+highest level) so if it's running, it will be the server used.  If the
+GPS clock is not available for any reason, however, this scheme offers
+a smooth and transparent failover to another server.  This scheme is
+now in use, and the mount currently synchronizes time both on software
+boot, and again when slew to a new object is requested.  A time offset
+of 1 or 2 milliseconds is typically obtained.  We also have modified
+the mount software to allow the operators to introduce the current DUT
+correction.
+
+
+Implementation of a new web-based catalog submittal
+form:
+
+A new web page was created using HTML and PHP for MMT observers to
+submit, verify, and view catalogs.  The submitted catalogs reside on
+an MMT server.  Options are available on the web page for updating and
+deleting previously submitted catalogs.  Individual catalogs can be
+viewed in a spreadsheet-format on the web page and sorted by any of
+the following data fields: object name, right ascension, declination,
+magnitude, or spectral type.  Small portions of the catalog can also
+be viewed. This web page is currently being incorporated into a set of
+web pages for each observer to obtain and submit information related
+to their upcoming MMT projects.
+
+
+Initiation of an new scope/catalog graphical user
+interface:
+
+Work was initiated on a new scope/catalog graphic user interface (GUI)
+for the operators.  Development of this GUI proceeded using C/Gtk+
+because of the need for fast computation for large astronomical
+catalogs and for access to the more sophisticated widgets available in
+Gtk+.  A prototype was developed to the extent of loading in large
+catalogs into a spreadsheet-like GUI, sorting catalogs on selected
+columns, and implementing drag-and-drop between catalogs.  This work
+led to investigation of the open-source Xephem software available from
+Clear Sky Institute, Inc..  Modifications were made to Xephem to allow
+the telescope operator to point-and-click on a displayed object and
+either: 1) add that object to a MMT-format catalog, or 2) move the
+telescope to the selected object.
+
+
+Hexapod and thermal system support:
+
+A considerable amount of time was spent on analyzing issues that arose
+on the hexapod (including focusing and collimation) and thermal
+systems after the telescope came back on-line in January.  Many of
+these issues, such as persistent alarms with the Carrier cooling unit,
+freezing of the Neslab cooling unit, and erroneous LVDT readings from
+the hexapod, are still being addressed.  A purchase order is in
+progress to repair and upgrade the Carrier so that it can operate at
+sub-freezing temperatures.  This will reduce the cooling load on the
+Neslab.  Software and operator procedures were modified to reduce
+icing and overloading problems for the Neslab.  Hardware modifications
+were make on the LVDT for Actuator 1 for the hexapod.
+
+
+Cyclades Terminal Server:
+
+For months the deployment of our 32-port Cyclades terminal server was
+delayed due to a mysterious data buffering "feature".  If one
+connected to a network port on the cyclades via telnet, data went
+through to the matching serial port with no delay.  However, if one
+connected using a raw network socket, the data would get buffered by
+some seemingly arbitrary amount before anything got through to the
+serial port.  The problem turned out to be a combination of an old
+firmware and/or poor documentation.  The old documentation only listed
+two possible port modes: socket (i.e. telnet) and ssh.  The manual for
+the new firmware listed a new mode, raw_data.  Installing the new
+firmware and configuring the ports to use the 'raw_data' mode cleared
+up all of the data buffering issues.  Work is underway to optically
+isolate the things we wish to interface using the Cyclades. 
+
+
+SAO Guider:
+
+During the first week of January, Brian McLeod and Tim Pickering
+engineering the SAO Guider to fix outstanding issues, make it more
+robust, and make it easier to use.  This was very successful and the
+guider has been used extensively in the weeks since with very few
+problems.  Starting up the guider is now just a matter of selecting
+the appropriate instrument entry from the desktop menu.  Another key
+usability feature is the ability to easily customize the guider for
+different instrument configurations.  Generally, if there is RS170
+video available, then all that is required is the orientation of the
+camera and its pixel scale which are then plugged into a new
+configuration file.  This was done easily for Flamingos, for example.
+Flamingos also required the ability to move the guide boxes along with
+the telescope when doing offsets.  This feature was added by Brian
+McLeod and has worked quite well.  
+

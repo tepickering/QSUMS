@@ -1,0 +1,99 @@
+From: "J Duane Gibson" <jdgibson@mmto.org>
+Date: November 2, 2006 11:05:10 AM MST
+To: tim@mmto.org
+Subject: BSUM input for Sep-Oct, 2006
+Reply-To: jdgibson@mmto.org
+
+Tim -
+
+Here's some input for the bsum in outline form.  Let me know if you need
+more input or portions rewritten.
+
+Thanks, Duane.
+
++++
+
+BSUM input for Sep-Oct, 2006:
+
+Tasks:
+
+1) Inclusion of offsets in hexapod operation:
+    A new approach to hexapod operation occurred during the past two
+months.  All hexapod positions are now the result of up to ten
+distinct types of offsets.  These offsets include:
+     i) operator offsets.
+    ii) base offsets,
+   iii) instrument offsets,
+   iv) wavefront sensor offsets,
+    v) guider offsets,
+   vi) OSS temperature offsets,
+   vii) M1 temperature offsets,
+   viii) flexure offsets,
+   ix) M1 spherical offsets, and
+   x) user offsets.
+
+This new approach allows better monitoring and logging of contributions to
+the final hexapod position from different sources, such as thermal and
+elevation effects, guiders and wavefront sensors.  Instrument-specific
+information is now included in calculation of these offsets.
+
+    a) Tim calculated new parameters for secondary and instrument offsets.
+ These parameters had previously been used in the "hexpredict" script.
+    b) Tom implemented new code in the hexapod crate, including position
+calculation from the offsets and automatic updating of thermal and
+elevation offsets.  The remote protocol for the hexapod crate was
+expanded.
+    c) I created a web-based, hexoffsets GUI for normal operation and
+engineering use.   This GUI will replace the existing "hexgui".  A
+"hexpods" web page had already been created to replace the "Pods" GUI.
+    d) Dallan has created a web-based "hexlimits" GUI.
+    e) Modifications were made to the setting server to accommodate the
+new instrument parameters.
+    f) Modification was made to MySQL tables and miniserver scripts to log
+the new parameters.
+    g) New web pages were created and existing web pages modified to
+display the new offsets in tabular and graphical form.
+
+2) Hexapod/Secondary support debugging:
+    a) Extensive analysis of f/5 hexapod background data is being done by
+Brian C., Ricardo O., and others to understand possible shifts in the
+hexapod support system.  High resolution (1Hz) hexapod data was
+collected and analyzed to quantify hexapod behavior.
+    b) Evaluation was also done of the f/9 hexapod and secondary following
+the recent re-aluminization.   New software limits were mapped for
+this hexapod.  Prior this mapping, it was thought that the f/9 hexapod
+was unable to contact any part of the telescope hub.  Software limits
+are now necessary to prevent this contact.
+
+3) Ongoing creation of new and modification of existing engineering web
+pages:
+     a) cell error log display, the "rerr" GUI, was converted to a
+ajax-enabled web page.
+     b) web pages were created to present thermal movies of primary mirror
+temperature data, creating images on-the-fly from E-series
+thermocouple data obtained from MySQL background logs.
+    c) Additional work has been done on XY scatterplot web pages for
+presenting MMT background log data to engineers and other end users.
+    d) Various web pages were created and modified for possible use on new
+control room monitors.  These web pages include weather,
+environmental, and systems status information.  Final layout for
+displays in these new monitors is underway.
+    e) Modifications were made to PHP scripts used to generate RRDTool
+images from RRDTool databases with the inclusion of additional
+parameters.
+    f) Additional functionality was added to the "Miniserver" and
+"xajaxMMT" PHP classes.  These modifications include new methods for
+communication with the cell crate using an ASCII protocol.  Work in
+underway by Skip in generating new cell GUI's to replace the existing
+windex GUIs.
+    g) PHP classes are also being developed to generalize the PHP/MySQL
+interface to background logs and for plotting of this background log
+data.
+    h) An inferred roof dewpoint is now being calculated and displayed for
+operator use.
+
+4) Project management software, specifically "dotproject", has been
+installed for evaluation by the MMT staff.
+
+5) Software group attended the ADASS conference.  (Betty was on organizing
+committee; Grant and Tim led field trips.)

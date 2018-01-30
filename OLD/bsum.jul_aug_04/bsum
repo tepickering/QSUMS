@@ -1,0 +1,94 @@
+		 Modeling the MMT Aluminizing Chamber
+
+To date, John Hill's SCOPES package for IRAF has been used to model
+the deposition of aluminum within the MMT's aluminizing chamber.
+However, this software is very limited in how it models the aluminum
+sources and how they are baffled.  It assumes that each filament has
+its own individual baffle whereas the MMT's chamber has baffles around
+each ring of filaments.  Intuitively, one could imagine how this could
+make a significant difference in how the deposited aluminum is
+distributed over the mirror surface.  To check this qualitatively, the
+algorithms from the SCOPES package were ported from IRAF to C and then
+extended to treat the baffles physically via raytracing.  Figures 1
+through 3 show results predicted using the geometry of the MMT primary
+and the current filament positions within the aluminizing chamber.
+Figure 1 shows what the original SCOPES package predicts given a
+baffle angle of 30 degrees.  The RMS here is 2.7% and the maximum
+peak-to-valley variation is 13 nm for a mean thickness of 95 nm.
+Figure 2 shows the predictions of the new raytracing model using the
+as-designed geometry of the current filament and baffle system.  The
+RMS is 15.7% and the maximum peak-to-valley is 35.7 nm for a mean of
+95 nm.  This is clearly much worse than we expected and suggests that
+our current coating may not be as even as we'd like.  Fortunately, it
+appears that the results can be significantly improved by simply
+moving the filament rings up or down.  Figure 3 shows the results of
+moving the inner ring down 200 mm, the middle ring up 100 mm, and the
+outer ring up 200 mm.  This brings the RMS down to 3.9% and the
+peak-to-valley down to 15.2 nm.  Once we determine how much range of
+adjustment we have for each filament ring, we will run a grid of
+models to find the optimum geometry.
+
+Figure 1 (scopes.ps):  Results from the original aluminizing model
+assuming individual baffles around each filament with a baffle angle
+(measured down from horizontal) of 30 degrees. 
+
+Figure 2 (current.ps):  Results for the current system using the
+as-designed geometry of filament and baffle positions.  
+
+Figure 3 (moved_filaments.ps):  Results obtained by moving the inner
+filament ring down 200 mm, the middle ring up 100 mm, and the outer
+ring up 200 mm.
+
+
+	  First Tests of a Hartmann-DIMM as a Seeing Monitor
+
+With the help of Don McCarthy, who loaned us a 10" Meade telescope
+(which was actually formerly owned by Shawn Callahan), and Matt
+Kenworthy (CAAO) we performed some initial feasibility tests of a
+simple Hartmann-DIMM (Differential Image Motion Monitor) design for a
+seeing monitor.  The classical approach to making a DIMM for measuring
+the seeing is to use a 8-12" amateur-class telescope, like a Meade or
+Celestron Schmidt-Cassegrain, and mask the entrance aperture down to
+two 50-60 mm apertures.  A wedge prism is placed over one of the
+apertures so that two separate images of a star are formed in the
+image plane and the differential motion of these images is used to
+determine the seeing.  A Hartmann-DIMM is similar, but separates the
+images from each aperture by changing the telescope's focus in lieu of
+using wedge prisms.  This design has the advantage of making it very
+easy to implement multiple apertures which can provide more
+information than just a single baseline.  The trade-off is that the
+images formed by each aperture will be out of focus.  Fortunately, the
+depth of focus provided by the relatively long focal length of the
+f/10 10" Meade allows us to defocus enough to separate the individual
+aperture images without significantly degrading those images.
+
+For the initial tests, we constructed a Hartmann mask with four 2"
+apertures arranged in a cross pattern which gives us six unique
+baselines to monitor.  We set the telescope up in front of
+T. Pickering's house and used a Supercircuits PC164 video camera plus
+a framegrabber card as the imaging system.  Figure 1 shows an example
+image taken of a 6th mag star.  We were initially concerned that the
+small apertures and short exposure times (1/60th of a second) would
+greatly limit how faint of a star we could use, but this 6th mag star
+provided plenty of signal.  With better seeing even a 7th mag star
+would probably be usable.  We grabbed two sets of 500 images each and
+used IRAF's starfind task to find and centroid the stellar images.
+Averaging the results of all baselines nets a seeing of 4.22" for the
+first set of images and 4.15" for the second set.  In both sets the
+two upper left to lower right baselines give significantly larger
+measures of the seeing than the lower left to upper right baselines.
+The average for the former for the two sets is 4.76" and for the
+latter is 3.82".  This shows that the wind direction is closely
+aligned with the upper left-lower right image diagonal.  More
+sophisticated temporal analysis of the image motion would allow us to
+determine the wind speed and actual direction.  
+
+The next step is to do similar tests with a system mounted on the MMT.
+This would allow direct comparison with seeing measures from direct
+images as well as our Shack-Hartmann wavefront sensors.  Ultimately we
+intend to mount the seeing monitor so that it can independently offset
+to a bright enough star so that seeing measurements can be made during
+science observations.  
+
+Figure 1 (dimm.ps): Example image of a 6th mag star taken with our
+Hartmann-DIMM prototype.  

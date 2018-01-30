@@ -1,0 +1,24 @@
+			  Network Changeover
+
+Over the course of the month of June, all machines managed by the MMTO
+were transitioned over to the new mmto.arizona.edu domain.  The first
+step in this was to configure our own DNS servers.  We now have a
+primary DNS server downtown as well as a secondary on the mountain.
+This way DNS on the mountain can still work when the radio link to
+downtown is lost, at least for local machines.  Migrating the mountain
+machines was mostly a matter of changing their domain names and DNS
+configurations.  Migrating the downtown machines was a little more
+involved since it required each machine to get a new address within
+the 128.196.100.0 network.  Except for some issues with some network
+gear, the transition went reasonably smoothly.  Windows users can now
+see all MMT machines in their network neighborhoods rather than just
+downtown or summit machines.  I have measured 10-15% better throughput
+than before between the summit and downtown thanks to us no longer
+having to route through CCIT to get to the mountain.  Managing our own
+DNS gives us much better response and flexibility in responding to our
+networking needs as well as those of observers wishing to plug
+computers into our network.  
+
+In addition to the mmto.arizona.edu domain, the mmto.org domain was
+also commissioned.  It refers specifically to a single machine that
+functions as the main mail, web, and file server for the MMT.  

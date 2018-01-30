@@ -1,0 +1,115 @@
+		    Tracking Performance Profiling
+
+Now that the guider logs are being archived on a nightly basis, it is
+possible to use them to profile the tracking performance of the
+telescope.  A good example of performance in good conditions is shown
+in Figure 1 where the telescope is tracking an object
+setting in the west with light winds.  In this case the RMS of the
+position errors calculated by the guider is about 0.06" with a
+peak-to-peak errors of about 0.1".  Under windier conditions, things
+are not quite as good as shown in Figure 1 where the
+winds were largely out of the east at about 25-30 mph with the
+telescope pointed directly into the wind after about 10:45 UT that
+night.  Here the RMS tracking error is 0.2-0.3" with peak-to-peak of
+up to 1.5" under the highest wind-loading.  This is qualitatively
+better than it was before the installation of the absolute tape
+encoders on the elevation drive arcs, but there is still room for
+improvement.
+
+Of greater concern are the systematic errors visible in Figure 1.
+This is seen most strikingly when the cumulative tracking is plotted
+as in Figure 2.  There is very obvious cyclical behavior in both
+elevation and azimuth with a nearly constant frequency in elevation
+and a frequency that decreases over time in azimuth.  This data was
+taken while tracking an object that was setting in the west with an
+elevation velocity that was nearly constant and an azimuth velocity
+that was decreasing to near zero by the end of the observation.
+Figure 3 is another example where an object is tracked as it crossed
+the meridian.  It clearly shows that the elevation frequency decreases
+before and then increases after the meridian crossing while the
+azimuth frequency remains high and relatively constant as the
+telescope swings around from east to west.  Figure 4 is an example
+where the elevation and azimuth velocities are nearly equal and
+constant which allows a more direct comparison of periods and
+amplitudes. While the guider does a good job of correcting for these
+oscillations while it's running, the 0.5-1.0" amplitude is currently
+the largest source of pointing error as judged by the 1" RMS of the
+latest pointing run.  What's worse, it means that even offsetting from
+a known good position cannot really be trusted to better than
+1.5-2.0".  This has been noted by some observers who have tried to do
+blind offsetting, though others have not reported problems.
+
+The variation of the frequency of the oscillations with tracking
+velocity points to the cause of the problem being spatially constant.
+The spatial period is also suspiciously close to 1024 cycles/rev which
+is an integer harmonic of the 512 cycles/rev natural frequency of the
+inductosyn absolute encoders.  To help test this further, Tom Trebisky
+developed a small tool that logs the output from the inductosyn
+absolute encoders (one each for azimuth and elevation) as well as the
+absolute tape encoders on the elevation drive arcs.  This tool was
+then run while the telescope was commanded to move at a constant
+velocity.  The results of the first of these tests are shown in Figure
+5 where the telescope was moving at a constant 0.004 degrees/sec.  In
+this case, the velocity was applied by commanding the inner servo loop
+while keeping the outer loop open.  This results in a fair amount of
+aperiodic, mechanical noise in the position readouts of the encoders.
+In Figure 5 this is best seen in the 'Tape 1 - Tape 2' panel.  Only
+Tape 2 has been fully calibrated so the output of Tape 1 differs by a
+constant factor.  Subtracting the mechanical signal as measured by
+Tape 2 from the absolute encoder readouts results in a very obvious
+sinusoidal signal with an almost 0.4" amplitude and a 1024 cycles/rev
+frequency (about 85 seconds), similar to what has been seen on the
+sky. 
+
+Clearly, there is something funky going on that affects both axes in a
+similar way.  Dusty Clark did some tuning of the electronics for the
+elevation inductosyn encoder and performed more constant velocity
+tests.  He found that the amplitude of the 1024 cycles/rev oscillation
+changed with position of the telescope, but was not affected
+noticeably by the tuning.  Subsequent guider data taken after the
+tuning also showed little to no change.  More tests were done with all
+of the raw inductosyn encoder data read out and saved at the full data
+rate.  There were no visible artifacts in the indexer and resolver
+data that would suggest a stuck bit or anything of that effect.
+Running a similar test, but with the outer servo loop closed, does
+show the improvement to the elevation encoder, however (Figure 6).
+The RMS noise in elevation is down to a few tens of milliarcsec.  The
+azimuth electronics were not tuned so there are still some artifacts
+there.  The 1024 cycles/rev oscillation is not seen in the outer loop
+test because the outer loop uses the inductosyn encoders as the
+position references.  A new test with the outer loop closed needs to
+be done where the tape encoders are read out to provide an independent
+measure of position.  If the 1024 cycles/rev oscillation is seen in
+the tape encoder outputs in that test, that would fully confirm that
+the underlying problem indeed rests in the inductosyns.  What exactly
+the problem could be is still a mystery.
+
+
+Figure 1 (fig1.ps): Raw tracking errors for the night of September
+6, 2002.  The raw errors are the actual differences between the
+reference position and the measured positions.  These are multiplied
+by the guider's gain parameter (usually 0.5) to calculate the
+correction to send to the mount.
+
+Figure 2 (fig2.ps): Cumulative tracking performance for the night of
+September 6, 2002.  This is calculated by cumulatively summing the raw
+tracking errors which results in a measure of how the telescope has
+tracked over time.  
+
+Figure 3 (fig3.ps): Tracking performance while observing an object as
+it crossed the meridian.  
+
+Figure 4 (fig4.ps): Tracking with nearly constant and equal elevation
+and azimuth velocities. 
+
+Figure 5 (fig5.ps): Results of a test where the telescope was
+commanded to run at a constant elevation velocity of 0.004
+degrees/sec.  'Absolute Encoder' refers to the inductosyn while 'Tape
+1' and 'Tape 2' refer to the tape encoders recently installed on the
+elevation drive arcs.  The test was performed with the outer loop open
+so that all three encoders provide fully independent position
+measurements.
+
+Figure 6 (fig6.ps): Results of a test where the telescope was
+commanded to run at a constant velocity with the outer servo loop
+closed.  The data shown are for the inductosyn encoders only.  

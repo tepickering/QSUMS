@@ -1,0 +1,46 @@
+			  AO Optical CCD Camera
+
+In collaboration with Matthew Kenworthy (CAAO), an attempt was made to
+interface the Axiom AX-6 CCD camera in the AO topbox to our own Apogee
+interface card located in the wavefront computer.  The AX-6 is a
+rebranded version of the Apogee AP-6 and uses what appears to be a
+very similar ISA interface card to those we've been using at the MMT
+for various Apogee cameras.  Interfacing that camera to our own
+interface would greatly simplify their setup and would allow it use
+the same image acquisition routines we've developed for the f/9 WFS
+system.  Unfortunately, we were not able to get that camera to read
+out properly with our PCI interface card.  The shutter and cooler
+control worked fine, but the firmware in that camera is sufficiently
+different than an AP-6 or any other Apogee camera that nothing we
+tried could get useful data read out.  It may be possible with more
+time to hack the Apogee driver to support the AX-6, but it was decided
+that a better long-term solution would be to replace the camera with
+something newer and more modern.
+
+
+			F/5 WFS GUI Interface
+
+During the October f/5 run, more work was done to flesh out the
+operator's GUI interface to the f/5 wavefront sensor.  Three new
+windows were added to the interface that can be brought up via the
+menubar on the main window:
+
+1) Interface to the PixelLink camera. 
+
+2) Interface to set the positions for the various stages within the
+WFS assembly. 
+
+3) Interface to monitor and toggle power to the WFS systems. 
+
+The PixelLink interface is especially handy for setting up stars onto
+the center of rotation.  When a image is taken with the PixelLink, a
+marker is place on the DS9 display window to denote the position of
+the center of rotation.  For the next run we will try to incorporate
+more automated schemes for selecting a star on the PixelLink and
+moving it to the center of rotation.  The stage position interface is
+mostly a convenient sanity check since the default positions have been
+determined and should remain fairly constant.  The power interface
+will greatly simplify the WFS start-up and shutdown processes at the
+beginning and end of the night.  Once the procedures for those are
+finalized, they will be automated as much as possible to further
+simplify things.  

@@ -1,0 +1,32 @@
+			  Summit Radio Link
+
+It has been determined that one of the pieces of equipment on the
+downtown end of the radio link is not what was originally specified in
+the order.  The equipment in question is a Marconi ES-3810 modular
+switch that we use to convert between ethernet and ATM.  Similar
+ES-3810's on the summit and ridge are equipped with "Segment" ethernet
+modules that support the specified 8192 ethernet addresses per
+ethernet port.  The ES-3810 downtown, however, is equipped with a
+"Workgroup" ethernet module that only supports 4 (yes, four!) ethernet
+addresses per port.  It works well enough as long as only one port is
+used and its switch matrix essentially disabled in its configuration
+and has been used in this way for years now.  However, it would be
+desirable have two 100 Mbit ethernet feeds into the downtown ES-3810
+so that we could fully utilize the 155 Mbit radio link as well as
+segregate MMT, ridge, and IOTA network traffic.  A segment module has
+been acquired via ebay (along with spares for various other pieces of
+gear), installed, and tested.  Setting up the 2nd ethernet link to the
+radio gear downtown will require some coordination with people at CCIT
+and has been put on hold while they have been dealing with severe
+network problems elsewhere on campus.
+
+		       System Software Updates
+
+With the advent of redhat 9, work has been done to port and test
+the various pieces of software we use or have written ourselves.  So
+far there haven't been any real show-stoppers so upgrading the various
+linux machines should go fairly smoothly.  The main server, mmto.org,
+will among the first to upgrade since it is the farthest behind.  The
+mountain machines will follow later, though the relatively minor
+differences between redhat 8.0 and 9 make the need somewhat less
+pressing.  

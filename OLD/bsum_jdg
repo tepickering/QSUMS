@@ -1,0 +1,116 @@
+From tom@cholla.as.arizona.edu  Mon Mar 25 16:03:55 2002
+Return-Path: <tom@cholla.as.arizona.edu>
+Received: from astro.as.arizona.edu (IDENT:root@astro.as.arizona.edu [128.196.208.2])
+	by caliente.as.arizona.edu (8.11.6/8.11.6) with ESMTP id g2PN3tq21625
+	for <tim@caliente.as.arizona.edu>; Mon, 25 Mar 2002 16:03:55 -0700
+Received: from cholla.as.arizona.edu (cholla.as.arizona.edu [128.196.208.67])
+	by astro.as.arizona.edu (8.11.6/8.11.6) with ESMTP id g2PN3qs30853
+	for <tim@as.Arizona.EDU>; Mon, 25 Mar 2002 16:03:52 -0700
+Received: (from tom@localhost)
+	by cholla.as.arizona.edu (8.11.6/8.11.2) id g2PN3sC25369
+	for tim@as.Arizona.EDU; Mon, 25 Mar 2002 16:03:54 -0700
+Date: Mon, 25 Mar 2002 16:03:54 -0700
+From: Tom Trebisky <tom@as.Arizona.EDU>
+To: tim@as.Arizona.EDU
+Subject: [jdgibson@as.arizona.edu: Jan/Feb bsum input.]
+Message-ID: <20020325160354.B25348@as.arizona.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.5.1i
+X-Keywords:                 
+X-UID: 311
+Status: RO
+Content-Length: 3333
+Lines: 89
+
+Here is Duane's contribution
+
+----- Forwarded message from J Duane Gibson <jdgibson@as.arizona.edu> -----
+
+From: jdgibson@as.arizona.edu (J Duane Gibson)
+To: ttrebisky@as.arizona.edu (Tom Trebisky)
+Cc: swest@as.arizona.edu (Dr. Steve West),
+   tim@as.arizona.edu (T. E. Pickering)
+Subject: Jan/Feb bsum input.
+Date: Mon, 11 Mar 2002 23:14:47 +0000
+X-Mailer: AT&T Message Center Version 1 (Feb 25 2002)
+
+Tom -
+
+This is a quick and dirty input for the bsum.  Let me
+know if you need more info on any of the items.
+
+Cheers, Duane.
+--------------------------------------------------------
+
+Software efforts focused in three areas:
+
+1)	Implementation of a new web-based catalog submittal,
+verification, and viewing system for observers,
+
+2)	Initiation of work on a new scope/catalog graphical
+user interface for the telescope operators, and
+
+3)	support of issues related to the hexapod and thermal
+systems.	
+
+
+1) Implementation of a new web-based catalog submittal
+form:
+
+A new web page was created using HTML and PHP for MMT
+observers to submit, verify, and view catalogs.  The
+submitted catalogs reside on an MMT server.  Options are
+available on the web page for updating and deleting
+previously submitted catalogs.   Individual catalogs can
+be viewed in a spreadsheet-format on the web page and
+sorted by any of the following data fields:  object name,
+right ascension, declination, magnitude, or spectral
+type.  Small portions of the catalog can also be viewed. 
+This web page is currently being incorporated into a set
+of web pages for each observer to obtain and submit
+information related to their upcoming MMT projects.
+
+2) Initiation of an new scope/catalog graphical user
+interface:
+
+Work was initiated on a new scope/catalog graphic user
+interface (GUI) for the operators.  Development of this
+GUI proceeded using C/Gtk+ because of the need for fast
+computation for large astronomical catalogs and for
+access to the more sophisticated widgets available in
+Gtk+.  A prototype was developed to the extent of loading
+in large catalogs into a spreadsheet-like GUI, sorting
+catalogs on selected columns, and implementing
+drag-and-drop between catalogs.  This work led to
+investigation of the open-source Xephem software
+available from Clear Sky Institute, Inc..  Modifications
+were made to Xephem to allow the telescope operator to
+point-and-click on a displayed object and either: 1) add
+that object to a MMT-format catalog, or 2) move the
+telescope to the selected object.
+
+3)  Hexapod and thermal system support:
+
+A considerable amount of time was spent on analyzing
+issues that arose on the hexapod (including focusing and
+collimation) and thermal systems after the telescope came
+back on-line in January.  Many of these issues, such as
+persistent alarms with the Carrier cooling unit, freezing
+of the Neslab cooling unit, and erroneous LVDT readings
+from the hexapod, are still being addressed.  A purchase
+order is in progress to repair and upgrade the Carrier so
+that it can operate at sub-freezing temperatures.  This
+will reduce the cooling load on the Neslab.  Software and
+operator procedures were modified to reduce icing and
+overloading problems for the Neslab.  Hardware
+modifications were make on the LVDT for Actuator 1 for
+the hexapod.
+
+----- End forwarded message -----
+
+-- 
+Tom Trebisky
+ttrebisky@as.arizona.edu
+

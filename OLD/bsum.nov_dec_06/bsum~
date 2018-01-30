@@ -1,0 +1,218 @@
+		     Primary Mirror Cell Software
+
+Skip Schaller has developed web-browser-based replacements for the old
+windx-based primary cell GUIs.  The old GUIs actually ran on the cell
+crate and were displayed remotely.  This required fairly significant
+resources on the crate side and special configuration on the client
+side to allow the cell crate access to the local X windows
+environment.  Such configuration is somewhat of a security risk. 
+
+The first iteration of a a new GUI used a PHP back-end with an "AJAX"
+javascript+html interface.  This version ran into performance problems
+with certain browers due to the large number of widgets updating once
+per second.  The second iteration implemented the GUIs using Java.
+This version can be viewed either in a browser using a Java plugin or
+run as standalone GUIs, though the browser method is more
+straightforward.  It has been well-tested and used routinely for a
+while.
+
+
+		  SCCS/ICE Modifications and Updates
+
+To support the new Red Channel camera that arrived in December, some
+modifications were made to the AZCAM server, ICE client software, and
+mmtobs observer account.  The changes were mostly minor and we were
+able to successfully acquire images without issue during the
+commissioning night of December 8.  A new ccdacq task called
+'compflats' was added for taking flat-field exposures with continuum
+lamps.  It works the same as the 'comps' task, but sets the image type
+to 'flat' instead of 'comp'.  
+
+One wrinkle with the new SCCS/AZCAM/ICE system is that pausing and
+resuming exposures with Blue Channel is not nearly as reliable as
+before.  After much testing by Skip, Red Channel appears to be fairly
+reliable at doing this, but Blue Channel fails a significant fraction
+of the time.  It fails both with the AzCamTool provided by Mike Lesser
+and with our ICE interface, though more frequently with the ICE
+interface.  We suspect the problem to be due to bugs in the Gen1
+controller's DSP code.  Blue Channel still uses its original Gen1
+controller while Red Channel has a new Gen2 controller.  We will
+confer with Mike Lesser about what can be done to help fix this.
+
+
+			   Hexapod Software
+
+Skip added high resolution UMAC data gathering to the hexapod and
+developed associated visualization tools.  This allows us to really
+see what the pods are doing during commanded moves.  Data taken with
+F9 showed that tuning the servos could yield some improvement of the
+following error.  Data has yet to be taken with F5, though we expect
+its servos are in even greater need of tuning.  We expect to do
+testing with F5 in mid-January. 
+
+Skip and Tom modified the hexapod code to compile and build both under
+linux and vxworks.  The vxworks build of this code appears to work the
+same as before, as it should, and is now being used in the hexapod
+crate.  Testing of the linux build is still pending.  Once the linux
+build is working and tested, we will deploy it as a server running on
+hacksaw and retire the vme crate we currently use.  
+
+
+		 Engineering and Operator Interfaces
+
+Duane made numerous changes to the MMTO Engineering web pages
+(http://hacksaw.mmto.arizona.edu/engineering), other GUIs, and related
+MySQL and RRDtool databases.  These changes include:
+
+-  Increased use of Ajax updating of web-page content.  A custom,
+   minimalistic Ajax-style library was developed for updating web
+   pages for the MMT.  This approach uses a Javascript XMLHttpRequest
+   object to get data from the web server without reloading the web
+   page.  Javascript Object Notation (JSON) replies from the web
+   server are used to update the web page.  The technique can easily
+   be applied to standard Ajax libraries, such as "prototype.js",
+   http://prototype.conio.net/, and the "YAHOO User Interface
+   library/YUI-Ext", http://www.jackslocum.com/blog/index.php.  The
+   widespread use of these libraries makes their use attractive.
+
+-  Refinement of a MMT-specific, "MMTDiv" Javascript class that
+   optimizes Javascript interaction with the web-page Document Object
+   Model (DOM) and encapsulates MMT GUI styles and behavior.
+
+-  Addition of new data and logging variables to MySQL databases and
+   tables.  Data was migrated from older ASCII background logs into
+   the MySQL database.  This increases MySQL database coverage to the
+   past three years.  New variables were added to the MySQL database,
+   including RMS azimuth, elevation and rotator servo errors for the
+   new mount software.
+
+-  A new web-based GUI, "hexpositioner", was created to allow
+   telescope operators to move the hexapod to an absolute target
+   position by adjusting hexapod operator offsets.  The web page
+   automatically calculates the required operator offsets for the
+   desired move, based on all other current hexapod offsets.  Hexapod
+   moves made through this GUI are compatible with other software that
+   use hexapod offsets.
+
+-  A web-based version of the "interlock" GUI was created and included
+   in the telstat displays above the operator station.
+
+-  Minor changes were made to existing GUI's: 
+     - The Ruby/Gtk "interlock" GUI was modified to include telserver
+       status 
+     - The "altaz" GUI was modified to include the 15-degree elevation
+       limit bypass status.
+
+
+-  Web pages and MySQL database tables related to the TempTrax digital
+   thermometers were modified to reflect the upgrade of the TempTrax1
+   unit from an 8-probe to a 16-probe unit and the relocation of
+   selected probes.
+
+-  Modifications were made to web pages related to the secondary mirror
+   support system in anticipation of removal of the hexapod crate.
+   New web pages were developed that present secondary mirror support
+   data versus telescope altitude.
+
+-  Modification was made to thermal web pages to allow zooming of the
+   images.
+
+-  New web pages were created for real-time monitoring of RMS servo
+   errors in the mount crate and building errors.
+
+-  Numerous web pages were modified so that they increasingly use MySQL
+   and RRDtool databases for data presentation in tabular and
+   graphical form.
+
+
+	       Software Knowledge Sharing With the LBTO
+
+The MMTO and LBTO software groups got together for a series of
+knowledge sharing meetings.  The first meeting was largely a high
+level discussion of the LBTO's TCS architecture and some of their
+software development methodologies.  At the second meeting Alex
+Lovell-Troy and Chinmaya Tumkur gave us a presentation on their web
+application and authentication frameworks.  They use the open-source
+and freely available Fedora Directory Server to store all of their
+user information and use it to integrate web, windows, and linux
+authentication.  They have developed frameworks to allow web
+applications to access and manage directory information.  This makes
+it possible for users to access secured web pages using the same
+password that they use to login to windows or linux machines.  Such an
+integrated authentication system would be very desirable so we will be
+in further contact with Alex and Chinmaya about setting up something
+similar for our network.  At the third meeting Duane presented a
+tutorial about our use of RRDtool (http://oss.oetiker.ch/rrdtool/) for
+logging and visualization of meteorlogical and thermal system data.
+We will continue to have semi-regular meetings between our groups as
+schedules permit.  
+
+ 
+	       Primary Thermal Structure Modeling Tools
+
+The IDL routines draw_temp and batch_temp were further refined by
+Betty.  The main modification was to add support for loading lists of
+data files into draw_temp.  When a list is loaded, it can be navigated
+via a scrollable list widget which makes it much easier to
+interactively select data to analyze and view.  Tim has been using
+these tools to analyze logged WFS and thermal system data to verify
+and calibrate the focus corrections we calculate from the models.  The
+predicted corrections match very well under some circumstances, but
+not well at all at other times.  Occasionally the predictions do worse
+than our current scheme of only following the temperature of the OSS.
+We need to better understand why this happens and under what
+circumstances before using these predictions to make open loop focus
+corrections. 
+
+
+	     Mining Sky Camera Data for Transient Events
+
+Betty continues to work on automating the processing of all-sky camera
+data to identify transient events.  Images are processed using the
+Hough Transform and the Sextractor program with three tables of
+resultant detections (Hough only, Sextractor only, and dual) written.
+Input is currently limited to data taken when the Sun's is below -12.0
+degrees.  So far, the results of the dual detections have been very
+robust.  Work is ongoing to try and determine how many real events are
+still being missed and how we might integrate this analysis into a
+real-time pipeline.  
+
+			    Committee Work
+
+Betty volunteered to participate as a member of the IAU FITS Working
+Group Technical Panel to draft updates and clarifications to the
+wording of the FITS Standard document, last updated in 1999.  She has
+been reviewing the document in question: The Definition of the
+Flexible Image Transport System (FITS) Document.
+
+
+		 MMT Service Request System Upgrades
+
+Dallan is working on the upgrade and redesign of the MMT Service
+Request System. The new version will eliminate the use of PEAR
+template modules allowing for easier feature additions.  New PHP
+classes will help make the database easier to work with and allow for
+non-SR applications to interact with the database.
+
+A few of the new features include:
+
+  * Redesigned layout
+  * Ability to quickly sort requests
+  * Enhanced searching capabilities
+  * Customizable settings on a per-user basis including optional
+    pager/SMS phone messages on critical events
+  * Previewing requests/responses before submitting
+  * Upload image feature
+  * Enhanced email option for users with HTML capable email clients
+  * Reports and logging
+
+The beta version is located at http://hacksaw.mmto.arizona.edu/service_no_PEAR/
+
+
+	      Calibrating Hexapod Open Loop Corrections
+
+We had two opportunities in early November to collect dedicated
+engineering data to measure how the f/5 front-end behaves as a
+function of elevation.  The first set of data was collected during the
+engineering night of November 7/8.  An instrument failure allowed us
+to get more data on the night of November 9/10.  

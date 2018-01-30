@@ -1,0 +1,136 @@
+			   F/5 WFS Computer and Hardware
+
+The f/5 WFS has again proven to be a rather cantankerous beast.  The
+PixeLink acquisition camera finally became so unreliable that we
+stopped using it altogether.  The problem appears to be with the
+IEEE1394 interface on the computer.  The computer reports errors
+loading the IEEE1394 driver and the camera works fine plugged into
+other computers.  Its very low sensitivity has always limited its
+usefulness, however, so we decided it wasn't worth the effort of
+replacing the computer's motherboard just to support it.  We tested a
+StellaCam low-light video camera such as the one used in the All-Sky
+Camera and found that even in its default mode of medium gain and no
+integration it was much more sensitive than the PixeLink.  Stars down
+to 10th magnitude were easily visible even when massively out of
+focus.  Adjusting gain and integration time via the StellaCam's RS232
+interface allowed us to easily reach 13th and 14th magnitude stars.
+We then went ahead and replaced the PixeLink with a StellaCam.  Some
+modifications were required within the WFS to run video and RS232
+cables out to the east drive arc and to provide 12V DC power to the
+camera.  There was an existing 12V DC power cable that was previously
+used by the science camera's filter wheel that we decided to use for
+the StellaCam.  It should have been sufficient in terms of current and
+was already wired up and switched through the LabJack.  However, we
+found that having the StellaCam powered up made the WFS computer
+unstable.  The WFS computer has not crashed since we decided to power
+off the StellaCam and leave it alone.  We will revisit this problem in
+early February while f/5 is off the telescope.
+
+In early December before we did any of the engineering to support the
+StellaCam, it was discovered that the hard drive in the WFS computer
+had died completely.  A replacement drive with a recent disk image
+installed on it was provided by John Roll.  This was installed and
+used successfully.  In the course of trying to debug the WFS
+computer's instability we migrated to booting the WFS computer over
+the network.  While this did not ultimately fix the stability problem,
+it did significantly improve the performance of the WFS computer and
+sped up the boot time by at least a factor of two.  It also greatly
+simplifies backing up the WFS computer and provides a means of easily
+managing and versioning known good configurations.  This is well worth
+the added complexity of requiring a second computer to be running and
+configured to support the WFS computer.  We are currently using the
+f/9 WFS computer on the east drive arc for this purpose, but may
+migrate this to hacksaw or hoseclamp in the future.
+
+Modifications were made to the software on the WFS computer to have it
+automatically start the required servers when it boots up.  Previously
+the operators had to start them manually.  
+
+
+		       M2 Open Loop Corrections
+
+Due to poor conditions on the engineering night of December 19, we
+were not able to make dedicated observations for checking our M2 open
+loop (a.k.a. ElColl) corrections.  It became clear over the following
+week that the sag term (M2 Y translation vs. elevation) had changed
+significantly since we had last measured it in mid-November.
+Analyzing the hexapod positions logged by the WFS after corrections
+have been applied found that the sag term has indeed changed and that
+there is also a significant temperature dependence that we were not
+correcting for previously.  Figure 1 shows the WFS data and elcoll
+fits projected to show the temperature dependence.  Figure 2 shows the
+same information projected to show the elevation dependence.  The
+slope of the temperature dependence is 115 microns per degree C.  The
+elevation dependence is much closer to linear versus the more purely
+cos(el) seen before.  Given the fairly large amount of scatter in the
+data it's not clear how significant this result is.  The Z (focus)
+component of elcoll has not changed significantly and the model
+determined in November did a reasonably good job of predicting the
+focus position in December.  There is even larger scatter in the focus
+data due largely to primary thermal state. 
+
+Figure 1 (transy_temp.ps):  Known good M2 Y positions as logged by the WFS (red
+crosses) during the last two weeks of December 2005 plotted with
+ElColl fits determined from dedicated observations during November
+2005 engineering time (green dashes) and by fitting a model to the WFS
+data (blue dashes).  The data is projected to most clearly show the
+temperature dependence seen in the December WFS data. 
+
+Figure 2 (transy_el.ps):  Same as Figure 1, but projected to show the elevation
+dependence.  
+
+
+  Wavefront Aberrations Due to Primary Mirror Temperature Variations
+
+In the past we have performed experiments to see how focus (as
+measured by a WFS) would change as the temperature of the OSS changed.
+In the course of doing so we saw large variations (~100 um) in focus
+on short timescales (0.5 to 1 hour) that did not correlate with any
+observed ambient or OSS temperature change.  Upon further analysis it
+was found that the focus changes did correlate with changes in the
+thermal structure within the primary mirror.  In hindsight it was
+obvious that this would be the case.  The softest circularly-symmetric
+bending mode of the primary mirror (the so-called "cone mode") does
+not correspond to any single zernike mode that we measure.  Instead,
+it projects into all circularly-symmetric zernike modes and most
+strongly into focus and spherical aberration.  So whenever we'd see
+spherical aberration change as temperature gradients in the mirror
+change, the focal length of the primary would be changing at the same
+time.
+
+On the night of November 21 we performed another experiment where we
+pointed at a star near the celestial pole to remove any elevation
+dependence and continuously took WFS data over a span of about 6
+hours.  For the first hour or so we just ran the thermal system
+normally.  Then we cranked the setpoint up to warm the mirror.  After
+about 3 hours we lowered it to start cooling the primary again.
+Figure 3 shows the results of modeling the primary's thermal
+structure.  The structure in each plate is modeled by a surface
+described by a nine mode Zernike polynomial.  This should in principle
+simplify relating temperature structure variations to variations in
+figure at the mirror surface.  Figure 4 shows the corresponding modes
+of wavefront aberrations measured by the WFS.  Note how the focus
+changes by over 100 um within an hour of changing the thermal system's
+setpoint.  The variations in measured focus correlate most closely
+with the focus term in the mid-plate fits.  The spherical term in the
+mid-plate also correlates with the measured spherical, though
+there is a phase shift in the peak that is not completely understood.
+Engineering time in mid-January 2006 will be used to further explore
+these issues with the goal of building an open loop tool that measures
+the primary's thermal state and applies corrections based on the
+predicted wavefront errors.
+
+Figure 3 (fit_plots.ps): Results of Zernike polynomial fits to the
+temperature structure of the primary mirror over the course of the
+night of November 21, 2005.  In all plots the red data corresponds to
+the front plate, green to the mid plate, blue to the back plate, and
+magenta to the average temperature.  The temperatures all come from
+the cell's E-series thermocouples.
+
+Figure 4 (zern_plots.ps):  Results of wavefront measurements over the
+same period of time shown in Figure 3.  The large scatter in the data
+is due to the fairly poor seeing conditions (~1.5") during the time
+the data was taken.  Still, the variations in focus, spherical, and
+0-degree astigmatism are very clear.  
+
+

@@ -1,0 +1,192 @@
+		  New and Revised Web Pages and GUIs
+
+a) A Flash9 version of the thermal transect was created for improved
+web page performance:
+
+http://hacksaw.mmto.arizona.edu/engineering/thermal_transect/flex2/thermal_transect/bin/thermal_transect.html
+
+Links are incorporated throughout this web page to more detailed
+information on current data and graphs.  This web page also allows the
+user to pick which temperatures are included in the thermal transect
+display.  This web page is also available from the MMT Engineering web
+page: http://hacksaw.mmto.arizona.edu/engineering/.
+
+b) Various web pages were created and updated to accompany the new
+thermal transect, including:
+
+http://hacksaw.mmto.arizona.edu/engineering/rrd/rrd_viewer.php 
+
+This web page now has more complete access the RRDTool databases.
+
+c) Bugs were fixed in the edb_gui, which allows Xephem and two-line
+element (TLE) format catalogs to be used at the MMT.  In addition, a
+CGI version of this code was written to allow calculation of sidereal
+and non-sidereal objects from web pages.  A new web page that uses
+this CGI script for solar system objects is at:
+
+http://hacksaw.mmto.arizona.edu/engineering/edb_cgi/solar.html
+
+d) New web pages were created for the: 
+
+  i) mount axial and transverse counterweights: 
+     http://hacksaw.mmto.arizona.edu/engineering/counterweights/bin/counterweights.html
+  ii) building error and mount drive currents:
+     http://hacksaw.mmto.arizona.edu/engineering/mount_drives/bin/mount_drives.html
+  iii) rotator motor drive currents:
+     http://hacksaw.mmto.arizona.edu/engineering/rotator_drives/bin/rotator_drives.html
+
+Although these web pages use Flash9, techniques were developed for
+having similar dynamic gauges using only Javascript.  These
+Javascript-based gauges can run on both 32-bit and 64-bit browsers
+while the Flash9 versions require a 32-bit browser because of the
+Flash plugin. Future versions of similar web pages may use the
+Javascript approach to gauges.
+
+e) A new weather web page was created that combines wind rose diagrams
+and other plots from the east and west Vaisala WXT510 units:
+http://hacksaw.mmto.arizona.edu/weather/wind_details.html.  Repairs
+continue on various weather sensors.  The Vaisala3 unit is at the
+manufacturer for repairs of its heating unit.  It may be possible to
+repair the Young wind unit if enough spare parts can be found.  This
+unit was damaged by lightning during the summer monsoons.
+
+f) More research was done on optimizing web pages, specifically in the
+use of Document Object Model (DOM) textnodes for displaying data in
+web pages.  Modifications were made to the MMTDiv Javascript class to
+use textnodes for optimal web page performance.  Use of textnodes is
+perhaps the most significant way in which web pages can be optimized
+by minimizing DOM manipulations.
+
+g) Work was started on a status server that uses the mini.pm Perl module. 
+This server would maintain status information for the cell, hexapod,
+mount, thermal system, and network.  A draft web page, modeled after the
+interlock GUI, is at:
+
+http://hacksaw.mmto.arizona.edu/engineering/sysstat/sysstat.html
+
+This would replace
+http://hacksaw.mmto.arizona.edu/engineering/sysstat/sysstat.php. 
+
+h) Finally, further consolidation of Apache web server configurations
+that are specific to the MMT have been collected into an mmt.conf file
+for both hacksaw and mmto.
+
+
+				 SPIE Abstracts
+
+The MMT staff has submitted several abstracts for papers to present at
+the SPIE Atronomical Instrumentation conference to be held in June,
+2008:
+
+- Duane Gibson submitted one for a paper that will describe results of
+  benchmarking studies and techniques to improve web browser
+  performance for highly dynamic data.
+
+- Tim Pickering submitted one for a paper that will describe the
+  results of steady-state finite element thermal analysis of the MMT
+  primary mirror and how their predictions compare to what has been
+  measured with our wavefront sensors.  
+
+
+			     Network Authentication
+
+In continued efforts to integrate and secure our network
+authentication, various options were investigated for getting the
+MMT's Google calendar to use our LDAP scheme.  Although there are some
+possible approaches for using LDAP, the current approach of using a
+common "mmtstaff" Google account seems to be the most attractive.  The
+main reason for LDAP authentication is internal security within MMT's
+network.  The Google calendar is outside of this security requirement.
+
+Likewise, enabling LDAP authentication for SiteScape would be
+problematic, require significant support from Steward ETS, and extra
+costs on our part to enable accounts for everyone.  Maintaining a
+single-signon for all MMT staff does not put our network at risk, but
+does involve some risk to the data we wish to store within SiteScape.
+This should be kept in mind if we wish to store sensitive data within
+that system.
+
+
+			 Autoguider Software
+
+The SAOguider software relies on a DT3155 framegrabber to digitize
+video signals into images that can be analyzed.  It is used primarily
+for Blue and Red channel with the videoscope ICCD, but it also used
+with the f/15 NGS topbox with their StellaCam.  Modifications were
+made to the linux driver for the DT3155 card so that it no longer
+limits the amount of useful ram that a machine can have.  Another
+limitation of the DT3155 card is that it seems to require using the
+"noapic" kernel switch in order to operate successfully.  It may be a
+hardware problem in that everything works properly when in APIC mode,
+but no interrupts are being detected.  The "noapic" switch has little
+performance impact for a single-processor machine so this is not a big
+problem at the moment.
+
+We have started looking into rationalizing the SAOguider and SOguider
+interfaces.  The idea is to use the same user interface with all of
+our different cameras.  Skip developed an interface between the current
+SAOguider program and the azcam camera used by SOguider.  However, this
+is based on the older version of SAOguider that we use and does not
+appear to be close to an optimal way to run the camera.  The versions
+of SAOguider used by MegaCam and Hecto are significantly updated and
+support the features we wish to use with azcam.  For example, we want
+the client and image server to run on separate machines whereas our
+version only passes images via shared memory.  We may also want to
+implement the automatic guide star selection and guide box
+configuration that has been implemented for MegaCam. 
+
+
+			MMT Seeing Statistics
+
+The end of 2007 marked the end of 5 years of routine operational use
+of our Shack-Hartmann wavefront sensors.  Over that time we have been
+making seeing estimates based on modeling the full-widths at
+half-maxima of the Shack-Hartmann spots.  The estimates generally
+agree pretty well with direct measurements using imaging devices such
+as MegaCam.  Tim reanalyzed all of the archived Shack-Hartmann frames
+with the current version of the WFS analysis software to create a
+consistent database of seeing measurements.  Culling out some
+obviously bad data leaves 48,085 WFS frames to analyze.  
+
+Figure 1 show the raw histogram of the measured seeing values with no
+corrections made for airmass.  The mean seeing is 1.03" and the median
+is 0.94".  Since WFS observations are generally taken in the vacinity
+of science targets these numbers are a useful metric of what the
+seeing quality has been during science observations.  Site seeing
+measurements are generally extrapolated to a seeing value at zenith.
+The standard model of atmospheric turbulence gives the relation:
+
+seeing(z=0) = seeing(z)/sec(z)**0.6
+
+where z is the zenith angle of the observation.  Figure 2 shows the
+results of applying this correction to the WFS seeing measurements.
+The mean seeing adjusts down to 0.9" and the median to 0.82".  
+
+Further analysis work is ongoing to look for trends in seeing as a
+function of azimuth, time of year, time of night, wind speed, etc.
+The effects of tracking errors and engineering nights with lots of WFS
+data taken also need to be accounted for.  
+
+Figure 1 (seeing_hist.ps): Histogram of 48,085 seeing measurements
+taken from the F/9 and F/5 Shack-Hartmann wavefront sensors.  
+
+Figure 2 (zenith_seeing_hist.ps): Histogram of the data shown in
+Figure 1 corrected for the airmassess of the observations to show
+expected seeing values at zenith. 
+
+
+			     OS Upgrades
+
+Fedora Core 8 was released in late October while Fedora Core 6 was
+demoted to legacy status in early December.  Machines that were still
+running FC6 were updated to FC8 over the course of late November
+through December.  The ability to perform OS upgrades on-the-fly using
+the yum command has improved considerably.  In each case the upgrade
+went very smoothly with very little extra tweaking required to make it
+work.  The two main server computers, mmto.org and hacksaw, are still
+running FC6 and will be updated by the end of January.  
+
+A new version of IRAF also was released in December and was included
+as part of the FC8 upgrade.  A few more astronomy-related tools that
+Tim had previously been packaging himself have now become included in
+Fedora most notably DS9.

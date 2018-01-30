@@ -1,0 +1,86 @@
+			 Observing Conditions
+
+The Fall 2008 trimester had some of the consistently best seeing that
+we've seen in over 5 years.  The median seeing for the entire
+trimester was 0.71" (based on 3545 WFS observations) and the seeing was
+0.5" or better more than 15% of the time.  It culminated on the last
+night of the year when MegaCam data was obtained with 0.3" FWHM
+stellar PSFs in images with 40-60 sec exposure times, no autoguiding,
+and smooth 10-15 mph winds.  The seeing values measured directly in
+the MegaCam images agreed very well with the ones measured by the WFS.
+This is further validation of our technique for deriving seeing values
+from the WFS data.  The fact that we were able to achieve such good
+image quality without guiding also shows how good our tracking can be.
+
+The good seeing is in large part due to long stretches of stable, mild
+weather that we had the 2nd half of September, most of October, and
+parts of November.  The histograms of wind, temperature, and humidity
+help bear this out.  The outside ambient temperature was between 10
+and 15 C roughly half the time while the humidity was near saturation
+about 10% of the time, but generally dry otherwise.  The winds were
+slightly lower overall with the median average and median gust speeds
+each down 2 mph from the summer.  
+
+seeing.ps: Seeing histograms for each trimester of 2008. The seeing
+values are corrected to zenith using the standard model of atmospheric
+turbulence.  Note how the seeing was markedly better during the fall
+than during the spring or summer.
+
+fall_08_temp.ps:  Histograms of nighttime humidity and temperature
+during the fall 2008 trimester.  Only data acquired between 6 PM and 6
+AM is included. 
+
+fall_08_wind.ps:  Histograms of nighttime wind speed and direction
+during the fall 2008 trimester.  Only data acquired between 6 PM and 6
+AM is included.
+
+
+			     AO Software
+
+A number of modifications and improvements were made to the AO
+software over the course of the fall trimester.  These include:
+
+TSS Server - The Thin Shell Safety (TSS) system has a communications
+interface that only allows one client to connect to it at a time.
+Most of the time the one client would be a 'dm_status' GUI that
+displays parameters reported by the TSS.  However, when preparing the
+mirror for operation or shutting it down, the one client limitation
+required the DM operator to close the dm_status connection so the
+other software could talk to the TSS and then reopen it afterwards.  A
+TSS server was developed to act as an intermediary to manage multiple
+simultaneous clients.  The bulk of the work was performed by Tom
+Trebisky with help from Tim Pickering in testing and deployment and
+from Skip Schaller to get TSS information incorporated into ao_gui.
+The TSS server was fully commissioned and deployed during the
+weathered-out December AO run and eventually used successfully during
+the January 2009 AO run.  
+
+Science Server - The science server for the AO system acts as an
+intermediary that allows instrument control software to coordinate
+control of the MMT mount, the AO topbox, and the AO loop.  AO
+instruments frequently need to nod or dither between exposures and
+the science server provides a way to automatically turn the loop gain
+down, move the telescope, move the field steering mirror, and then
+turn the loop gain back up when a dither or nod is commanded.
+Previously it was implemented as a stand-alone tcl/tk GUI.  Skip
+Schaller modified it to act as a server running in the background with
+the configuration interface incorporated into the main ao_gui
+interface.  The new science server was deployed and used successfully
+during the November and December AO runs. 
+
+New Actuator Current Limit Handling - Previously, the actuator current
+limits in the DM were based on absolute values for individual
+actuators.  If one actuator hit a limit, the loop would break.  This
+highly conservative approach wasn't a dealbreaker for NGS, but
+severely hampered LGS under all but the very best conditions.  Vidhya
+Vaitheeswaran implemented a new approach that monitors the RMS of all
+actuator currents over a period of time.  This was a breakthrough for
+LGS operations and was ported over to NGS operations during the
+November run.  On the first night the new limit scheme was used with
+NGS we were able to keep the loop closed on the same object from 5:50
+PM until 12:40 AM without any interruption.  The conditions during
+most of that time were exquisite, though there were numerous occasions
+where the loop would likely have broken with the original limit
+scheme.  We expect this new scheme to greatly improve the efficiency
+of NGS operations and extend the range of conditions where NGS is able
+to work.  

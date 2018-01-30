@@ -1,0 +1,178 @@
+From: "J Duane Gibson" <jdgibson@mmto.org>
+Date: November 2, 2006 2:11:46 PM MST
+To: "Shawn Callahan" <callahan@mmto.org>
+Cc: "'Ricardo Ortiz'" <rortiz@mmto.org>, "'T. E. Pickering'"  
+<tim@mmto.org>, bcomisso@mmto.org
+Subject: Re: Mapping f/9 limit switches
+Reply-To: jdgibson@mmto.org
+
+Shawn -
+
+I included some text in my bsum input to Tim on the f/9 limit mapping
+activity.
+
+All of limits for the various secondaries are stored in the settings
+server on hacksaw (see below).
+
+Cheers, Duane.
+
++++
+
+Current "official limits" for the f/9 are:
+     <official_limits>
+         <nlimit>
+           <tx>-1000.00</tx>
+           <ty>-1000.00</ty>
+           <tz>-1000.00</tz>
+           <x>-4550.00</x>
+           <y>-4550.00</y>
+           <z>-4801.00</z>
+         </nlimit>
+         <plimit>
+           <tx>1000.00</tx>
+           <ty>1000.00</ty>
+           <tz>1000.00</tz>
+           <x>4500.00</x>
+           <y>6500.00</y>
+           <z>4801.00</z>
+         </plimit>
+       </official_limits>
+
+The current f/9 limits that the operators are using are:
+    <limits>
+         <nlimit>
+           <tx>-1000.00</tx>
+           <ty>-1000.00</ty>
+           <tz>-1000.00</tz>
+           <x>-4550.00</x>
+           <y>-4550.00</y>
+           <z>-4801.00</z>
+         </nlimit>
+         <plimit>
+           <tx>1000.00</tx>
+           <ty>1000.00</ty>
+           <tz>1000.00</tz>
+           <x>4500.00</x>
+           <y>6500.00</y>
+           <z>4801.00</z>
+         </plimit>
+       </limits>
+
+
+For the f/5:
+     <limits>
+         <nlimit>
+           <tx>-3600.00</tx>
+           <ty>-3600.00</ty>
+           <tz>-300.00</tz>
+           <x>-20000.00</x>
+           <y>-20000.00</y>
+           <z>-35000.00</z>
+         </nlimit>
+         <plimit>
+           <tx>3600.00</tx>
+           <ty>3600.00</ty>
+           <tz>300.00</tz>
+           <x>20000.00</x>
+           <y>20000.00</y>
+           <z>20000.00</z>
+         </plimit>
+       </limits>
+       <official_limits>
+         <nlimit>
+           <tx>-3600.00</tx>
+           <ty>-3600.00</ty>
+           <tz>-300.00</tz>
+           <x>-20000.00</x>
+           <y>-20000.00</y>
+           <z>-20000.00</z>
+         </nlimit>
+         <plimit>
+           <tx>3600.00</tx>
+           <ty>3600.00</ty>
+           <tz>300.00</tz>
+           <x>20000.00</x>
+           <y>20000.00</y>
+           <z>20000.00</z>
+         </plimit>
+       </official_limits>
+
+And the f/15:
+   <limits>
+         <nlimit>
+           <tx>-1500.00</tx>
+           <ty>-1500.00</ty>
+           <tz>-300.00</tz>
+           <x>-8500.00</x>
+           <y>-2000.00</y>
+           <z>-5300.00</z>
+         </nlimit>
+         <plimit>
+           <tx>1500.00</tx>
+           <ty>1500.00</ty>
+           <tz>300.00</tz>
+           <x>3900.00</x>
+           <y>4100.00</y>
+           <z>5002.00</z>
+         </plimit>
+       </limits>
+       <official_limits>
+         <nlimit>
+           <tx>-1500.00</tx>
+           <ty>-1500.00</ty>
+           <tz>-300.00</tz>
+           <x>-8500.00</x>
+           <y>-2000.00</y>
+           <z>-5300.00</z>
+         </nlimit>
+         <plimit>
+           <tx>1500.00</tx>
+           <ty>1500.00</ty>
+           <tz>300.00</tz>
+           <x>3900.00</x>
+           <y>4100.00</y>
+           <z>5002.00</z>
+         </plimit>
+       </official_limits>
+
+> Ricardo and Duane,
+>
+> Cc: Tim
+>
+>
+>
+> Could one of you write up the results in this month's Bimosums of the
+> results of mapping the f/9 limit switches and the changes that were  
+> made
+> in
+> the software? It would be nice to have a statement of why this was
+> necessary
+> and the protection achieved.
+>
+>
+>
+> Thanks,
+>
+> S
+>
+>
+>
+> Shawn Callahan
+>
+> System Engineering Coordinator
+>
+> MMT Observatory
+>
+> 520-621-7649 Office
+>
+> 520-954-6619 Cell
+>
+> "Only systems that hover on the border between order and chaos  
+> exhibit the
+> needed general stability and capacity to explore the universe of  
+> possible
+> solutions to challenges."
+>
+>
+>
+>

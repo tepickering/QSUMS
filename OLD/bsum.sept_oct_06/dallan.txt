@@ -1,0 +1,87 @@
+From: Dallan Porter <dporter@mmto.org>
+Date: November 1, 2006 10:29:57 AM MST
+To: "T. E. Pickering" <tim@mmto.org>
+Subject: Re: [bruss@mmto.org: Bsum reminder]
+
+Tim,
+
+Here's a couple paragraphs I put together for the Bsum. If you need  
+more, I could probably think of some other stuff.
+
+Dallan
+
+
+*Windows Domain Controller*
+------------------------------------
+The Windows Domain Controller server is online. All remaining MMT  
+Windows users will be migrated onto the new domain over the next few  
+weeks. The domain controller provides a centralized mode of  
+administration and allows any MMT user to log into any Windows  
+computer on the MMT domain with their existing username and password.
+
+All of the MMTs Autodesk Inventor files have been moved onto the new  
+Windows server and these files are accessed using AutodeskÕs Vault  
+software. The Vault provides a robust method for checking in-and-out  
+files and maintaining appropriate permissions.
+
+We are currently evaluating Ôroaming profilesÕ which will permit  
+Windows users to store their computer settings and ÔMy DocumentsÕ  
+on the server instead of their desktop computer. This will give users  
+their same ÔdesktopÕ regardless of which computer at the MMT they  
+are logged into.
+
+A centralized backup system for Windows desktops is currently being  
+evaluated. This will provide Windows users with automatic backup of  
+important documents onto the server on a regular basis.
+
+
+*Catalog Enhancements*
+---------------------------------
+Since the roll out of the new observer catalog submission tool, many  
+changes and additions have been requested and implemented. A couple  
+of the major enhancements are:
+
+    * The ability for the observer to edit catalogs online after they
+      have already been submitted.
+    * Plotting catalog targets and graphing airmass.
+    * Administration page for managing submitted catalogs.
+
+
+
+
+
+
+T. E. Pickering wrote:
+> as before, send your contributions to me and i'll collate them and
+> pass them along to barb.
+> tim
+>
+> ----- Forwarded message from bruss <bruss@mmto.org> -----
+>
+> From: "bruss" <bruss@mmto.org>
+> To: "Williams, Grant" <gwilliams@mmto.org>,
+>         "Van Horn, Ken" <kvanhorn@mmto.org>,
+>         "Trebisky, Tom" <ttrebisky@mmto.org>,
+>         "Stobie, Betty" <bstobie@mmto.org>,
+>         "Stalcup, Thomas" <tstalcup@mmto.org>,
+>         "Smith, Dennis" <dsmith@mmto.org>, "Schaller, Skip"  
+> <skip@mmto.org>,
+>         "Porter, Dallan" <dporter@mmto.org>,
+>         "Pickering, Tim" <tpickering@mmto.org>,
+>         "Ortiz, Ricardo" <rortiz@mmto.org>,
+>         "Gibson, Duane" <jdgibson@mmto.org>,
+>         "Gerber, Dondi" <dgerber@mmto.org>, "Clark, Dusty"  
+> <dclark@mmto.org>,
+>         "Chute, Creighton" <cchute@mmto.org>,
+>         "Callahan, Shawn" <scallahan@mmto.org>,
+>         "Lacasse, Marc" <mlacasse@cfa.harvard.edu>,
+>         "Knop, Cory" <cknop@mmto.org>, "Comisso, Brian"  
+> <bcomisso@mmto.org>
+> Subject: Bsum reminder
+> Date: Wed, 1 Nov 2006 08:30:16 -0700
+> X-Mailer: Microsoft Outlook Express 6.00.2900.2869
+>
+> Due this Friday ...
+> ----- End forwarded message -----
+>
+>

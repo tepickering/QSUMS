@@ -1,0 +1,63 @@
+			    All-Sky Camera
+
+Work done to date on the MMT all-sky camera was presented at the SPIE
+conference in the form of a paper, a talk, and a poster.  The work was
+presented again at the MMT Science Symposium in the form of a talk and
+poster.  The paper and poster are available on the mmto.org website.  
+
+
+		      F/5 Open Loop Corrections
+
+The open loop tools for f/5 were calibrated over the spring to
+compensate for the broken tangent rods in the f/5 cell.  After the
+cell was repaired, the tools needed recalibration since the position
+of the mirror within the cell has changed by at least a couple of
+millimeters.  We hoped to get some engineering data to do the
+recalibration, but the early onset of the monsoon prevented it.
+Fortunately, we were able to get on the sky long enough to get one WFS
+session in.  This provided enough information to recalibrate the
+zeropoints within the hex_predict tool.  More information is required
+to determine whether the elevation-dependent terms have changed
+significantly.  
+
+
+			Logging of Seeing Data
+
+The telstat monitor, the WFS software, and the SAO guider have been
+modified to take advantage of the new seeing server.  The WFS software
+updates the value of wfs_seeing whenever a WFS frame is analyzed.  The
+guider updates the value of guider_seeing whenever it calculates the
+FWHM of a guide star.  The telstat display now shows both seeing
+values.  The values are kept separate because the WFS seeing
+determination is more accurate and is not susceptible to systematic
+effects like telescope focus or collimation.  The guider seeing is not
+as accurate, but updates more frequently.  Systematic deviation from
+the WFS seeing can be a useful indicator of the telescope going out of
+focus.  We are working with the AO group to have them update our
+seeing server with the values they determine with their system.  These
+will provide accurate and frequent measurements that will allow us to
+do site characterization at a level that we haven't been able to do
+before.  
+
+
+		       OS and Computer Upgrades
+
+Fedora Core 5 has been installed on several machines downtown.  They
+were all upgraded in situ from Fedora Core 4 using the 'yum' utility.
+This method, while not officially support by Fedora, has proven to
+work very well and is much faster than booting into a special install
+program.  It also allows a machine to be used during the upgrade
+process and can easily be done remotely.  The rpm packages that are
+still maintained in-house have been rebuilt and tested on the upgraded
+machines.  Upgrades of mountain machines will commence in late July.  
+
+A new server machine was ordered to take the place of hacksaw.  It
+will be a dual-processor rackmount machine with a large RAID5 array
+similar to the mmto.org server.  The current hacksaw is becoming
+somewhat bogged down by running all of the network services and data
+logging/archiving tasks as well as most of the operator's TCS guis.
+Putting the network services, databases, and data archives on the
+rackmount machine should free up the operator's workstation
+considerably.  We plan to deploy the new server over summer shutdown
+which should give us plenty of time to test and debug the new
+configuration. 

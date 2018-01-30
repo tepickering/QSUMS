@@ -1,0 +1,79 @@
+			    All-Sky Camera
+
+The storm that rolled over Mt. Hopkins on July 16 that helped to put
+out the forest fire also hit the sky camera with some lightning.  Near
+the end of the daytime movie from that day there is a bright flash at
+18:31 MST and then garbled video afterward.  At the same time, the
+system logs on the computer running the sky camera reported a spurious
+interrupt and over-voltage on the serial port connected to the camera.
+Subsequent forensic testing confirmed that the serial port on the
+computer was fried as well as the StellaCam's power supply and RS232
+communications box.  The rest of the computer, including the
+framegrabber card, was fine.  It turned out that the StellaCam itself
+is also fine except for it's gamma adjustment and automatic iris
+controls.  The gamma adjustment is not useful, but the iris control is
+essential for daytime outdoor use so a replacement camera was ordered
+and installed.  The old camera is still useful for nighttime purposes,
+though, and could be used as a more sensitive RATcam or chamber
+surveillance camera.
+
+
+		    Mt. Hopkins Seeing Conditions
+
+The summer shutdown provided a good opportunity to look over the 2+
+years of seeing data that have been collected with our Shack-Hartmann
+wavefront sensors.  Every image taken with those instruments provides
+a seeing data point by measuring the average spot width and deriving
+the seeing from that using a standard atmospheric turbulence model.
+Thus far we have just shy of 20,000 such data points.  Figure 1 shows
+total and cumulative histograms of this data.  The distribution is
+similar to what was observed with the old MMT with a peak near 0.7"
+and a long tail.  The seeing was better than 1.0" nearly 3/4 of the
+time and better than 0.5" about 1/6 of the time.  This confirms
+Mt. Hopkins status as a site with good to excellent seeing.  
+
+Breaking the data down allows us to look for possible trends.  Figure
+2 shows the results of splitting the data into UT quadrants.  The bin
+for the last quarter of the night (3 AM onwards) has a significantly
+narrower peak and lower median seeing than the other quadrants. This
+is consistent with the conventional wisdom that seeing often settles
+down overnight and is best at the end of the night.  It's possible
+this is due in part to selection effects since good nights may be more
+likely to have WFS data taken at the end of the night to take the most
+advantage of conditions.  On the other hand, the results from the end
+of the night are the most consistent with those reported in CTM-96-4
+from the old MMT where the data was also taken at the end of the
+night, but in an unbiased fashion (i.e. whenever it was clear).
+
+Breaking down the data month by month is shown in Figure 3.
+Conclusions are more difficult to draw here since the smaller number
+of points per bin allows good or bad nights with lots of data to skew
+the results significantly.  Figure 4 shows the seeing data plotted
+versus the time of year it was taken.  There are still significant
+observational gaps in some of the months (February and September, in
+particular) and lots of scatter in the seeing year-round.  In fact,
+there is frequently a lot of scatter even in a given night.  This has
+been seen qualitatively by the AO group during f/15 runs and Figures 5
+and 6 show results from nights where tempfoc data was obtained.  These
+are perhaps a bit unrepresentative since tempfoc data is taken
+pointing due north at an elevation of about 30 degrees which brings
+ground layer seeing effects into much greater play.  Still, it is not
+uncommon to see the seeing jump from 0.5" to 1.0" on short timescales
+even at zenith.
+
+Figure 1 (seeing.ps):  Total and cumulative histograms of the
+Shack-Hartmann seeing data. 
+
+Figure 2 (ut_bin.ps):  Histograms of seeing data divided into
+quadrants of the night.  
+
+Figure 3 (year.ps):  Histograms of seeing data divided into months of
+the year. 
+
+Figure 4 (all_year.ps):  Plot of seeing versus time of year.
+
+Figure 5 (tempfoc_20050503.ps):  Seeing versus time for the night of
+May 2, 2005.
+
+Figure 6 (tempfoc_20050504.ps):  Seeing versus time for the night of
+May 3, 2005.

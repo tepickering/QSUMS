@@ -1,0 +1,122 @@
+		  Wavefront Sensor Analysis Software
+
+Over the course of the f/5 engineering runs in May and June the WFS
+analysis software was engineered to the point where it works at least
+as well as for the f/5 WFS as it does for the f/9 system.  The key to
+solving many of the problems we had with the f/5 system during the
+April run was replacing the finely pitched lenslet array that the
+Puntino WFS unit originally came with.  Dan Fabricant obtained and
+installed a coarser lenslet array as well as some extra optics that
+were needed to correctly image the pupil onto the lenslet array
+(another source of previous problems).  The coarser array greatly
+simplifies the process of associating spot centroids with their
+reference positions, especially when the seeing is degraded, while
+still providing a more than adequate number of apertures across the
+pupil.  Figure 1 shows what kind of image quality it is possible to
+achieve in as few as 2 iterations with the f/5 system under good
+conditions.
+
+Specific modifications, additions, and improvements to the software
+include:
+
+Interactive Aperture Overlay - This is based on Steve West's original
+interactive overlay and was resurrected to help deal with the closely
+spaced spots of the original lenslet array.  See Figure 2 for a
+screenshot.  It not necessary as frequently with the new array, but
+still provides a useful fallback mode when conditions are poor and the
+default centroiding parameters do not work well.  Both the f/5 and f/9
+systems will bring up the interactive overlay if the criteria for
+initial spot association are not met.
+
+Inserting Telescope and Other Data in WFS Image Headers - The first
+cut at this was done previously for the f/9 WFS, but required some
+non-trivial modifications of some core code in the Mill's Apogee
+software.  This has been replaced by a much more general perl script
+that takes a FITS file as input, queries the mount, hexapod, and
+thermal systems, and places the collected information into the FITS
+header.  Having as much information as possible in the image headers
+will greatly ease mining of WFS data to profile telescope performance.
+
+Handling of Arbitrary Rotator Position - Steve West put hooks in the
+analysis code to handle non-zero rotator angles, but these were unused
+and not fully tested.  It is now fully implemented via parsing rotator
+angles out of the image headers and has been tested by inserting known
+amounts of aberrations at various angles.  Thus the WFS can be used
+successfully at any rotator angle and will even work with the rotator
+on, though that is not recommended.  Several tests were performed to
+confirm that everything is indeed derotated properly. 
+
+WFS Interface GUI for f/5 - Using a script provided by John Roll as a
+starting point, a GUI was built to remotely control the f/5 WFS stage
+and acquire images.  A screenshot of it is shown in Figure 3.  It's a
+relatively simple interface that provides the ability to move the WFS
+stage in and out of the field, select and configure which camera to
+use, and configure and acquire images from the selected camera.
+
+New Interface for the f/9 WFS CCD - To faciliate running the f/9 WFS
+in a fully remote fashion, the original tcl/tk-based Apogee CCD
+interface has been replaced with a GUI based on the one used to
+remotely control the f/5 WFS.  A screenshot is shown in Figure 4.  It
+remotely executes a script on the wavefront computer to acquire an
+image and then reads it out over the network via NFS.  
+
+Simplified WFS Startup and Automated Data Archiving - Both the f/9 and
+f/5 systems can now be fully brought up via desktop menu entries on
+hacksaw and hoseclamp.  The data generated from WFS sessions on either
+computer are collected every morning and archived in /mmt/wfsdat.  
+
+New Method of Correcting Spherical Aberration - Spherical aberration
+is one of the most problematic modes to bend in or out of the primary.
+It requires applying force in one direction on the inner and outer
+parts of the mirror while applying force in the opposite direction in
+between.  This is not a natural bending mode of the mirror and thus
+can require large amounts of force to correct relatively small amounts
+of aberration.  With the help of Brian Mcleod, we did some tests to
+come up with a combination of defocus and spherical that would offset
+the r^2 term in the spherical mode and leave us with something that is
+monotonic with radius and reduce the corrective force required (see
+Figure 5).  The result should be analogous to the so-called 'cone
+mode' that Magellan implements for their primary mirrors.  It turns
+out that introducing 6 nm of zernike defocus for every 1 nm of
+spherical minimizes the amount of force required to correct a given
+amount of spherical.  The difference is almost a factor of two less
+force versus introducing no defocus.  The defocus introduced into the
+primary can then be compensated for by moving the secondary
+accordingly.  This method is now fully implemented within the WFS
+analysis software and has been used to successfully correct for over 1
+micron of spherical aberration on a number of occasions.  The old
+method would require more corrective force than the cell will allow to
+correct that much spherical aberration.
+
+
+Figure 1 (f5_wfs_small.png): A screenshot of the full f/5 WFS desktop
+showing the results after two corrective iterations under good seeing
+conditions. 
+
+Figure 2 (overlay.jpg): This window provides a fallback to the
+automatic routines in the WFS software and allows the user to align
+the reference spot positions (red boxes) with the measured spots in
+the image.  Clicking and dragging anywhere in the image will move the
+entire reference pattern around at once.  The 'Mag+' and 'Mag-'
+buttons will scale the reference pattern to account for any focus
+offset.  The centroiding parameters HWHM (Half-width at half maximum)
+and Threshold can be changed and then applied to the image by clicking
+'Re-centroid'. 
+
+Figure 3 (f5_gui.png): A simple graphical interface for controlling
+the f/5 WFS stage and acquiring images from the CCD cameras contained
+within the stage.  
+
+Figure 4 (f9_gui.png): A simple graphical interface for remotely
+acquiring images from the Apogee CCD hooked up to the f/9 wavefront
+computer. 
+
+Figure 5a (non_cone.png) and 5b (cone.png): Figure 5a shows the
+wavefront error across the pupil due to pure spherical aberration.
+Note how it is positive in the outer and inner parts and negative in
+the middle.  Figure 5b shows the combination of 6 nm zernike
+defocus per nm of spherical.  The wavefront error is now monotonically
+increasing with radius which is much easier to bend out.  The PSF is,
+of course, much worse when extra wavefront error is added on purpose,
+but the defocus component can be easily compensated for by moving the
+secondary.  

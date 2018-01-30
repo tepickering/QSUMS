@@ -1,0 +1,51 @@
+			Mountain Linux Updates
+
+The four linux workstations in the control room were all updated to
+Fedora Core 3 from Fedora Core 1.  This brings them up-to-date with
+the new server and the other linux workstations that are in use
+downtown and on the mountain.  To better support the growing number of
+linux machines, we now host our own local Fedora mirror at
+http://www.mmto.org/fedora/.  This mirror is updated nightly and all
+machines now point to it for their automatic updates.  The update
+process included updating IRAF to 2.12.2p2 on all machines and
+modifying the device drivers for the DT3155 and FlashBus MV
+framegrabber cards to work with the new linux kernel.  
+
+
+			    All-Sky Camera
+
+A weather-tight enclosure was obtained and the camera system handed
+off to the electronics group to assemble and prepare for installation.
+In the meantime, software for the data pipeline was completed.  When
+operational, the camera will take an image every 10 seconds and after
+every image is taken, the last 100 images will be combined into an
+animated .gif file.  Each image is analyzed to determine whether the
+gain or integration time of the camera needs to be changed.  This
+allows the camera to automatically adapt to changing lighting
+conditions.  Upon sunrise and sunset, image acquisition will be paused
+and the accumulated images combined into DivX format movies and then
+purged.  A night's worth of raw images takes up to 4 GB or more of
+disk space while a high quality DivX movie generated from the same
+images will usually be 20 MB or less.  DivX movies can be viewed under
+linux using either mplayer or xine.  Windows and Mac players can be
+downloaded from www.divx.com.
+
+
+		  Wavefront Sensor Software Updates
+
+Work was done to clean up and streamline much of the WFS interface
+code.  Both f/9 and f/5 systems and all instrument profiles are now
+supported by a single program.  This will also ease the adding of
+support for new instruments and wavefront sensors as they come
+on-line.  The WFS interface now sports an internal network server to
+allow remote access and control.  This makes it possible to develop
+external programs that automate WFS tasks without having to modify the
+core WFS code itself.  Such programs have been written to automate
+acquisition and analysis of tempfoc and elcoll data.  In addition, the
+WFS now logs hexapod and temperature data after every set of
+corrections which will help further refine and characterize elevation
+and temperature dependencies over time. Another GUI was written to
+automate routine WFS data acquisition, analysis, and application of
+primary and secondary corrections.  It has worked well so far and work
+will continue to further automate and simplify WFS operation.
+

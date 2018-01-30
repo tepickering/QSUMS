@@ -1,0 +1,17 @@
+			    All-Sky Camera
+
+The all-sky camera was brought back on-line after installing fiber
+links for the video and RS232 feeds.  The extra level of digitization
+proved not to be an issue for video image quality.  In fact, replacing
+the long run of coaxial cable seems to have improved quality
+somewhat.  While the camera was off-line, the field-of-view and focus
+adjustments on the lens were tweaked to better match the size of the
+detector.  The focus also is improved a little bit from before.  Once
+back on the sky images were analyzed to build a new mapping between
+elevation and azimuth and sky camera image coordinates.  The increase
+in field size changed the pixel scale from 2.94 pixels/degree to 3.2.
+The 2nd and 3rd order terms to convert zenith angle to radius from
+image center are same within the uncertainties and the offset between
+azimuth and image angle changed from 10.2 to 12.9 degrees.  The RMS
+scatter of the transformation fit across the image remains a little
+over 2 pixels.  

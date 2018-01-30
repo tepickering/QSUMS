@@ -1,0 +1,131 @@
+		     Hartmann-DIMM Seeing Monitor
+
+Tests of various centroiding methods and algorithms were performed
+on-sky with the LX200 and a new Kwik-Focus 3-aperture Hartmann mask.
+Figure 1 shows a representative image obtained using the new mask. The
+basic center-of-mass algorithm is the same that is used in our (and
+most) autoguiders: define a box around your source, subtract
+background, sum counts along both axes to form X and Y histograms, and
+then calculate intensity-averaged values of X and Y from those
+histograms.  The DAOfind algorithm used by the Shack-Hartmann
+wavefront sensor software is similar, but uses least squares fits of
+gaussian profiles to the X and Y histograms.  In the poor conditions
+in town where the seeing was worse than 2" most of the time, the
+DAOfind method proved to be unstable due to the spot shapes frequently
+being non-gaussian in shape.  The center-of-mass method worked well
+even when the seeing would blow up to >8", at which point the spots
+were smeared considerably and became difficult to detect.
+
+Different methods of thresholding and windowing the data before
+centroiding were also tried out.  Given the poor conditions, the
+results were somewhat inconclusive.  Testing under better conditions
+with independent, external measures of seeing are required to more
+accurately judge how well a method is working and what kinds of biases
+it may introduce into a seeing measurement.  What has worked best so
+far has been a constant window radius of 7 pixels and iterating the
+centroid routine 3 times per image to converge on a center.  This
+center is then used as the starting point for the next image.
+Windowing with smaller radii at each iteration sometimes produced
+unstable results.  Thresholding beyond simply subtracting the
+background measured in an annulus around the spot pattern did not
+significantly alter the final results in any of the tests.  
+
+Two other biasing factors can significantly affect seeing measurements
+obtained with a DIMM: centroiding noise and exposure time.  The former
+is relatively easy to account for.  The per-pixel RMS is determined
+within the background annulus and used to generate formal
+uncertainties in the calculated X and Y positions of each centroid.
+This variance is subtracted in quadrature from the measured variance
+and the result used to determine the seeing.  Correcting for exposure
+time is a little more tricky.  The usual method of doing this is to
+interleave short exposures with longer ones and then scale the short
+exposure seeing by the ratio of short exposure seeing to long exposure
+seeing to estimate "zero exposure" seeing.  In essence, this assumes
+that the measured seeing decays exponentially with exposure time.  The
+calculations of A. Tokovinin (2002, PASP, 114, 1156) show that this
+isn't quite correct and that a modified exponential gives better
+results.  Interleaved exposures and this modified exponential
+correction are now implemented and have been tested.  Under the
+conditions that the tests have been made the centroiding noise
+corrections have been negligible (<0.05") and the exposure time
+corrections relatively small (0.1"-0.2" out of 2" or more).  In better
+conditions both of these effects will be much more significant. 
+
+A quick test was done to compare the performance of the supercircuits
+PC164 camera to the new StellaCam II that will become the new sky
+camera.  At video rate with maximum gain, the StellaCam II was about
+10% less sensitive than the PC164 with about the same noise level.
+This was better than expected given the quoted lux ratings for the two
+cameras, but the StellaCam II is still not best-suited to real-time
+video applications.
+
+Software work was completed to fully implement the LX200 mount
+protocol into a Ruby class.  All of the functionality that we will use
+has been tested and works well.  A few bugs have been found in other
+functionality that Meade claims will be resolved in the next firmware
+release.  A graphical interface using this class and based on the WFS
+catalog GUI was put together to allow easier remote control and easy
+access to a catalog of stars suitable for measuring seeing (Figure 2).  
+
+
+			    All-Sky Camera
+
+After an encouraging test using a PC164 video camera and inexpensive
+wide-angle lens, we went ahead and purchased a StellaCam II video
+camera along with a Fujinon auto-iris fisheye lens.  The ability of
+the StellaCam to integrate on-chip up to 256 full video frames (about
+8.5 seconds) is an enormous improvement over having to read out and
+integrate in software via a framegrabber card.  The PC164 setup
+required a carefully constructed dark image and at least two minutes
+of software frame integration to be able to see 4th magnitude stars.
+In contrast, a single frame capture from the StellaCam configured to
+integrate 256 frames at medium gain easily gets down to 6th magnitude
+or better.  Figure 4 shows a representative image under dark skies.
+The MMT building and forklift are on the right, summit support in the
+upper left, and Nogales at the bottom.  Orion, the winter Milky Way,
+and a stray Geminid meteor are easily visible.  There are lots of
+lenses within the fisheye lens assembly so bright objects are bound to
+create various internal reflections and caustics.  Figure 5 shows an
+image taken during 1st quarter moon.  The moon itself is on the right
+near the MMT building.  The artifacts are not too bad, fortunately,
+and the Milky Way is still easily visible in the frame.  This system
+should thus work very well under almost any nighttime condition.  The
+sun is somewhat more brutal, however.  Even with the automatic iris
+clamping down on the input, the sun still creates lots of artifacts in
+the image (Figure 6).  While the automatic iris makes it safe to leave
+the camera running during the day, it's not clear how useful the
+images will be.
+
+Because the StellaCam has no automatic gain control and the automatic
+iris only kicks in under very bright conditions, we purchased the
+RS232 interface module to allow remote configuration.  This module
+only comes bundled with Windows software, but with the help of Matt
+Kenworthy (CAAO) we were able to reverse engineer the protocol and
+develop our own scripts and GUI.  A screenshot of the GUI is shown in
+Figure 7.  Somewhat strangely and annoyingly, the StellaCam RS232
+protocol only seems to work properly when communicating directly over
+a serial port.  It did not work at all via a Lantronix device and is
+flaky via a Cyclades device or software network-serial relay server.
+The all-sky camera will have a dedicated computer so that is not a
+huge deal.
+
+
+Figure 1 (seeing.png): Example image taken with the Hartmann-DIMM
+seeing monitor with the new 3-aperture mask.
+
+Figure 2 (lx200.png): Screenshot of the LX200 catalog and control GUI.
+
+Figure 3 (fbcontrol.png): Screenshot of the framegrabber control GUI.
+
+Figure 4 (meteor.png): Image taken under dark skies with the
+StellaCam-based all-sky camera system. 
+
+Figure 5 (moon.png): StellaCam image taken during 1st quarter moon. 
+
+Figure 6 (sun.png): StellaCam image taken just after sunrise.  In this
+image the StellaCam was configured to run and full video rate with the
+gain set to the minimum value.  The automatic iris is running here
+otherwise the entire image would be saturated. 
+
+Figure 7 (stella.png): Screenshot of the StellaCam control GUI.
+

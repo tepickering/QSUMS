@@ -1,0 +1,362 @@
+		       MMT Pointing Performance
+
+On the night of March 12-13, 2007 we performed a pointing run to try
+and verify the systematic azimuth-dependent pointing errors we have
+been observing.  We used one of the Hecto fiber positioner robot
+cameras and observed a set of 59 stars.  Open loop hexapod corrections were
+applied before each observation.  The results were analyzed with
+TPOINT using the standard set of terms for an Alt/Az telescope.  The
+best fit solution is:
+
+       coeff       change     value    sigma
+
+  1     IA         -0.042  +1193.56    2.352
+  2     IE         -0.237     +0.59    0.534
+  3     NPAE       -0.072     -1.90    3.327
+  4     CA         +0.076    +11.23    3.875
+  5     AN         +0.011     -2.55    0.182
+  6     AW         -0.002    -12.26    0.176
+  7     TF         +3.785     +9.21    1.956
+  8     TX         -1.129     -3.95    0.869
+
+Sky RMS =   1.22
+Popn SD =   1.31
+
+For reference, the model that we had been using was derived from
+pointing data obtained in January, 2004.  The best fit terms from it
+are:
+
+       coeff       change     value    sigma
+
+  1     IA         +0.001  +1193.31    1.895
+  2     IE         -0.001     -1.54    0.498
+  3     NPAE       -0.001     -4.57    2.235
+  4     CA         +0.000     +8.81    2.664
+  5     AN         +0.001     -3.33    0.226
+  6     AW         +0.001    -16.03    0.224
+  7     TF         +0.010    +13.55    1.246
+  8     TX         -0.008     -5.59    0.319
+
+Sky RMS =   1.59
+Popn SD =   1.70
+
+There are slight variations between the 2004 and 2007 models, but
+nothing significant enough to explain the errors we have observed.  In
+fact, in the course of doing the pointing run it was obvious from
+where the stars appeared on the camera as we went around in azimuth
+that there is a signficant harmonic error that the Alt/Az model alone
+does not account for.  This can be seen in the plots shown in Figure
+1.
+
+In looking through the TPOINT software installation on hacksaw, it was
+found that there exists a procedure called 'MMT' that implements an
+Alt/Az model plus several harmonic terms as functions of Alt and Az.
+This was likely leftover from when TPOINT's author, Pat Wallace, did
+some consulting for the pre-upgrade MMT.  Since we're still using the
+same mount and rotary encoders, it seemed likely that this model is
+still relevant.  Modeling the March 2007 pointing data with this
+procedure produced the following results:
+
+       coeff       change     value    sigma
+
+  1     IE         +0.000    +17.06    2.543
+  2     IA         -0.000  +1194.12    1.567
+  3   & HACA2      -0.000     -0.10    0.285
+  4   & HACA4      +0.000     +0.09    0.261
+  5   & HZCZ       +0.000    +16.45    2.183
+  6   & TF         -0.000     +9.87    1.559
+  7     NPAE       +0.026     -1.03    2.297
+  8     CA         +0.000    +10.25    2.644
+  9   & HZSA       -0.000     +0.87    0.238
+ 10   & HZSA2      -0.000     +0.47    0.152
+ 11   & HZSA3      -0.000     +1.23    0.173
+ 12     AW         -0.000    -11.76    0.187
+ 13     AN         -0.000     -2.38    0.121
+
+Sky RMS =   0.80
+Popn SD =   0.90
+
+A very significant improvement in the sky RMS and population standard
+deviation to better than an arcsecond RMS!  Note the size of term #8,
+specifically, which is a Az error that is proportional to cos(Az).
+Experimenting with different mixes of harmonic terms yielded slightly
+better results, but not significantly so.  A larger pointing run with
+better sky coverage would help determine which harmonic terms we
+really need.  Also, when the new servo system is implemented we may
+need to do different tweaks to the TPOINT model to reflect the changes
+due to using the tape vs. rotary encoders for position information.  It
+will require some effort to implement a more sophisticated TPOINT
+model into our mount software, but the payoff will likely be RMS
+pointing errors less than 2/3 what they are now and overall pointing
+performance that would be the envy of most other large telescopes.
+
+Figure 1 (tpoint_a6.png): TPOINT residual plots for the Alt/Az fit to
+pointing data from March 12-13, 2007. 
+
+
+			Observer Catalog Tool
+
+The MMT Observer's Catalog Tool has been significantly enhanced.  Some
+of its key features include:
+
+* Observers catalog entries are displayed on top of All Sky Camera as
+  colored dots and updated in real-time.
+* Air mass and elevation are plotted over a 12 hour period for all
+  catalog entries.
+* Wind direction and speed are continuously updated.
+* Azimuth and DEC skycam overlay can be toggled on and off.
+* Every observer who submits a catalog via the MMT Catalog Submission
+  website automatically receives a link to view their catalog using this
+  new tool.
+* Runs in a web browser and compatible with Windows, Mac and Linux.
+  It takes advantage of the capabilities provided by the Flash 9
+  plug-in from Adobe. 
+
+MMTO staff can view and use this tool via
+http://hacksaw.mmto.org/catalogs/skycam/admin.php from within the MMTO
+network.  Figure 1 shows a screenshot of the tool.
+
+Figure 2 (catalog_tool.jpg): Screenshot of the new web-based MMTO
+Observer Catalog Tool.
+
+
+		  SCCS/ICE Modifications and Updates
+
+Further work was done to upgrade the Red and Blue Channel spectrograph
+control software.  More functionality was moved from the client to the
+server.  For the sake of comparison, two different browser-based GUI
+clients were built.  The first was built using Java's native GUI
+toolkits and runs in a web browser as an applet.  The second was also
+built in Java, but used the Google Web Toolkit (GWT;
+http://code.google.com/webtoolkit/) to create an HTML+javascript
+interface from the Java code.  The applet method works well, but
+requires that the java plugin, which is not included in the base OS,
+be installed and maintained on mountain machines.  It is also not as
+easily integrated into our OS updating/installing scheme as other 3rd
+party plugins such as Adobe's Flash.  However, these issues have been
+worked around in the past to support applet-based satellite image
+viewers and the new applet-based cell GUIs.  The GWT method generates
+HTML+javascript code that can support almost any modern browser with
+no need for any extra plugins.  The resulting interface loads quickly
+and works fairly well.  However, this is done at the expense of
+functionality in the provided interface widgets (e.g. the lack of a
+spinner widget for entering floating point values) and greater
+complexity in back-end implementation.  For example, the java applet
+can communicate directly with the spectrograph server using the SOAP
+protocol whereas the GWT interface must communicate via its own RPC
+protocol to java code running on a server which then relays the
+request to the spectrograph server.  This has been implemented using
+the Tomcat5 to run the server-side java code on hacksaw.  Tomcat5 is
+well-supported by the OS that we use and was not difficult to
+configure to run the GWT server-side code, but seems to be an overly
+complicated solution to the problem at hand.  Further testing is
+ongoing and the new SCCS server/client software should be deployed by
+this summer.  
+
+Mike Lesser fixed some bugs in the AzCam server software that is used
+by the Blue and Red Channel CCDs.  These changes required some
+modifications to our ICE interface.  These were implemented and tested
+so that pausing and resuming exposures should now work reliably for
+both the Red and Blue Channel CCDs.  
+
+The motor servos for the f/9-f/15 hexapod were tested and tuned to
+reduve the following error, just as was done previously with the f/5
+hexapod.  A similar increase in performance was observed and it is now
+possible to make smooth focus adjustments during exposures that do not
+significantly degrade image quality.
+
+
+	 Data Mining All-Sky Camera Data for Transient Events
+
+All sky camera data can now be processed with one IDL program,
+ntransient_search.  Difference images are now computed on-the-fly in
+the program, eliminating the need to store difference frames on disk.
+The sky camera image acquisition software now stores data with North
+up and East to the left and the data archived on hacksaw has been
+modified to match this which eliminates the need to flip images for
+display purposes.  The program now checks the phase of the moon and
+its elevation as well as the sun's elevation in order to determine
+what images to exclude from processing.  Tables are produced
+containing moving objects tracked frame to frame (aircraft),
+stationary objects of one - two frames (meteors), and stationary
+objects over multiple frames (usually bogus detections).  Cloudiness
+is still an issue.  Although photometry on the raw frames may indicate
+the level of cloudiness in areas of bright sources, in many cases it
+may vary substiantially across the frame.
+
+Although IDL is a perfect environment for prototyping the transient
+search program, a batch program implemented in C will better serve in a
+production environment because it will execute faster and no IDL
+license will be required.  We have acquired the Slalib, a collection of
+C routines for positional astronomy from Patrick Wallace, RAL.  Routines
+in this library will replace the IDL routines from the Astron library
+for computing the sun and moon position and the moon phase as well 
+as providing many useful astronomical routines for other applications.  
+I am investigating two open source implementations of the Hough Transform, 
+one in the Gandalf package and the XHoughtool.  If one of these routines
+is viable for our needs it would be preferable to developing a new Hough
+transform from scratch.
+
+
+			    Committee Work
+
+Betty Stobie participated in the definition of the 2007 program for
+the Astronomical Data Analysis Software and Systems Conference
+including the selection of special topics, guest speakers, and
+tutorials.
+
+She continued to review multiple iterations of and suggest revisions for
+the Definition of the Flexible Image Transport System document as a member
+of the IAU FITS Working Group Technical Panel.
+
+Connie Walker, an astronomer with the NOAO Education and Public
+Outreach Office, sought Betty's help in debugging their TLRBSE Solar
+Spectra Data Analysis Package developed in IDL.  There were two
+logistical problems with the reading of the raw data and the
+processing of extracted spectra.  The problems were easy to diagnose
+and workarounds were provided for both. 
+
+
+		    M1 Thermal System Performance
+
+We used Betty Stobie's batch_temp tool to analyze snapshots of M1
+thermal data that are captured during the course of acquiring WFS
+data.  The motivation was to see if different approaches to
+controlling the thermal system yielded measurable differences in
+thermal system performance.  The nights of March 6-7, 2007 and March
+11-12, 2007 provide a good case study for comparison.  Both nights
+used the F/5 plus Hectochelle configuration and had fairly stable
+conditions.  For March 6-7, a constant offset of approximately -6.5C
+from chamber ambient temperature was used for the Carrier chiller's
+setpoint.  For March 11-12, the offset from chamber ambient was
+changed every 1-2 hours.
+
+The batch_temp tool analyzes the mirror temperature state by fitting a
+set of Zernike polynomials to the E-series thermocouple data.  The
+results of finite element modeling are used to generate predicted
+mirror surface distortions from the temperature fits.  For the
+purposes of the current comparison the surface distortion modes that
+correspond to wavefront defocus and spherical aberration are the most
+salient.  They provide a measure of symmetric, radially-dependent
+temperature variations.  The predicted focus error term actually has
+two components.  One is a bulk term that correlates with the mean
+temperature so that a completely isothermal mirror would have a
+predicted focus error of -21 * T(mean) microns.
+
+The batch_temp results for the two nights are shown below:
+
+			   March 6-7, 2007
+#Time-GMT      Focus     Spherical Aberration      Mean Temp     RMS(Temp)
+03:16:16    -135.024              243.6              9.58         0.119
+05:55:47    -117.291              166.1              9.78         0.081
+05:56:42    -117.759              144.3              9.77         0.080
+08:38:04     -97.779               31.7              9.54         0.067
+08:38:59     -99.483               59.4              9.53         0.068
+10:12:08    -101.960               46.5              9.32         0.089
+10:13:03    -102.280                7.9              9.34         0.089
+11:36:58    -118.631               60.8              9.40         0.098
+11:39:44    -120.594               58.3              9.42         0.100
+11:41:35    -120.008               44.9              9.42         0.100
+11:42:30    -117.844               30.6              9.42         0.097
+
+			  March 11-12, 2007
+#Time-GMT      Focus     Spherical Aberration      Mean Temp     RMS(Temp)
+02:20:28    -104.798              214.6              6.74         0.155
+02:21:24    -105.161              198.8              6.74         0.153
+04:06:34    -109.369              131.2              6.67         0.101
+04:07:29    -110.089              128.7              6.68         0.100
+06:34:16     -92.271               60.5              6.97         0.053
+06:35:11     -92.878               74.5              6.96         0.053
+10:34:07       7.804              -86.5              6.12         0.149
+10:35:57       7.092             -114.6              6.12         0.148
+
+The first thing to note is that the mirror is well within its
+isothermality spec in each of these cases.  At worst the temperature
+RMS is 0.16 C and at best it's 0.05 C which is very, very good!  The
+second thing to note is that the performance with the Carrier setpoint
+automatically kept at -6.5 C below chamber ambient produces results
+that are at least as good, if not better than, manual control by the
+operator.  Based on these results, a new "carrier_auto" script was
+written that sets the Carrier temperature to a constant offset from a
+selected ambient temperature, usually from the chamber.  Further
+evaluation of M1 thermal behavior during use of this script needs to
+be done, but the initial results are very promising.  If the script is
+implemented for normal operations, it would eliminate the need for
+operator input for M1 thermal control except in abnormal weather
+conditions, such as high humidity or dewpoint.
+
+Other work on the M1 thermal control system involved revising the Carrier
+control web interface, adding additional possible reference temperatures,
+such as the Yankee thermohygrometer.
+
+
+		       Meteorological Equipment
+
+The Yankee thermohygrometer was moved from the telescope chamber to the
+elevator shaft on the roof outside of the building.  This move would
+allow the Yankee unit to be used as an accurate indicator for outside
+dewpoint prior to opening the chamber.  However, soon after this move,
+systematic oscillations in dewpoint and temperature values were observed
+for the Yankee unit.  The unit has been returned to the manufacturer for
+servicing and calibration.  The unit should be returned within a month.
+
+
+		       MMTO Balance Calculator
+
+The "balancer" web page was updated to include a new MySQL database and
+associated web pages.  The new MySQL database was created on hacksaw with
+tables for: 
+
+1) moments for different secondaries, instruments and other telescope
+   attachments 
+2) observed telescope configurations as well as the associated
+   counterweight settings and elevation motor drive currents
+3) calculated configurations for hypothetical telescope configurations
+
+Four new web pages have been created including the telescope balance
+calculator and tabular views of the moments, observed configurations, and
+calculated configurations database tables.
+
+
+		    MMT Mirror Coating Performance
+
+J.D. Gibson continued work with R Ortiz on a new MySQL database and
+web pages for aluminum reflectivity and scattering data from the MMT
+primary, secondaries, and aluminization reference samples.  Separate
+tables were created for raw, corrected, and averaged data for the
+primary mirror, F/5 and F/9 secondary mirrors and the MMT SS1 and 4-in
+witness standards.  These table contain light reflectivity and
+scattering data for varying wavelengths from 400 to 700 nanometers, in
+10 nanometer intervals, over the past few years.  The data is
+currently being reviewed for quality assurance.  Web pages were
+created for charting of reflectance and scattering data versus
+wavelength and versus time.
+
+
+		     Misc. Software-related Tasks
+
+- Revised the "rerr" web page viewer (again) to limit the number of
+  displayed lines and to prevent performance issues for large log files. 
+  Changes were made to the cell crate code to reduce the size of logs.
+
+- Added MySQL logging of newly published cell variables for the X, Y, Z,
+  TX, TY, and TZ platform parameters (in millimeters).  Additional cell
+  status parameters for bump status, bump warnings, and bump errors were
+  added to the cell crate and to the MySQL background logging for the cell.
+
+- Did additional work on the MMT system status web page.  Rather that
+  using the code as a web page, we are currently considering creating a new
+  'service' from this code that would automatically send emails to the
+  appropriate people when problems arise.
+
+- Supplied thermal data to Gabor Furesz for evaluation with F/5 data with
+  Hectochelle.
+
+- Set up a MySQL database table for the cell, hexapod, and mount crate
+  event logs.  Dallan is working on a new 'logger' socket server, inputting
+  data into this event_log database table, and web interfaces to these logs.
+
+- TempTrax digital thermometer probes were added for the Drive room at
+  the MMT and for the MMTO web server room downtown.
+
+

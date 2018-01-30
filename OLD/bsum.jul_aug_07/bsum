@@ -1,0 +1,229 @@
+		    Control Room Telstat Displays
+
+Two new telstat monitors are being added to the control room to
+display additional information to the operators and observers. These
+two monitors will display the following information at all times:
+Primary mirror thermal information and actuator force/air pressure
+status, Altitude/Azimuth/Rotator status and position, Hexapod status,
+weather radar loop, local lightning strikes and Vaisala weather
+station information. Work is in progress on completing the content of
+these monitors by Dallan and Duane.
+
+
+		    Safety Training Video Web Page
+
+Dallan and Cory have developed an online safety training website which
+will allow MMT staff to view a collection of over 10 safety training
+DVDs online inside of a web browser. The site is nearly ready to
+deploy. Dallan is researching hardware and bandwidth requirements
+prior to making the site available to all staff.
+
+
+		      Sky Camera Image Database
+
+Work is underway on a database that will store sky camera header
+information.  This database will allow for faster searching through sky
+camera image files as well as the ability to generate time lapse movie
+files based on user defined begin and end times. So far the database
+has been created on Hacksaw and a large portion of the archived sky
+camera images have been processed and added to the database. Once all
+of the old images have been added to the database, a web based
+front-end will be created to allow users to search through the data
+and generate movie files.
+
+
+		     Instrument Control Software
+
+Skip provided software support for image acquisition with Maestro
+while it was in the lab and later during its run at the telescope in
+late July.  Minor changes were made to the ICE image acquisition to
+support odd binning on split serial chips to match what the AzCam
+server was providing.  Skip also worked with Mike Lesser to identify
+problems in the AzCam server for gen 3 SDSU CCD controllers. Once such
+problem is the inability to query the camera and dewar temperatures
+during an exposure.  This and some other more minor problems are still
+outstanding.
+
+
+		     Single Sign-on Authentication
+
+Skip worked on setting up an LDAP server for the mmto.org domain.
+This was implemented using the open-source Fedora Directory Server.
+This provides a unified way to authenticate all modern operating
+systems (windows, linux, OS X, and others), network file access via
+samba, and web page access.  A user will be able to use one
+username/password combination for all authentication.  This will allow
+us to improve security by doing away with public accounts such as
+mmtstaff and mmtop.  A user's password can be changed from any machine
+and the change will be immediately reflected on all machines.  Two
+servers were configured, acting as redundant backups for each other.
+If one server is down or otherwise unreachable, the client will
+automatically use the other server.  Thus, the outage will be
+mostly transparent to the user.  
+
+The deployment of the LDAP servers was completed in late August/early
+September and most observatory linux workstations modified to use
+them, including all of the control room workstations.  The migration
+went quite smoothly.  Most of the issues involved the LDAP server on
+hacksaw being I/O starved at times and making itself unavailable.
+This tripped up some bugs in the nscd (name service cache daemon)
+server that linux clients use to buffer LDAP access.  fortunately,
+when the issues cropped up, they would sort themselves out within a
+minute or two.  We also tuned some I/O intensive tasks that hacksaw
+runs to make them more efficient and tweaked some kernel parameters to
+improve response latency when the I/O load is heavy.  No LDAP errors
+have been reported since these changes were made.  
+
+Remaining work includes integrating the FDS and windows Active
+Directory LDAP servers.  The Fedora Directory Project distributes
+software to facilitate this so it should mostly be a matter of
+configuring that for our environment.  We also need to migrate our
+password authenticated web pages to use LDAP in lieu of the .htpasswd
+files we currently use.  All of the software necessary to support this
+is in place so this just requires tweaking and testing the .htaccess
+configuration files we use.  This should be completed in
+mid-September. 
+
+
+		    /tcs virtual memory on hacksaw
+
+A shared memory, temporary file system ('tempfs') has been implemented on
+hacksaw under /dev/shm.  The /tcs directory has been mounted to this
+tempfs file system to create an in-memory file system.  This shared memory
+improves overall system performance and facilitates data sharing between
+processes.
+
+At the present, one subdirectory has been created within the /tcs
+directory:  /tcs/devices/.  Within this directory are subdirectories for
+the various miniservers.  The value of each variable within each
+miniserver is stored in a separate file within the tempfs.  These files
+are updated only when the value of the variable changes.  Symbolic links
+can be created, as needed, in order to quickly change data sources.  For
+example, an 'outside ambient temperature' variable could be linked to a
+temperature variable within the Yankee, Vaisala3, or TempTrax1
+miniservers, depending on availability of data.
+
+
+		 mini.pm, miniserver code unification
+
+A new Perl module, mini.pm, was written that consolidates code related to
+the miniservers.  The main advantage of this module is code reuse and
+standardization among the various miniservers.  This module contains two
+Perl classes: one for a miniserver client, similar to the existing PHP
+Miniserver class, and one for a miniserver socket server, which uses code
+from Lincoln Stein's book on "Network Programming with Perl".  Conversion
+of the various miniservers to use this Perl module is almost complete. 
+This code is also used for updating the MySQL background logs for the
+miniservers.
+
+
+			     Web Services
+
+Much work was done on consolidating support of various formats for web
+support of miniserver data.   After several revisions, a mod_perl handler
+was created for web services that takes advantage of the /tcs/devices/
+shared memory directory described above.  This mod_perl handler can either
+not block or block until new data has been posted by the appropriate
+miniserver, allowing real-time updating of web pages and other client
+applications without the need for constant polling for new data.
+
+A web page example with this real-time updating is:
+http://hacksaw.mmto.arizona.edu/engineering/carrier/carrier.html
+
+The mod_perl handler can provide data in XML, JSON, CGI and the
+MMT-specific "all" format.  Only selected parameters can be returned,
+if desired.
+
+
+	     Upgrades to Control Room Linux Workstations
+
+The workstations that the telescope operators use, yggdrasil and
+hoseclamp, were last significantly updated over three years ago.  Some
+components in them actually date back more than five years and their
+enclosures have been complained about for years for being too bulky
+and noisy.  In August we replaced them with new 2.4 GHz Core 2
+Duo-based workstations from Dell.  The new machines are very
+noticeably much faster than the old ones, run significantly cooler,
+and are much quieter.  They each have 2 GB of RAM, a 250 GB disk, PCI
+Express-hosted gigabit ethernet, and dual-head video cards.  What they
+don't offer, however, are any legacy ports such as serial, parallel,
+or PS/2 for mice/keyboards.  The only ports they provide are USB and
+sound I/O.  This necessitated replacing the previous PS/2 keyboards
+with newer USB models, reconfiguring the UPS's to use their USB
+interfaces, and moving the operator's hardware paddle to a different
+machine.  
+
+Another twist with the new machines is that the Core 2 processors they
+use are now natively 64-bit.  They can run 32-bit operating systems
+and applications, but there can be a significant performance gain when
+running 64-bit applications.  Some quick benchmarks showed that 64-bit
+browsers ran update-intensive ajax web pages about 2.5 times faster
+than their 32-bit equivalents.  Given this and the fact that our main
+server computers were already running 64-bit operating systems, we
+decided to bite the bullet and run the new computers in full 64-bit
+mode.  Although the 64-bit format offers noticeably faster
+performance, software support is not as widespread as for 32-bit
+systems.  For example, the Flash and Java browser plugins are not
+available in 64-bit format.  To work around this a Ruby/Gtk script,
+using the gtkmozembed embedded browser, is being used for both 32-bit
+and 64-bit web applications.  This approach has several advantages: 1)
+each web page runs in a separate process, reducing the
+interdependencies between web-based GUI's, 2) the embedded browser is
+streamlined compared to Firefox and requires fewer system resources,
+3) a compiled version of the Ruby/Gtk script can be built on a 32-bit
+machine, then used on a 64-bit machine, allowing use of 32-bit browser
+plugins.  Work continues on other 32-/64-bit issues, such as
+recompiling C libraries used by xephem and the edb_gui application for
+non-sidereal tracking.
+
+In addition, the computer that runs the telescope status displays,
+telstat, was also upgraded.  It was previously a Shuttle small
+form-factor machine that could only support one PCI video card in
+addition to an AGP video card.  Since we want to eventually support 6
+status monitors, we need to support at least one more video card.  A
+suitable replacement became available that is faster than the previous
+machine and can support three video cards with a PCI slot to spare.
+This machine was deployed in August and the spare slot used to host
+the DT3155 framegrabber card used by the SAOguider.  This was done
+because the DT3155 driver limits its host to 896 MB of RAM.  We didn't
+want to throw away more than half the memory in any of the new
+machines and telstat is otherwise single-purpose so it made sense to
+also be a guider host.  Unfortunately, this rearrangement broke the
+existing desktop entries for bringing up the SAOguider.  The interim
+workaround is to ssh into telstat and run the command 'saoguider'.
+This has been sufficient for the September f/9 run and we will improve
+automation for the follow f/9 run late in the fall. 
+
+In the course of setting up the new machines some improvements were
+made to the way user accounts are configured.  An mmt_env package was
+created to ease the installation and management of MMT-specific
+configurations and modifications.  So far this package is used to
+automatically install and solve dependencies for software packages we
+use, it installs configuration files that set up user environments to
+include /mmt/bin in the PATH variable and configure our IDL
+environment, and it sets up a top-level desktop menu called 'MMT'.
+The 'MMT' desktop menu has been enhanced and divided into the
+following sub-menus by category: i) Autoguiders, ii) Cell GUIs, iii)
+Hexapod and M2 GUIs, iv) MMTAO GUIs, v) Mount GUIS, vi) Thermal System
+GUIs, and vii) WFS GUIs.  Running individual applications from these
+menus assures that the appropriate version is run in an optimal
+environment.  Work continues on adding applications to this menu
+system as well as adding entries to bring up sets of applications at
+once.  
+
+
+			Aluminization Software
+
+Software is being developed in conjunction with the Lotis project for
+primary mirror aluminization.  Rate of aluminization deposition and
+pressures within the bell jar are obtained from an Agilent data
+acquisition unit.  Voltages and currents from the bank of 10 welder power
+supplies are acquired through a PCI card that is mounted in the
+"aluminization" Windows PC.  Data acquisition and visualization are
+handled through a set of new LabVIEW GUI's or 'virtual instruments'.  Data
+logging is done by a Perl script that interacts with a MySQL database. 
+Webcam images from inside the bell jar are available for display in a web
+browser and in the main LabVIEW GUI.  Images are collected and stored to
+disk every second so that a movie can be constructed for the aluminization
+process.  Engineering web pages have also been developed for remote
+monitoring of data collection.

@@ -1,0 +1,30 @@
+From: Skip Schaller <sschaller@mmto.org>
+Date: November 1, 2006 11:56:36 AM MST
+To: "T. E. Pickering" <tim@mmto.org>
+Subject: bsum
+
+At the beginning of this period, I continued testing hexapod control.
+
+During engineering at the telescope, I tested and commissioned
+gspec gui changes to allow multiple clients to red/blue channel spectrograph,
+the ccdacq detector interface to azcam science camera (red/blue channel),
+the ccdacq instrument interface to red/blue channel spectrograph, and
+the ccdacq telescope interface to telstat.
+
+I also implemented computer control of comparison lamps,
+(many thanks to Cory and Brian for their electronics work), and
+made a ccdacq interface to the lamps.
+This was tested and successfully used during a recent blue channel run.
+
+During this period, I also investigated using LDAP for unix account passwords,
+web page passwords, and samba account password.  The lack of LDAP support
+in gdm was a show stopper for now.
+
+I also made some minor changes to ccdacq to prepare for the new red channel.
+The changes involved moving some initialization code out of the client and into
+the server.  These changes were tested and used during a recent
+blue channel run.
+
+October 15-18, I attended ADASS conference in Tucson.
+
+I have started working on replacing windx cell guis with php/ajax web pages.

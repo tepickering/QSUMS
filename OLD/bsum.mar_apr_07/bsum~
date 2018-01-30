@@ -1,0 +1,239 @@
+			Observer Catalog Tool
+
+The MMT Observer's Catalog Tool has been significantly enhanced.  Some
+of its key features include:
+
+* Observers catalog entries are displayed on top of All Sky Camera as
+  colored dots and updated in real-time.
+* Air mass and elevation are plotted over a 12 hour period for all
+  catalog entries.
+* Wind direction and speed are continuously updated.
+* Azimuth and DEC skycam overlay can be toggled on and off.
+* Every observer who submits a catalog via the MMT Catalog Submission
+  website automatically receives a link to view their catalog using this
+  new tool.
+* Runs in a web browser and compatible with Windows, Mac and Linux.
+  It takes advantage of the capabilities provided by the Flash 9
+  plug-in from Adobe. 
+
+MMTO staff can view and use this tool via
+http://hacksaw.mmto.org/catalogs/skycam/admin.php from within the MMTO
+network.  Figure 1 shows a screenshot of the tool.
+
+Figure 1 (catalog_tool.jpg): Screenshot of the new web-based MMTO
+Observer Catalog Tool.
+
+
+		  SCCS/ICE Modifications and Updates
+
+Further work was done to upgrade the Red and Blue Channel spectrograph
+control software.  More functionality was moved from the client to the
+server.  For the sake of comparison, two different browser-based GUI
+clients were built.  The first was built using Java's native GUI
+toolkits and runs in a web browser as an applet.  The second was also
+built in Java, but used the Google Web Toolkit (GWT;
+http://code.google.com/webtoolkit/) to create an HTML+javascript
+interface from the Java code.  The applet method works well, but
+requires that the java plugin, which is not included in the base OS,
+be installed and maintained on mountain machines.  It is also not as
+easily integrated into our OS updating/installing scheme as other 3rd
+party plugins such as Adobe's Flash.  However, these issues have been
+worked around in the past to support applet-based satellite image
+viewers and the new applet-based cell GUIs.  The GWT method generates
+HTML+javascript code that can support almost any modern browser with
+no need for any extra plugins.  The resulting interface loads quickly
+and works fairly well.  However, this is done at the expense of
+functionality in the provided interface widgets (e.g. the lack of a
+spinner widget for entering floating point values) and greater
+complexity in back-end implementation.  For example, the java applet
+can communicate directly with the spectrograph server using the SOAP
+protocol whereas the GWT interface must communicate via its own RPC
+protocol to java code running on a server which then relays the
+request to the spectrograph server.  This has been implemented using
+the Tomcat5 to run the server-side java code on hacksaw.  Tomcat5 is
+well-supported by the OS that we use and was not difficult to
+configure to run the GWT server-side code, but seems to be an overly
+complicated solution to the problem at hand.  Further testing is
+ongoing and the new SCCS server/client software should be deployed by
+this summer.  
+
+Mike Lesser fixed some bugs in the AzCam server software that is used
+by the Blue and Red Channel CCDs.  These changes required some
+modifications to our ICE interface.  These were implemented and tested
+so that pausing and resuming exposures should now work reliably for
+both the Red and Blue Channel CCDs.  
+
+The motor servos for the f/9-f/15 hexapod were tested and tuned to
+reduve the following error, just as was done previously with the f/5
+hexapod.  A similar increase in performance was observed and it is now
+possible to make smooth focus adjustments during exposures that do not
+significantly degrade image quality.
+
+
+	 Data Mining All-Sky Camera Data for Transient Events
+
+All sky camera data can now be processed with one IDL program,
+ntransient_search.  Difference images are now computed on-the-fly in
+the program, eliminating the need to store difference frames on disk.
+The sky camera image acquisition software now stores data with North
+up and East to the left and the data archived on hacksaw has been
+modified to match this which eliminates the need to flip images for
+display purposes.  The program now checks the phase of the moon and
+its elevation as well as the sun's elevation in order to determine
+what images to exclude from processing.  Tables are produced
+containing moving objects tracked frame to frame (aircraft),
+stationary objects of one - two frames (meteors), and stationary
+objects over multiple frames (usually bogus detections).  Cloudiness
+is still an issue.  Although photometry on the raw frames may indicate
+the level of cloudiness in areas of bright sources, in many cases it
+may vary substiantially across the frame.
+
+Although IDL is a perfect environment for prototyping the transient
+search program, a batch program implemented in C will better serve in a
+production environment because it will execute faster and no IDL
+license will be required.  We have acquired the Slalib, a collection of
+C routines for positional astronomy from Patrick Wallace, RAL.  Routines
+in this library will replace the IDL routines from the Astron library
+for computing the sun and moon position and the moon phase as well 
+as providing many useful astronomical routines for other applications.  
+I am investigating two open source implementations of the Hough Transform, 
+one in the Gandalf package and the XHoughtool.  If one of these routines
+is viable for our needs it would be preferable to developing a new Hough
+transform from scratch.
+
+
+			    Committee Work
+
+Betty Stobie participated in the definition of the 2007 program for
+the Astronomical Data Analysis Software and Systems Conference
+including the selection of special topics, guest speakers, and
+tutorials.
+
+She continued to review multiple iterations of and suggest revisions for
+the Definition of the Flexible Image Transport System document as a member
+of the IAU FITS Working Group Technical Panel.
+
+Connie Walker, an astronomer with the NOAO Education and Public
+Outreach Office, sought Betty's help in debugging their TLRBSE Solar
+Spectra Data Analysis Package developed in IDL.  There were two
+logistical problems with the reading of the raw data and the
+processing of extracted spectra.  The problems were easy to diagnose
+and workarounds were provided for both. 
+
+
+
+1)  Compared M1 glass temperature data and related wavefront sensor data
+for two different nights of f/5, hectochelle operations: the night of
+March 6-7, 2007 and the night of March 11-12, 2007.  Different approaches
+were used to control the M1 ventilation system and Carrier chiller during
+these two nights.  For March 6-7, a constant offset of approximately -6.5C
+from chamber ambient temperature was used for the Carrier setpoint.  For
+March 11-12, the offset from chamber ambient was changed every 1-2 hours.
+
+M1 mirror temperatures and wavefront-sensor spherical aberration
+corrections were then compared for the two nights.
+
+The data for March 6-7, 2007 is as follow:
+#Time-GMT      Focus     Spherical Aberration      Mean Temp     RMS(Temp)
+03:16:16    -135.024              243.6              9.58         0.119
+05:55:47    -117.291              166.1              9.78         0.081
+05:56:42    -117.759              144.3              9.77         0.080
+08:38:04     -97.779               31.7              9.54         0.067
+08:38:59     -99.483               59.4              9.53         0.068
+10:12:08    -101.960               46.5              9.32         0.089
+10:13:03    -102.280                7.9              9.34         0.089
+11:36:58    -118.631               60.8              9.40         0.098
+11:39:44    -120.594               58.3              9.42         0.100
+11:41:35    -120.008               44.9              9.42         0.100
+11:42:30    -117.844               30.6              9.42         0.097
+
+The data for March 11-12, 2007 is as follow:
+#Time-GMT      Focus     Spherical Aberration      Mean Temp     RMS(Temp)
+ 02:20:28    -104.798              214.6              6.74         0.155
+02:21:24    -105.161              198.8              6.74         0.153
+04:06:34    -109.369              131.2              6.67         0.101
+04:07:29    -110.089              128.7              6.68         0.100
+06:34:16     -92.271               60.5              6.97         0.053
+06:35:11     -92.878               74.5              6.96         0.053
+10:34:07       7.804              -86.5              6.12         0.149
+10:35:57       7.092             -114.6              6.12         0.148
+
+Based on the similarity of RMS temperature errors for the two nights, a
+new "carrier_auto" script was written that sets the Carrier temperature to
+a constant offset from an ambient temperature.  This script can be run in
+a background mode and automatically adjust the Carrier setpoint every 60
+seconds, as needed.  Data from the two nights of hectochelle observing
+suggest that this approach, which completely eliminates telescope operator
+input on M1 thermal control, may be as good as an approach involving
+direct human input for the M1 thermal system control.   M1 thermal
+behavior during use of this script needs to be tested and evaluated.  If
+the script is implemented for normal operations, it would eliminate the
+need for operator input for M1 thermal control except in abnormal weather
+conditions, such as high humidity or dewpoint.
+
+Although these two nights had similar instrumentation (f/5 secondary,
+hectochelle, f/5 wfs and corrector) and, in general, similar weather
+conditions, the focus errors for March 11-12 vary by more than 100 um
+while the mean temperature only varies 0.6C.  This suggests that other
+factors besides temperature are involved in the changing focus values.
+
+Other work on the M1 thermal control system involved revising the Carrier
+control web interface, adding additional possible reference temperatures,
+such as the Yankee thermohygrometer.
+
+2) Moved the Yankee thermohygrometer from the telescope chamber to the
+elevator shaft on the roof outside of the building.  This move would
+enable the Yankee unit be used as an accurate indicator for outside
+dewpoint prior to opening the chamber.  However, soon after this move,
+systematic oscillations in dewpoint and temperature values were observed
+for the Yankee unit.  The unit has been returned to the manufacturer for
+servicing and calibration.  The unit should be returned within a month.
+
+3) Updated the "balancer" web page to include a new MySQL database and
+associated web pages.  The new MySQL database was created on hacksaw with
+tables for: 1) moments for different secondaries, instruments and other
+telescope attachments, 2) observed telescope configurations as well as the
+associated counterweight settings and elevation motor drive currents, and
+3)  calculated configurations for hypothetical telescope configurations. 
+Four new web pages have been created including the telescope balance
+calculator and tabular views of the moments, observed configurations, and
+calculated configurations database tables.
+
+4) Continued work with R Ortiz on a new MySQL database and web pages for
+aluminum reflectivity and scattering data from the MMT primary,
+secondaries, and aluminization reference samples.  Separate tables were
+created for raw, corrected, and averaged data for the primary mirror, F/5
+and F/9 secondary mirrors and the MMT SS1 and 4-in witness standards. 
+These table contain light reflectivity and scattering data for varying
+wavelengths from 400 to 700 nanometers, in 10 nanometer intervals, over
+the past few years.  The data is currently being reviewed for quality
+assurance.  Web pages were created for charting of reflectance and
+scattering data versus wavelength and versus time.
+
+5) Provided input for software-related items for the Program Plan.
+
+6) Revised the "rerr" web page viewer (again) to limit the number of
+displayed lines and to prevent performance issues for large log files. 
+Changes were made to the cell crate code to reduce the size of logs.
+
+7) Added MySQL logging of newly published cell variables for the X, Y, Z,
+TX, TY, and TZ platform parameters (in millimeters).  Additional cell
+status parameters for bump status, bump warnings, and bump errors were
+added to the cell crate and to the MySQL background logging for the cell.
+
+8) Did additional work on the MMT system status web page.  Rather that
+using the code as a web page, we are currently considering creating a new
+'service' from this code that would automatically send emails to the
+appropriate people when problems arise.
+
+9) Supplied thermal data to Gabor Furesz for evaluation with F/5 data with
+Hectochelle.
+
+10) Set up a MySQL database table for the cell, hexapod, and mount crate
+event logs.  Dallan is working on a new 'logger' socket server, inputting
+data into this event_log database table, and web interfaces to these logs.
+
+11) TempTrax digital thermometer probes were added for the Drive room at
+the MMT and for the MMTO web server room downtown.
+
+

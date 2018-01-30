@@ -1,0 +1,34 @@
+		  New Spectrograph Observer Machine
+
+Due to ringo's deteriorating health and reliability, spectrograph
+observing was moved over to the linux box, alewife.  The mmtobs
+account was configured to emulate ringo's mmtobs account, but also
+enhanced to take some advantage of the more modern linux desktop
+environment.  So far it has worked quite well and the observers have
+been pleased with the 10x increase in speed and memory capacity the
+new machine provides.  At the moment, data backup is provided by
+either the network or the cd-writer.  A DDS3 DAT drive will be
+obtained for alewife for larger capacity backup.  However, observers
+will still be encouraged to use the cd-writer due to the lower cost,
+higher reliability, and greater portability of cd-r and cd-rw media. 
+
+
+	      GSPEC - A GTK+-based Replacement for SCCS
+
+Currently, the observers control the spectrographs via a 10 year old
+DOS PC.  This PC then interfaces to the spectrographs via RS232.
+GSPEC is the first step in creating a new graphical interface for
+controlling the spectrographs and topbox lamps.  The screenshot shows
+the layout of the current incarnation.  The GSPEC GUI is built using
+the gtk+ graphical toolkit so that it integrates well with the
+gnome-gtk+ desktop environment that is used on the mountain computers.
+Another advantage of gtk+ is the glade GUI builder
+(http://glade.gnome.org) which hugely simplifies the task of laying
+out, coding, and maintaining user interfaces.  The next step in
+replacing SCCS is writing a server that will take commands from GSPEC
+or other programs like command-line tools or IRAF's ICE environment
+and then configure the spectrograph accordingly via RS232 (via the
+cyclades).  This way the spectrograph can be controlled from any
+computer or any number of computers as a time in a sane and safe
+manner.
+

@@ -1,0 +1,61 @@
+		     WFS Modifications and Elcoll
+
+A 'Center Image' function has been added to the WFS interface that
+takes the center of the spot pattern as determined by centroiding and
+calculates the appropriate hexapod commands to move the spot pattern
+to the center of the WFS camera.  This helps speed up WFS setup in
+normal use and improves consistency when determining elcoll
+coefficients.  This was tested out during the engineering run in early
+January.  However, the conditions were rather poor so the elcoll
+determination was not significantly improved over what had been
+measured previously.  
+
+
+		      Radio Link Reconfiguration
+
+Attempts were made to configure the radio link to Mt. Hopkins to
+support separate broadcast domains for the MMT and SAO (ridge and
+IOTA, specifically) networks.  So far we have been unsuccessful.  Part
+of the problem initially was that the downtown end had an ethernet
+module that only supported 4 machines per port.  It worked well enough
+when we were using only one port, but any attempt to use more than one
+created problems.  Replacing it with the appropriate module that
+supports 8192 hosts/port (like the ones found in similar units on the
+summit and ridge) solved this problem.  However, there are still
+issues when trying to use multiple VLANs simultaneously.  Resolving
+these issues is the subject of on-going work.
+
+
+		      Mountain Computer Upgrades
+
+All three of the primary Linux machines in the control room received
+hardware upgrades:
+
+alewife	  - motherboard, DVD burner, 1 GB RAM, 2.6 GHz CPU, and 160 GB disk
+hoseclamp - 160 GB disk
+hacksaw	  - 2.66 GHz CPU and 160 GB disk
+
+In the process, they have also received full OS upgrades to Fedora
+Core 1.  In addition to improved stability and performance, Fedora
+provides a much more robust and streamlined scheme for automatic
+software updates via the 'yum' utility.  This scheme also makes it
+much easier to fold custom software into the automatic updates.  TEP
+has updated all of the software packages he supports (e.g., IRAF, ds9,
+xephem, pgplot, etc.) to run under Fedora, set up a yum-compatible
+web-based archive for these packages, and configured the Fedora
+machines he maintains to point to this archive for updates. 
+
+
+			  SCCS Modifications
+
+With the help of Dennis Smith and Grant Williams, the old SCCS PC was
+set up in the chamber to help reverse engineer the command to tell the
+MSD box to stop what it's doing.  This was successful and is now
+incorporated into the new SCCS GUI.  Improvements have also been made
+to the engineering interface of the new SCCS.  The grating and filter
+wheel configuration has been split into two windows.  The grating
+configuration has been organized better and the zeropoint
+determination simplified.  Work is ongoing with the help of Grant
+Williams and Gary Schmidt to implement a universal conversion between
+grating angle and grating tilt motor DVM which will completely do away
+with the need to calculate new zeropoints after changing gratings.

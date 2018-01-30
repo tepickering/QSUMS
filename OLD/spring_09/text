@@ -1,0 +1,122 @@
+			  Seeing Statistics
+
+The overall seeing during the Spring 2009 Observing season was
+markedly worse than what we enjoyed last fall.  The median jumped from
+0.68" to 0.88", the mean from 0.73" to 0.97", and the mode from 0.58"
+to 0.73".  The histogram of seeing data for the entire trimester is
+shown in Figure 1. 
+
+The change in seeing conditions has everything to do with the weather which became
+a lot more unsettled starting in late December.  Breaking the data out
+into individual months (Figure 2) shows that February and April were
+significantly more unsettled on average than January and March.
+April, in particular, was marked by a steady procession of strong
+frontal systems passing through every few days that, while dry,
+brought along plenty of wind and cooler temperatures.  
+
+Figure 1 (spring_09_total.pdf):  Histogram of Spring 2009 seeing data (corrected
+to zenith).  Data was acquired using the f/5 and f/9 Shack-Hartmann
+wavefront sensors.  
+
+Figure 2 (spring_09.pdf): Spring 2009 seeing data broken down by
+month.  
+
+
+		    F/15 DM and NGS AO Operations
+
+The f/15 DM system was used on the telescope twice during the Spring
+2009 trimester: 14 nights in NGS mode in January and 4 nights each of
+NGS and LGS time in March.  The first four nights of the January run
+were wiped out entirely due to a winter storm and parts of several
+other nights were also lost due to poor conditions.  The March run was
+also plagued by poor weather with three nights lost entirely and most
+other nights losing at least a few hours to conditions.  
+
+For the most part the DM and NGS systems performed fairly well.  There
+was a gap contamination event that occurred on the night of January 8
+that was severe enough to cost the last three hours of that night.
+The push-n-wiggle routine was applied to the DM the following day
+which managed to reduce the effect of the contamination enough to get
+the system working properly.  The maximum gap when the DM was pulled
+against the reference body was still 40-43 microns and remained that
+way for the remainder of the January and March runs.  This didn't
+obviously affect the efficiency of operations, at least with NGS, but
+appears to have done so for LGS.  It's also not very desirable to
+stress the mirror by operating with that much contamination.  On April
+16 a crew of MMTO staff assisted by Manny Montoya and Richard Sosa
+from SO/LBTO removed the DM's shell to try and clean out the
+contamination.  The process went very smoothly and helped acquaint
+several MMTO staff members with the required procedures.  We ended up
+with maximum gap when pulled against the reference body of less than
+25 microns.  Thus we managed to safely remove the existing
+contamination without introducing any new problems which is always a
+risk when removing the shell.  
+
+A number of AO software tasks were worked on during this time, however
+the lack of on-sky engineering time due to the weather prevented most
+of them from getting sufficient testing to allow them to be fully
+deployed.  The two most important features that require more testing
+are PID servo control of the DM and porting of the ability to
+enable/disable the DM's real-time loop mode directly from the PC
+reconstructor (PCR).  Currently, starting and stopping the AO loop
+requires extra mouse-clicks to do before or after RT loop from the DM
+control gui in addition to clicking close or open AO loop.  We hope to
+get these capabilities fully tested and deployed during the Summer
+2009 trimester. 
+
+
+	   Assessing Mount and Hexapod Pointing Performance
+
+After the mirror wash, we had one on-sky M&E night with f/5 installed
+on April 8-9.  The time was used to finally fix some f/5 WFS issues
+pertaining to newer versions of tcl/tk, take some pointing data, and
+take some elcoll data.  
+
+The f/5 WFS software issues stemmed from a tcl/tk script that was
+inherited from John Roll that was used to perform most stage motion
+and image acquisition tasks.  It was written in a way that works fine
+with tcl/tk 8.4 or earlier, but breaks with tcl/tk 8.5.  It would have
+taken significant rewriting and refactoring to make it compatible so
+it was easier (and ultimately cleaner) to simply do away with it.
+Where motion control commands are sent, the code was changed to send
+network commands directly to the 'waveserv' motion control server.
+The image acquisition commands are now carried out by executing a
+simple, 8-line shell script that takes an exposure time in seconds and
+a filename as arguments.  
+
+Other WFS software changes were made to fix various issues with
+deploying the WFS off-axis.  These were tested out and off-axis WFS
+data acquired.  No obvious signs of M1-M2 misalignment were found in
+this data, though the poor conditions probably prevented us from
+getting data that was stable and consistent enough to test that
+adequately.
+
+The software changes were also put through their paces by doing a long
+elcoll run.  The results of this are shown Figure 1.  The systems were
+pretty far out of thermal equilibrium after being closed up and worked
+on for over two days and then closed for most of the first half of the
+night due to clouds.  This is likely the cause for most of the scatter seen
+in the results, especially for focus (Z motion).  However, it's clear
+that there are significant zero-point offsets compared to the previous
+results.  There may be slight changes in the elevation-dependent
+terms, but they're not significant given the scatter in the data.
+It's also clear that the significant transverse terms (X and Ty) that
+we've been observing are still there.  The hexapod open-loop
+parameters were updated to use these new results except for focus
+where only the zeropoint was updated.
+
+After the elcoll run was completed, we took a set of pointing data.
+The conditions were a bit poor and the automatic selection of
+reference stars was not as efficient as we would have liked so we
+didn't get as much data as we intended.  However, it was clear while
+taking the data that the combination of updated elcoll and existing
+pointing model yielded very good results.  Even long slews usually
+brought stars within 1-2" of the center of rotation.  We saw some
+slight signs of systematic behavior as a function of position on the
+sky, but the data was too sparse and noisy (due to wind) to provide a
+significant improvement over what we had.  
+
+
+Figure 1 (elcoll_color.pdf):  Results of the elcoll data obtained
+during the night of April 8-9.  The fits to the previous results are
+shown as red lines.  

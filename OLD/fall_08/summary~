@@ -1,0 +1,49 @@
+			 Observing Conditions
+
+The Fall 2008 trimester had some of the consistently best seeing that
+we've seen in over 5 years.  The median seeing for the entire
+trimester was 0.73" and the seeing was 0.5" or better about 20% of the
+time.  It culminated on the last night of the year when MegaCam data
+was obtained with 0.3" FWHM stellar PSFs in images with 40-60 sec
+exposure times, no autoguiding, and smooth 10-15 mph winds.  The
+seeing values measured directly in the MegaCam images agreed very well
+with the ones measured by the WFS.  This is further validation of our
+technique for deriving seeing values from the WFS data.  The fact that
+we were able to achieve such good image quality without guiding also
+shows how good our tracking can be.
+
+The good seeing is in large part due to long stretches of stable, mild
+weather that we had the 2nd half of September, most of October, and
+parts of November.  The histograms of wind, temperature, and humidity
+help bear this out.  The outside ambient temperature was between 10
+and 15 C roughly half the time while the humidity was near saturation
+about 10% of the time, but generally dry otherwise.  The winds were
+slightly lower overall with the median average and median gust speeds
+each down 2 mph from the summer.  
+
+seeing.ps: Seeing histograms for each trimester of 2008. The seeing
+values are corrected to zenith using the standard model of atmospheric
+turbulence.  Note how the seeing was markedly better during the fall
+than during the spring or summer.
+
+fall_08_temp.ps:  Histograms of nighttime humidity and temperature
+during the fall 2008 trimester.  Only data acquired between 6 PM and 6
+AM is included. 
+
+fall_08_wind.ps:  Histograms of nighttime wind speed and direction
+during the fall 2008 trimester.  Only data acquired between 6 PM and 6
+AM is included.
+
+
+			     AO Software
+
+A number of modifications and improvements were made to the AO
+software over the course of the fall trimester.  These include:
+
+TSS Server - The Thin Shell Safety (TSS) system has a communications
+interface that only allows one client to connect to it at a time.
+Most of the time the one client would be a 'dm_status' GUI that
+displays parameters reported by the TSS.  However, when preparing the
+mirror for operation or shutting it down, the one client limitation
+required the DM operator to close the dm_status connection so the
+other software could talk to the TSS. 

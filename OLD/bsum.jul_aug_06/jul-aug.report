@@ -1,0 +1,48 @@
+       My Progress Report for July/August 2006
+
+Software Development
+
+  I have developed an IDL visualization program to:
+
+     - read the MMT thermocouple values from a file
+     - plot the values for the front, middle, and back thermocouples
+     - select which of the front, middle, and back surfaces to plot
+       and control the temperature range for the plots
+     - fit the front, middle, and back values with a 9 coefficient polynomial
+	 (zernike terms)
+     - display the fitted telescope surface temperature images
+     - calculate and display the focus correction
+     - output all fitted results to the designated log files
+     - print view of the raw data display or the fitted image display by
+	  creating .png files from reading the display
+
+The user may select the desired thermocouple data file to read, or process
+a list of data files where a timer controls the delay between the reading 
+of each file in the list.  The remaining items to implement include:
+     
+     - read the thermocouple values from a socket on hacksaw.  The timer
+	 will control the delay between reads of the socket.
+     - create a save file so that draw_temp can run in the IDL virtual
+	 environment which does not require an IDL license.
+
+
+Committee Work:
+
+  I serve on the Local Organizing Committee for the Astronomical Data 
+Analysis Software and Systems Conference (ADASS XVI) to be held in 
+Tucson at the La Paloma Resort October 15-18, 2006.  During the last
+two months I have been responsible for the selection and planning of 
+all conference catering including the opening reception, morning and
+afternoon breasks, box lunches, and the conference banquet.  I also
+assisted in the development of the conference logo and poster.
+
+  I serve on the Program Organizing Committee for ADASS.  During the
+last two months I voted for the selection of the financial aid
+recipients and the contributed oral program from among the requested
+oral presentations.  I reviewed the Birds of a Feather proposals and
+the focus demonstration proposals.
+
+  I serve on the International Astronomical Union Flexible Image Transport
+System Working Group (IAU FITS WG).  I did not attend the August FITS 
+Working Group Meeting as it was held at the IAU Conference in Prague,
+Czechoslovakia.

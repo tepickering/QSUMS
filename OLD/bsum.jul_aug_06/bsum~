@@ -1,0 +1,305 @@
+	      Hexapod Control and Performance Evaluation
+
+Tom Trebisky, Duane Gibson, and Skip Schaller worked to deploy and
+test new hexapod code to move all the motors in a coordinated fashion.
+This should ensure that a motion only in the focus direction will not
+make the image of the star move around in the field during the motion.
+We discovered various anomalies in both hexapods during the release
+and application of the brakes as well as other erratic behavior of the
+pods.  This discovery led to more detailed evaluation of hexapod
+performance.  
+
+This evaluation included comparing and contrasting coordinated and
+uncoordinated motion, the release and application of brakes and servo
+control during each move, and the trajectory of motion for each pod
+during a move.  Data was collected at different telescope elevations
+and with different payloads on the hexapods.  New data acquisition and
+analysis tools have been developed for logging hexapod data at 1Hz, a
+higher resolution than has been available in the past.  Real-time
+visualization tools have also been developed as part of this testing.
+We still need to do more daytime testing as well as on-sky tests
+during upcoming engineering nights.
+
+
+Updates to Blue/Red Channel Image Acquisition and Spectrograph Control
+			       Software
+
+I wrote a new ICE interface to the AZCAM detector system,
+testing it briefly with the guide camera.  It is now under
+test in the downtown lab with the science camera system
+for the red and blue channel controllers.
+
+I wrote a new ICE telescope interface to the MMT telescope control
+system, using SOAP via the telstat server, bypassing a more
+complex, and apparently unreliable route to the same information.
+
+I modified the control software for the red and blue channel
+spectrograph, separating it into client and server pieces.
+The server can handle multiple clients.  I wrote an ICE instrument
+interface to this new server.  ICE can now control spectrograph
+functions, as well as, fill in header information with spectrograph
+values.
+
+
+			   Hexapod Offsets
+
+Work is underway on incorporating different types of hexapod/secondary
+mirror offsets into a more systematic approach to improve hexapod control,
+trend analysis, and data mining.  Unique hexapod offsets have been
+defined for instruments, thermal-dependent effects,
+elevation-dependent effects, guiders, and wave-front sensors.  Input
+from the telescope and instrument operators are captured into their
+own separate offsets.  
+
+In the past, these various hexapod offsets have been lumped together,
+making analysis of individual effects on hexapod location and behavior
+difficult.  This functionality has now been implemented in the hexapod
+crate code and is available through the "remote" network protocol. 
+Further work is needed to augment the "msg" protocol to handle these
+offsets.  A new web-based graphic user interface is also being developed
+and is ready for testing.  Modifications were made to the existing
+"settings" server to include the various offsets and to improve the XML
+format of the stored data.
+
+
+	      Hexapod/UMAC/VME Servicing/Troubleshooting
+
+The UMAC CPU was replaced because of communication failures.  We are
+also addressing an intermittent "Tape Status" error.
+
+
+			   GUI's/Web Pages
+
+Work continues on creating new and improving existing web pages and GUI's.
+A new PHP class, "xajaxMMT", was created to centralize MMT-specific
+PHP/Ajax functionality.  This class extends the PHP class,
+"xajaxResponse", of the xajax PHP/javascript library (see
+http://www.xajaxproject.org/).  The new xajaxMMT class: 1) minimizes web
+server/browser communication by only sending new values to the web
+browser, and 2) provides class methods for common MMT GUI functionality,
+such as changing background color based on system status.  The existing
+Miniserver PHP class was also augmented to allow active control of
+essentially all network-based MMT hardware, including the mount, hexapod,
+and cell crates.  Methods for interacting with the settings server were
+also added to the Miniserver class.
+
+Thermal web pages that use these two PHP classes have been created for
+Carrier chiller and Pit Neslab chiller control.  Other thermal web pages,
+such as for the thermal transect and the Vaisala WXT510 status web page,
+are also now using this technology.
+
+
+		      DT3155 Framegrabber Driver
+
+In early July it was discovered that the framegrabber driver and thus
+the SAOguider had quit working.  It had worked fine with the 2.6.12
+and 2.6.14 kernels, but did not work at all with 2.6.16 or newer
+ones.  The driver would build and install fine and generated no
+runtime errors, but SAOguider and other framegrabber tasks would hang
+up.  A key hint to the root of the problem came from the fact that
+one of the test programs that comes with the DT3155 driver did work.
+There are two ways to grab frames from the DT3155:  by polling the
+card until it's in a frame-ready state or by having the card generate
+interrupts when frames are ready.  The SAOguider and our software use
+the interrupt mode while the test program that worked used the polling
+mode.  Thus the driver and card were fine, but the card was not
+generating interrupts for some reason.  Checking /proc/interrupts
+while attempting to grab frames in interrupt mode confirmed this to be
+the case.  Further testing found that the more recent kernels were
+configured to use the more modern IO-APIC interrupt controller for all
+interrupts while the older ones used the legacy XT-PIC mode for the
+DT3155.  Forcing the newer kernels into the legacy XT-PIC mode via the
+'noapic' boot parameter got the DT3155 working again in all modes.
+Under a heavy interrupt load there can be a performance penalty
+when using the XT-PIC mode, but it's not enough to be a concern for
+us.  The machines such as hoseclamp that host DT3155 cards have had
+their boot configurations modified to include the 'noapic' flag and
+the SAOguider now works properly. 
+
+
+	       Update of Hacksaw to a Rackmount Server
+
+With a single cpu and less than 1 GB of RAM (due to DT3155 driver
+limitations), hacksaw was buckling under the demands of running 
+dozens of TCS servers, continuous logging and monitoring of
+TCS systems, and the dozens of windows that operators use to control
+everything.  Splitting the TCS server duties off to a dedicated
+machine would go a long way towards improving the responsiveness of
+the operator's desktop.  Since we've had very good luck with our
+mmto.org rackmount server from ASL, we acquired a similar system to
+become the new hacksaw.  It has dual dual-core opteron cpus, 2 GB of
+RAM, and 3 TB of RAID5 disk spanning 11 drives plus a 12th as a hot
+spare.  This will provide us plenty of room for our growing data
+archiving and analysis needs.
+
+The new machine was deployed as hacksaw and the former hacksaw renamed
+to yggdrasil during the last week of August.  This gave us some
+engineering time to iron out the kinks and weed out implicit and
+explicit assumptions about hostnames and where operators are logged
+in.  This mostly involved boot configurations for vxworks crates, but
+also the cell rerr window and the operator log screenshot mechanism.
+These issues were successfully worked around and we now seem to be
+running smoothly with the new configuration.  We are now in a position
+to deal with a failure of a control room computer much more smoothly
+and easily.  Any one of them will be able to run all TCS interfaces
+nearly equally well.  In the case of a failure of hacksaw, the
+mmto.org server downtown can easily be reconfigured on the fly to
+respond to hacksaw's ip number and run all of the TCS services that
+hacksaw hosts.  
+
+
+    DONUT: A Method for Wavefront Sensing using Out-of-Focus Stars
+
+A recent paper by A. Tokovinin and S. Heathcote (astro-ph/0606388)
+describes a method for measuring wavefront aberrations using single
+images of out-of-focus stars.  The ability to do wavefront sensing
+with single CCD frames and no extra hardware is a potentially very
+powerful tool.  One obvious application for the MMT would be to
+quickly measure aberrations across a megacam field.  The results
+of that can then be analyzed to determine alignment errors between M1,
+M2, and the WFC.  Another possible application would be continuous
+wavefront sensing for f/9 using one of the guider cameras.  
+
+The authors made available an IDL implementation of this method which
+we have been trying out.  It seems to work well, is easy to use, and
+is easily modified to support the MMT's optical specifications.  A
+drawback of this method is that its iterative nature makes it somewhat
+computationally intensive.  However, we have found that even the IDL
+implementation only takes at most a few seconds to converge on a
+solution.  During engineering time in September we hope to take data
+at f/9 and f/5 to compare results between DONUT and our existing
+Shack-Hartmann wavefront sensors.  
+
+
+      Making a Low-End SBIG CCD Into a High-Speed Seeing Camera
+
+Measuring seeing with a DIMM or similar instrument requires a detector
+that is capable of taking exposures short enough to "freeze" the
+atmosphere as much as possible.  For a standard DIMM short enough is
+generally 5-10 ms.  This is possible with inexpensive CCDs with
+mechanical shutters, but the turnaround time between exposures is
+often of order a few hundred ms or more.  This is fine for determining
+seeing from a two aperture DIMM, but better temporal sampling is
+required to fully take advantage of a multi-aperture Hartmann-DIMM.  
+
+A solution would be to leave the shutter open and read the CCD out
+continuously.  This way the exposure time would be limited by the
+readout speed of the CCD and there would be continuous sampling from
+exposure to exposure.  The resulting image would have long strips for
+each aperture.  Atmospheric turbulence parameters can then be derived
+from the RMS deviations from the average strip positions.  The
+continuous sampling would make it possible to bin the strips to
+determine exposure time corrections.  
+
+CCD cameras from SBIG provide the capability of reading out while
+exposing, a feature widely used by amateur astronomers to do drift
+scan imaging.  We obtained the smallest SBIG camera, the ST-402, since
+it has all of the sensitivity and features of the larger cameras and
+we don't need a large field.  As a bonus the camera comes with an
+internal RGB+Clear filter wheel making color imaging possible.  A
+sample image taken during software testing is shown in Figure 1.  The
+software to do the continuously exposed readout is mostly completed
+and we hope to do some on-sky testing of it this fall.
+
+Figure 1 (st402.png):  A sample image created by taking R, G, and B
+images of equal exposure time with a ST-402 camera.  
+
+
+	      OS and Software Updates for Linux Machines
+
+All of the mountain machines with the exception of yggdrasil have been
+upgraded from Fedora Core 4 to 5.  It and mmto.org will be updated
+later in September.  Two floating licenses for IDL 6.3 were purchased
+for observatory use and IDL installed on all of the observatory's
+linux workstations.  
+
+
+ IDL Tool for Visualizing and Analyzing the Thermal Properties of the
+			    Primary Mirror
+
+Betty Stobie has developed an IDL visualization program to:
+
+      - read E-series thermocouple values from a file
+      - plot the values for the sets of thermocouples in the front, middle, and
+	back plates
+      - select which of the sets to plot and control the temperature
+	range for the plots
+      - fit the front, middle, and back values with 9 coefficient
+	Zernike polynomials
+      - display the fitted surfaces for each plate
+      - calculate and display the focus correction predicted by FEA
+	modeling done by T. Pickering.
+      - output all fitted results to the designated log files
+      - print view of the raw data display or the fitted image display by
+	creating .png or .eps files
+
+The user may select the desired thermocouple data file to read or process
+a list of data files where a timer controls the delay between the reading 
+of each file in the list.  Remaining items to implement include:
+
+      - read the thermocouple values from the cell mini-server on
+	hacksaw.  The timer will control the delay between reads of the socket.
+      - create a save file so that draw_temp can run in the IDL virtual
+	environment which does not require an IDL license.
+
+Screenshots of the raw data and surface fit displays are shown in
+Figures 2 and 3.
+
+Figure 2 (draw_old.png): Screenshot showing the raw data display.  The
+outer circle denotes the front plate, the middle the mid plate, and
+the inner circle the back plate.  Clicking on a thermocouple position
+will display the temperatures at that position in the 3 plates along
+with their deviations from the mean mirror temperature.
+
+Figure 3 (image_old.png): Screenshot showing the surface fit display.
+When the cursor is moved within one of the three images, the
+calculated temperature from the fit at that position is displayed.
+
+			    Committee Work
+
+Betty Stobie serves on the Local Organizing Committee for the
+Astronomical Data Analysis Software and Systems Conference (ADASS
+XVI) to be held in Tucson at the La Paloma Resort October 15-18,
+2006.  During the last two months she has been responsible for the
+selection and planning of all conference catering including the
+opening reception, morning and afternoon breasks, box lunches, and
+the conference banquet.  She also assisted in the development of the
+conference logo and poster.
+
+Betty serves on the Program Organizing Committee for ADASS.  During the
+last two months she voted for the selection of the financial aid
+recipients and the contributed oral program from among the requested
+oral presentations.  She reviewed the Birds of a Feather proposals and
+the focus demonstration proposals.
+
+Betty also serves on the International Astronomical Union Flexible Image
+Transport System Working Group (IAU FITS WG).  However, she did not
+attend the August FITS Working Group Meeting as it was held at the IAU
+Conference in Prague.
+
+
+	     Online Observer Catalog Submission Webpage.
+
+A new observer catalog submission webpage is now online on the MMT
+website for observers to utilize. This tool will help observers submit
+their existing catalogs or generate new catalogs from scratch. The
+page allows for observers to type in a target name (such as Vega or
+M45) and that target's RA, DEC and proper motion are all
+automatically generated and added to the catalog. This works by making
+a connection under-the-hood (using a combination of Ajax & SOAP) to
+the SIMBAD database. The catalog format is interchangeable with other
+Steward Observatory telescopes so even non-MMT observers can also
+utilize this tool to generate their own catalogs if
+desired.  The URL is http://hacksaw.mmto.arizona.edu/catalogs/
+
+
+		    HORIZONS Ephemerides TCS Tool
+
+To help make tracking non-sidereal targets easier, a new tool has been
+developed for the MMT Telescope Control System. The MMT Horizons
+Ephemerides tool accepts a name of a non-sidereal object, it then
+establishes a connection behind the scenes (using PHP CURL & Ajax) to
+NASA JPLÕs Solar System Dynamics database to generate a 1 minute
+interval ephemeris for any desired time span. Modifications have been
+made to the Mount crate to accept this new ephemeris table and to
+perform the interpolation of the ephemeris table.

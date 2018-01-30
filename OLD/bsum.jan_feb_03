@@ -1,0 +1,46 @@
+		Computer and Network Security Upgrades
+
+While the programmers downtown had all upgraded their desktop machines
+to Red Hat 8.0 over the course of the fall, the mountain machines
+(hacksaw, hoseclamp, alewife) lagged behind due to issues relating to
+the kernel drivers used for the framegrabber cards.  Tim managed to
+finally sort that out and make it stable which cleared the path for
+upgrading the mountain.  So far it seems to have been successful,
+though hopefully the next release will clear up some niggling
+usability issues such as the ability to make a root-level MMT desktop
+menu.  
+
+The wireless access point in the control room that had become very
+unreliable and weak was replaced with a new one.  At the same time an
+access point was installed in the main office downtown.  Because of
+the greater security concerns within the campus environment, users
+will need to consult with Tim Pickering to enable access for their
+wireless device.
+
+To add an extra level of network security, we have had CCIT implement
+access control lists on their core routers for the MMT network.  These
+effectively work very much like a firewall, but do not require any
+extra hardware.  The current configuration blocks all access for
+network devices such as switches and wireless access points, allows
+full access for some server machines that can implement their own
+internal security, and allows a limited number of well-used ports for
+everything else with some exceptions for special cases.  
+
+
+		 Tracking Performance Statistics Page
+
+The guider logs are now automatically parsed every morning and the
+summary page of results updated accordingly.  This page can be found
+at http://www.mmto.org/tracking/.  Figure 1 (guide_20030310.png) shows
+representative results for a recent calm night.  Under such conditions
+the tracking performance is quite good with tracking errors of less
+than 0.1" a majority of the time.  Figure 2 (guide_20021026.png) shows
+a worst case scenario where the wind was 30 mph or more most of the
+night.  The current guider and mount servo systems can't keep up with
+that much buffeting.  The guider star FWHM measurements should in
+principle provide a good indicator of seeing, but f/9 topbox optics
+and the limited dynamic range of the framegrabber output limit this
+for the video-based guider used for Blue and Red Channel as well as
+Flaminigos.  The guider system for MiniCam uses its own direct-imaging
+guide CCD chip and should provide much better seeing determinations.  
+

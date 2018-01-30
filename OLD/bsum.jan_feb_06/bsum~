@@ -1,0 +1,21 @@
+		      F/9 Open Loop Corrections
+
+Since we didn't have any dedicated engineering time to refine f/9's
+open loop parameters, they had to be refined over time using WFS data.
+When the WFS is finished applying corrections, it logs elevation, the
+OSS temperatures, and the hexapod's platform coordinates.  These data
+from multiple nights are then combined and each platform coordinate
+modeled with a function of the form:
+
+f(el,T) = a*cos(el) + b*sin(el) + c*T + d
+
+where el is the elevation and T is the average OSS temperature.  We
+have been doing similar analysis to build the open loop tools for f/5,
+but this is the first opportunity since our extended shutdown to do
+likewise for f/9.  
+
+The results of analyzing the f/9 WFS data from Jan 31 through March 2
+are shown in Figure 1. 
+
+Figure 1 (f9_2006.pdf):  Results of analyzing f/9 WFS data to
+determine parameters for open loop corrections.  

@@ -1,0 +1,68 @@
+		     Hartmann-DIMM Seeing Monitor
+
+After a successful proof of concept, we decided to go ahead and
+acquire the components needed to put together a Hartmann-DIMM seeing
+monitor system.  The primary component is a 10" Meade LX200-GPS
+telescope.  The mount of this telescope provides full remote control
+capability via its RS232 interface and well-documented serial
+protocol.  Several linux applications (e.g. xephem and kstars) support
+this protocol out of the box and were successfully tested using both a
+direct serial connection and over USB using Meade's USB-to-serial
+converter.  The protocol is very simple and straightforward which
+makes it easy to add LX200 communication to custom applications.
+
+At least initially, we will use a Supercircuits PC164 camera as the
+detector since it proved itself sensitive enough in our tests.
+However, the maximum of 30 frames/sec that the DT3155 framegrabber
+card could manage was somewhat disappointing so we purchased an
+Integral Technologies FlashBus MV card to see if it could perform
+better.  In spite of costing half as much as a DT3155 and being color
+instead of pure monochrome, the FlashBus appears to be at least as
+sensitive as the DT3155 and doesn't have any of the pattern noise that
+the DT3155 cards sometimes exhibit.  More importantly, the linux
+driver for the FlashBus easily allows full 60 Hz framegrabbing with
+minimal system load.  In fact, the FlashBus's DMA buffer can be read
+at up to 600 Hz if the reads are not synced to the video signal.  The
+FlashBus card also supports progressive scan framegrabbing which
+provides an upgrade path to a faster camera if the need arises.
+
+The linux software development kit that Integral Technologies provides
+has proven to work quite well.  The kernel module did require some
+modification to work with linux 2.6.x kernels, but the changes were
+minor and the ported driver has been stable.  Many examples were
+included which eased the development of custom code for grabbing and
+centroiding frames in real-time.  Work is on-going to test out various
+centroiding algorithms, but the basic center-of-mass algorithm used in
+our autoguiders seems to be the most robust and is very fast.  We hope
+to perform some on-sky tests on the summit in early November so that
+we can compare the seeing measurements from the DIMM and the f/5
+wavefront sensor.
+
+
+			MMT Seeing Statistics
+
+The Shack-Hartmann wavefront sensors estimate seeing by relating the
+width of the spots to differential image motion.  This estimate has
+been measured and logged for every WFS image that was analyzed in the
+past year and a half.  Figure 1 shows a histogram of the WFS seeing
+measurements obtained to date (top), a cumulative histogram (middle),
+and a scatter plot of seeing versus UT of observation (bottom).  The
+seeing measurements are corrected for zenith distance, z, using the
+relation:
+
+seeing(z = 0) = seeing(z)/sec(z)**0.6
+
+The histogram is qualitatively very similar to what was observed with
+the old system previous to 1998 and shows how good our site is most of
+the time.  We are doing better than 0.5" about a fifth of the time and
+better than 1" almost three quarters of the time.  Somewhat
+surprisingly, there is no significant correlation between the quality
+of seeing and time of night.  No systematic indication of the expected
+effects of dome seeing at the beginning or of turbulence later in the
+night from temperature inversions.
+
+Figure 1 (total_seeing.ps): Histogram of seeing measurements taken
+with the Shack-Hartmann wavefront sensors (top), cumulative histogram
+of the same data (middle), and seeing versus time of observation
+(bottom). 
+
